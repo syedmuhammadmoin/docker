@@ -1,0 +1,103 @@
+<div [ktBusy]="isLoading" class="kt-portlet" style="overflow :hidden;">
+  <div class="kt-portlet__head">
+    <div class="kt-portlet__head-caption">
+      <div class="kt-portlet__head-title">
+        <h3 class="kt-portlet__head-text modal-header"> {{formName}}
+          <span (click)="onCloseDialog()" class="dialog-cross"><i class="fa fa-times float-right"></i></span>
+        </h3>
+      </div>
+    </div>
+  </div>
+  <!-- form start -->
+  <form autocomplete="off" #formDirective="ngForm" (ngSubmit)="onSubmit()" [formGroup]="categoryForm"
+        class="kt-form kt-form--label-align-right">
+    <!-- portlet body starts -->
+    <div class="kt-portlet__body">
+      <!-- form first section starts -->
+      <div class="kt-form__section kt-form__section--first">
+        <!-- first row starts -->
+        <div class="col-md-12 col-lg-12 col-sm-12">
+          <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6">
+              <div class="form-group kt-form__group mb-0">
+                <label class="col-form-label pt-0">Category: <i class="fa fa-asterisk" aria-hidden="true" style="color: #eb4c5d;font-size: 8px;position: relative;top: -5px;"></i></label>
+                <kt-input-field
+                  [errorMessage]="vs.errTEXT(categoryForm, 'name', 'Category Name')"
+                  formControlName="name"
+                  placeholder="Enter Category Name">
+                </kt-input-field>
+              </div>
+            </div>
+
+            <div class="col-lg-6 col-md-6 col-sm-6">
+              <div class="form-group kt-form__group mb-0">
+                <label class="col-form-label pt-0">Inventory Account: <i class="fa fa-asterisk" aria-hidden="true" style="color: #eb4c5d;font-size: 8px;position: relative;top: -5px;"></i></label>
+                <kt-simple-dropdown
+                  [isDisabled]="disableDropdown"
+                  (blurEvent)="logValidationErrors(this.categoryForm, this.formErrors, this.validationMessages)"
+                  [errorMessage]="formErrors.inventoryAccount"
+                  [optionList]="ngxsService.otherAccountsLevel4$"
+                  formControlName="inventoryAccount"
+                  matFormFieldClass="full-width"
+                  placeholder="Select Inventory Account"
+                  propertyName="name"
+                  propertyValue="id"
+                  searchPlaceholder="Search Account...">
+                </kt-simple-dropdown>
+              </div>
+            </div>
+          </div>
+          <!-- first row ends -->
+          <!-- second row starts -->
+          <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6">
+              <div class="form-group kt-form__group mb-0">
+                <label class="col-form-label pt-0">Revenue Account: <i class="fa fa-asterisk" aria-hidden="true" style="color: #eb4c5d;font-size: 8px;position: relative;top: -5px;"></i></label>
+                <kt-simple-dropdown
+                  [isDisabled]="disableDropdown"
+                  (blurEvent)="logValidationErrors(this.categoryForm, this.formErrors, this.validationMessages)"
+                  [errorMessage]="formErrors.revenueAccount"
+                  [optionList]="ngxsService.otherAccountsLevel4$"
+                  formControlName="revenueAccount"
+                  matFormFieldClass="full-width"
+                  placeholder="Select Revenue Account"
+                  propertyName="name"
+                  propertyValue="id"
+                  searchPlaceholder="Search Revanue...">
+                </kt-simple-dropdown>
+              </div>
+            </div>
+
+            <div class="col-lg-6 col-md-6 col-sm-6">
+              <div class="form-group kt-form__group mb-0">
+                <label class="col-form-label pt-0">Cost Account: <i class="fa fa-asterisk" aria-hidden="true" style="color: #eb4c5d;font-size: 8px;position: relative;top: -5px;"></i></label>
+                <kt-simple-dropdown
+                  [isDisabled]="disableDropdown"
+                  (blurEvent)="logValidationErrors(this.categoryForm, this.formErrors, this.validationMessages)"
+                  [errorMessage]="formErrors.costAccount"
+                  [optionList]="ngxsService.otherAccountsLevel4$"
+                  formControlName="costAccount"
+                  matFormFieldClass="full-width"
+                  placeholder="Select Cost Account"
+                  propertyName="name"
+                  propertyValue="id"
+                  searchPlaceholder="Search Cost...">
+                </kt-simple-dropdown>
+              </div>
+            </div>
+          </div>
+          <!-- second row ends -->
+        </div>
+      </div>
+      <!-- form first section ends -->
+    </div>
+    <kt-btn-form-actions
+      [editDisplay]="isEditButtonShow"
+      [permissionz]="permissions.CATEGORIES_EDIT"
+      [validate]="{form:categoryForm, errors: formErrors, messages: validationMessages}"
+      (resetAction)="reset()"
+      (toggleEdit)="toggleEdit()"
+    ></kt-btn-form-actions>
+  </form>
+  <!-- form ends -->
+</div>

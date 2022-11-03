@@ -1,0 +1,147 @@
+<div class="container " >
+  <div class="col-lg-10 mx-auto text-right">
+    <div class="row">
+      <button
+        printSectionId="main"
+        printTitle="Credit Note"
+        id="credit_note_print"
+        ngxPrint
+        type="button"
+        [useExistingCss]="true"
+        class="app-default-btn"
+        style="margin-bottom: 20px;"><i class="fas fa-print"></i> Print
+      </button>
+    </div>
+  </div>
+  <div class="col-lg-10 mx-auto" id="main">
+    <div class="row">
+      <div class="bg-white">
+
+        <div class="print_header_area justify-content-center align-items-center">
+          <div class="print-col-6">
+            <div class="logo_and_title">
+              <!-- <img src="../../../../../../assets/media/logos/logo-wr.png" style="height: 100px;" alt=""> -->
+              <span class="top-heading">CREDIT NOTE</span>
+            </div>
+
+          </div>
+
+          <div class="print-col-6 text-right">
+            <img src="../../../../../../assets/img/logos/admin-logo.png" style="height: 40px;" alt="">
+         </div>
+
+        </div>
+
+
+        <div class="print_body_area">
+
+          <div class="print-col-5" style="margin-top: 3%;">
+
+            <div class="print-box" >
+              <h4 style="font-size: 22px;font-weight: 600;color: #2988BC;">{{creditNoteMaster?.customerName}}</h4>
+              <!-- <p style="font-size: 16px;font-weight: 600;color: #2988BC;margin-bottom: 2px;"></p> -->
+              <p style="font-size: 15px;font-weight: 400;color: #2988BC;">24 Dummy Street Area, Location, Lorem Ipsum, 570xx59x</p>
+            </div>
+          </div>
+
+          <div class="print-col-5 ml-auto">
+            <div class="id_num">
+              <div class="print-box">
+                <h4 style="font-size: 16px;letter-spacing: 3px;font-weight: 600;color: #2988BC;">Credit Note No: <span class="float-right" style="font-weight: 400;">{{creditNoteMaster?.docNo}}</span></h4>
+                <p style="margin-bottom: 0px;"></p>
+              </div>
+              <div class="print-box">
+                <h4 style="font-size: 16px;letter-spacing: 3px;font-weight: 600;color: #2988BC;margin-top: 10px;">Credit Note Date: <span class="float-right" style="font-weight: 400;">{{creditNoteMaster?.noteDate | date: 'MMM d, y'}}</span></h4>
+              </div>
+
+            </div>
+
+          </div>
+
+          <div class="print-col-12" style="margin-top: 3%;">
+            <div class="table-responsive">
+              <table class="table table-bordered" style="background-color: #fff;">
+                <thead class="thead-dark_color" >
+                  <tr style="background-color: #e4edf3; color: #2988BC;">
+                    <th style="background-color: #e4edf3; color: #2988BC;">S.No</th>
+                    <th style="background-color: #e4edf3; color: #2988BC;">Item</th>
+                    <th style="background-color: #e4edf3; color: #2988BC;">Description</th>
+                    <th  style="background-color: #e4edf3; color: #2988BC;">Quantity</th>
+                    <th  style="background-color: #e4edf3; color: #2988BC;">Price</th>
+                    <th  style="background-color: #e4edf3; color: #2988BC;">Tax</th>
+                    <th  class="text-center" style="background-color: #e4edf3; color: #2988BC;">SubTotal</th>
+
+
+                  </tr>
+                  <tr *ngFor="let line of creditNoteLines; index as i">
+                    <td style="font-weight: 500;border-bottom: 1px solid #2988BC;">{{i + 1}}</td>
+                    <td  style="font-weight: 500;border-bottom: 1px solid #2988BC;" >{{line?.itemName || '---'}}</td>
+                    <td style="font-weight: 500;border-bottom: 1px solid #2988BC;"> {{line?.description}}</td>
+                    <td style="font-weight: 500;border-bottom: 1px solid #2988BC;">{{line?.quantity.toLocaleString(undefined, { maximumFractionDigits: 2 })}}</td>
+                    <td  style="font-weight: 500;border-bottom: 1px solid #2988BC;" >{{line?.price.toLocaleString(undefined, { maximumFractionDigits: 2 })}}</td>
+                    <td style="font-weight: 500;border-bottom: 1px solid #2988BC;"> {{line?.tax + '%'}}</td>
+                    <td class="text-right" style="font-weight: 500;border-bottom: 1px solid #2988BC; "><b>{{line?.subTotal.toLocaleString(undefined, { maximumFractionDigits: 2 })}}</b></td>
+                  </tr>
+
+
+                </thead>
+              </table>
+            </div>
+          </div>
+
+
+          <div class="print-col-5  ml-auto" style=" margin-top: 2%;">
+
+            <div class="print-box">
+              <h4 style="font-size: 14px;letter-spacing: 1px;font-weight: 600;color: #2988BC;margin-top: 10px;">Total Before Tax:
+                <span class="float-right" style="font-weight: 500;">{{totalBeforeTax?.toLocaleString(undefined, { maximumFractionDigits: 2 })}}</span>
+              </h4>
+            </div>
+            <div class="print-box">
+              <h4 style="font-size: 14px;letter-spacing: 1px;font-weight: 600;color: #2988BC;margin-top: 10px;">Total Tax:
+                <span class="float-right" style="font-weight: 500;">{{totalTax?.toLocaleString(undefined, { maximumFractionDigits: 2 })}}</span>
+              </h4>
+            </div>
+
+            <div class="print-box">
+              <h4 style="font-size: 14px;letter-spacing: 1px;font-weight: 600;color: #2988BC;margin-top: 10px;border-top: 2px solid #2988BC;
+              padding-top: 10px;">Grand Total:
+                <span class="float-right" style="font-weight: 500;">{{totalAmount?.toLocaleString(undefined, { maximumFractionDigits: 2 })}}</span>
+              </h4>
+            </div>
+          </div>
+
+
+          <div class="print-col-12" style=" margin-top: 2%;">
+            <img src="../../../../../../assets/img/logos/final-logo-new-xs.png" style="height: 40px;" class="mb-5" alt="">
+            <div class="print-box">
+              <p style="font-size: 18px;color: #2988BC;
+            font-weight: 500;">Terms and conditions:</p>
+            </div>
+            <div class="print-box">
+              <h4 style="font-size: 14px;line-height:18px;font-weight: 300;color: #2988BC;">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+              </h4>
+            </div>
+
+            <div class="print-box" style="margin-top: 25px;">
+              <p style="
+              font-family: inherit; font-weight: bold;color: #2988BC;
+              font-size: 22px;">Thankyou for your Business</p>
+            </div>
+
+          </div>
+
+
+
+          <div class="print-col-4" style=" margin-top: 8%;color: #2988BC;">
+            _________________________________
+            <p class="text-center">Authorised Sign</p>
+          </div>
+
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+</div>

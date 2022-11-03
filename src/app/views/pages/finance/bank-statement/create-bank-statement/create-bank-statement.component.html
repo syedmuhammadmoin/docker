@@ -1,0 +1,225 @@
+<div [ktBusy]="isLoading">
+  <kt-portlet>
+    <kt-portlet-header [title]="formName + ' Bank Statement'">
+      <ng-container ktPortletTools>
+        <a [href]="appConst.remoteServiceBaseUrl + 'BankStmt/getStmtFile'" class="app-default-btn text-white"
+          target="_blank">
+          <i class="fas fa-download"></i>
+          Download
+        </a>
+      </ng-container>
+    </kt-portlet-header>
+    <!--begin::Form-->
+
+    <form autocomplete="off" #formDirective="ngForm" (ngSubmit)="onSubmit()" [formGroup]="bankStatementForm"
+      class="kt-form kt-form--label-align-right">
+      <div class="kt-portlet__body">
+        <div class="kt-form__section kt-form__section--first">
+          <div class="col-lg-12 col-md-12 col-sm-12">
+            <div class="row mt-8 mb-0">
+              <div class="col-lg-4 col-md-4 col-sm-4">
+                <div class="form-group kt-form__group mb-0">
+                  <label class="col-form-label pt-0">Bank Account: <i class="fa fa-asterisk" aria-hidden="true"
+                      style="color: #eb4c5d;font-size: 8px;position: relative;top: -5px;"></i></label>
+                  <kt-simple-dropdown
+                    (blurEvent)="logValidationErrors(this.bankStatementForm, this.formErrors, this.validationMessages)"
+                    [optionList]="ngxsService.bankAccounts$" errorMessage="Bank Account is required"
+                    formControlName="bankAccountId" matFormFieldClass="full-width" placeholder="Select Bank Account"
+                    propertyName="accountTitle" propertyValue="id" searchPlaceholder="Search Bank Account...">
+                  </kt-simple-dropdown>
+                </div>
+              </div>
+              <div class="col-lg-4 col-md-4 col-sm-4">
+                <div class="form-group kt-form__group mb-0">
+                  <label class="col-form-label pt-0">Description: <i class="fa fa-asterisk" aria-hidden="true"
+                      style="color: #eb4c5d;font-size: 8px;position: relative;top: -5px;"></i></label>
+                  <kt-input-field
+                  [errorMessage]="vs.errTEXT(bankStatementForm, 'description', 'Description')"
+                   formControlName="description" placeholder="Enter Description">
+                  </kt-input-field>
+                </div>
+              </div>
+
+              <div class="col-lg-4 col-md-4 col-sm-4">
+                <div class="form-group kt-form__group mb-0">
+                  <label class="col-form-label pt-0">Opening Balance:</label>
+                  <kt-input-field (blurEvent)="calculateRunningTotal()"
+                    (change)="this.cumulativeBalances[0] = this.openingBalance = $event.target.value"
+                    [errorMessage]="vs.errAMOUNT(bankStatementForm, 'openingBalance', 'Opening Balance')"
+                    type="number" formControlName="openingBalance" placeholder="Enter Opening Balance">
+                  </kt-input-field>
+                </div>
+              </div>
+            </div>
+
+            <div class="row mb-10">
+              <div *ngIf="!isEdit" class="col-lg-5 col-md-5 col-5">
+                <label class="col-form-label">Attachment:</label>
+                <div class="row" id="upload">
+                  <div class="col-lg-12 col-12">
+                    <label class="et_pb_contact_form_label" for="et_pb_contact_brand_file_request_0"></label>
+                    <input #uploadFileInput (change)="uploadFile($event.target?.files)" accept=".xlsx, .xls"
+                      class="file-upload" id="et_pb_contact_brand_file_request_0" type="file">
+                  </div>
+                  <div *ngIf="showFileName" class="col-lg-12 col-12">
+                    <div class="app_file_name_box">
+                      <span>
+                        {{fileName}}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-lg-12 col-md-12 col-sm-12">
+                <div *ngIf="showLines" class="example-container  ">
+                  <ng-container formArrayName="bankStmtLines">
+                    <mat-table #table [dataSource]="bankStatementForm.get('bankStmtLines')['controls']">
+                      <!-- Account Column -->
+                      <ng-container matColumnDef="reference">
+                        <mat-header-cell *matHeaderCellDef class="flex-2"> Ref #</mat-header-cell>
+                        <mat-cell *matCellDef="let element;  let i = index" [formGroup]="element" class="flex-2">
+                          <div class="col-lg-12 col-sm-12 mt-2">
+                            <kt-input-field
+                              (blurEvent)="logValidationErrors(this.bankStatementForm, formErrors, validationMessages)"
+                              [errorMessage]="vs.errTEXT(element, 'reference', 'Reference')"
+                              formControlName="reference" matFormFieldClass="full-width input_d_1"
+                              placeholder="Enter Ref #">
+                            </kt-input-field>
+                          </div>
+                        </mat-cell>
+                      </ng-container>
+                      <!--Partner Column-->
+                      <ng-container matColumnDef="stmtDate">
+                        <mat-header-cell *matHeaderCellDef [ngClass]="'width'" class="flex-2"> Date <i
+                            class="fa fa-asterisk" aria-hidden="true"
+                            style="color: #eb4c5d;font-size: 8px;position: relative;top: -5px;"></i></mat-header-cell>
+                        <mat-cell *matCellDef="let element;  let i = index" [formGroup]="element" [ngClass]="'width'"
+                          class="flex-2">
+                          <div class="col-lg-12 col-sm-12 mt-2">
+                            <kt-date-input
+                              (blur)="logValidationErrors(this.bankStatementForm, formErrors, validationMessages)"
+                              [errorMessage]="bankStatementForm.get('bankStmtLines')['controls'][i].controls.stmtDate.errors?.required && bankStatementForm.get('bankStmtLines')['controls'][i].controls.stmtDate.touched ? 'Date is required' : false "
+                              [maxDate]="currentDate" formControlName="stmtDate"
+                              matFormFieldClass="full-width input_d_1" placeholder="Statement Date">
+                            </kt-date-input>
+                          </div>
+                        </mat-cell>
+                      </ng-container>
+                      <!-- Description Column -->
+                      <ng-container matColumnDef="label">
+                        <mat-header-cell *matHeaderCellDef class="flex-2"> Label <i class="fa fa-asterisk"
+                            aria-hidden="true" style="color: #eb4c5d;font-size: 8px;position: relative;top: -5px;"></i>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let element;  let i = index" [formGroup]="element" class="flex-2">
+                          <div class="col-lg-12 col-sm-12 mt-2">
+                            <kt-input-field [id]="'label' + i"
+                              [errorMessage]="vs.errTEXT(element, 'label', 'Label')"
+                              formControlName="label"
+                              matFormFieldClass="full-width input_d_1" placeholder="Enter Label">
+                            </kt-input-field>
+                          </div>
+                        </mat-cell>
+                      </ng-container>
+                      <!-- Debit Column -->
+                      <ng-container matColumnDef="debit">
+                        <mat-header-cell *matHeaderCellDef class="flex-2"> Debit</mat-header-cell>
+                        <mat-cell *matCellDef="let element;  let i = index" [formGroup]="element" class="flex-2">
+                          <div class="col-lg-12 col-sm-12 mt-2">
+                            <kt-input-field (keyup)="onChangeEvent($event , i); calculateRunningTotal()"
+                              [errorMessage]="vs.errAMOUNT(element, 'debit', 'Debit')" type="number"
+                              formControlName="debit" matFormFieldClass="full-width input_d_1"
+                              placeholder="Enter Debit">
+                            </kt-input-field>
+                          </div>
+                        </mat-cell>
+                      </ng-container>
+                      <!-- Credit Column -->
+                      <ng-container matColumnDef="credit">
+                        <mat-header-cell *matHeaderCellDef class="flex-2"> Credit</mat-header-cell>
+                        <mat-cell *matCellDef="let element;  let i = index" [formGroup]="element" class="flex-2">
+                          <div class="col-lg-12 col-sm-12 mt-2">
+                            <kt-input-field (keyup)="onChangeEvent($event , i); calculateRunningTotal()"
+                              [errorMessage]="vs.errAMOUNT(element, 'credit', 'Credit')"
+                              type="number" formControlName="credit" matFormFieldClass="full-width input_d_1"
+                              placeholder="Enter Credit">
+                            </kt-input-field>
+                          </div>
+                        </mat-cell>
+                      </ng-container>
+                      <!-- Location Column -->
+                      <ng-container matColumnDef="cumulativeBalance">
+                        <mat-header-cell *matHeaderCellDef class="flex-2"> Cumulative Balance</mat-header-cell>
+                        <mat-cell *matCellDef="let element;  let i = index" [formGroup]="element" class="flex-2">
+                          <div class="col-lg-12 col-sm-12 mt-2">
+                            <kt-input-field formControlName="cumulativeBalance" matFormFieldClass="full-width input_d_1"
+                              placeholder="Cumulative Balance" readonly="true">
+                            </kt-input-field>
+                          </div>
+                        </mat-cell>
+                      </ng-container>
+                      <!-- Action Column -->
+                      <ng-container matColumnDef="action">
+                        <mat-header-cell *matHeaderCellDef class="flex-1">Action</mat-header-cell>
+                        <mat-cell *matCellDef="let element;  let i = index" [formGroup]="element" class="flex-1">
+                          <!-- <mat-icon class="delete-button" (click)="removeJournalEntryLineClick(i);">delete_forever
+                          </mat-icon> -->
+
+                          <button (click)="removeBankStatementLine(i); calculateRunningTotal()" class=" app-remove-btn"
+                            type="button">
+                            <i aria-hidden="true" class="fas fa-trash"></i>
+                          </button>
+                        </mat-cell>
+                      </ng-container>
+                      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                    </mat-table>
+                  </ng-container>
+
+                  <ng-container>
+                    <div *ngIf="showLines" class="row" style="align-items: center;">
+                      <div class="col-lg-5 col-sm-5">
+                        <button (click)="addBankStatementLineClick()" class=" app-add-new-line-btn" type="button">
+                          <i aria-hidden="true" class="fas fa-plus"> </i> Add New Line
+                        </button>
+                      </div>
+                      <div class="col-lg-7 col-md-7 text-right">
+                        <!-- <div class="col-lg-6 amount-font"></div> -->
+                        <div class="amount"> Closing Balance : {{
+                          math.sign(calculateClosingBalance()) !== -1
+                          ? (calculateClosingBalance() | number: '1.2-2')
+                          : '(' + (calculateClosingBalance() | number: '1.2-2')?.replace('-', '') + ')' || 0.00}}</div>
+                      </div>
+                    </div>
+                  </ng-container>
+
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <!--File Upload-->
+          <!--Journal Entry Lines-->
+        </div>
+      </div>
+
+      <mat-divider class="mt-10"></mat-divider>
+      <div class="kt-portlet__foot p-5">
+        <div class="kt-form__actions kt-form__actions">
+          <div class="row ">
+            <div class="col-lg-12 text-right">
+              <button (click)="reset()" class="app-reset-btn mr-3" type="button"><i class="fas fa-undo"></i> Reset
+              </button>
+              <button (click)="logValidationErrors(this.bankStatementForm, this.formErrors, this.validationMessages)"
+                class="app-default-btn" type="submit"><i class="far fa-save"></i>
+                Submit
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </kt-portlet>
+</div>

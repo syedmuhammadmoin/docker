@@ -1,0 +1,71 @@
+<div>
+  <!-- [ktBusy]="isLoading" -->
+  <kt-portlet>
+    <kt-portlet-header [title]="'Inventory Adjustment Detail'">
+      <ng-container ktPortletTools>
+        <!-- <button [routerLink]="'/credit-note/print/' + creditNoteMaster?.id" type="button" mat-raised-button
+          class="btn_white mr-3">
+          Print Credit Note
+        </button>
+        <button *ngIf="creditNoteMaster?.state === docStatus.Draft || creditNoteMaster?.state === docStatus.Rejected"
+          [disabled]="!(permission.isGranted(permissions.CREDITNOTE_EDIT))"
+          [ngClass]="!(permission.isGranted(permissions.CREDITNOTE_EDIT)) ? 'disable' : '' "
+          [routerLink]="'/credit-note/edit/' + creditNoteMaster?.id"
+          [queryParams]="{q: creditNoteMaster?.id, 'isCreditNote': true}" type="button" mat-raised-button
+          class="btn_white mr-3">
+          Edit
+        </button>
+        <h4 class="overall_statuses {{creditNoteMaster?.status}}"> Status:  {{creditNoteMaster?.status}} </h4> -->
+      </ng-container>
+    </kt-portlet-header>
+    <kt-portlet-body>
+      <div class="col-md-12 col-lg-12 mx-auto  mb-5">
+
+        <div class="row mt-5">
+          <div class="col-md-12 col-lg-12">
+            <div class="table-responsive">
+
+              <table class="table" style="border-collapse: separate; border-spacing:6px 6px;">
+                <tbody>
+                  <tr rowspan="1">
+                    <th  style="    border: 1px solid #8babdb; width: 15%;">Doc #:</th>
+                    <td  style="background: #595e791c; width: 20%;">
+                      {{adjustmentMaster?.docNo}}</td>
+                    <th  style="    border: 1px solid #8babdb; width: 15%;">User:</th>
+                    <td  style="background: #595e791c; width: 20%;">
+                      {{adjustmentMaster?.employee?.name}}</td>
+                  </tr>
+                  <tr rowspan="1">
+                    <th  style="    border: 1px solid #8babdb;width: 15%;">Date:</th>
+                    <td  style="background: #595e791c; width: 20%;">
+                      {{adjustmentMaster?.adjustmentDate | date: 'MMM d, y'}}</td>
+                    <th  style="    border: 1px solid #8babdb;width: 15%;">Contact:</th>
+                    <td  style="background: #595e791c; width: 20%;">
+                      {{adjustmentMaster?.contact}}</td>
+                  </tr>
+
+
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <kt-ra-grid-offline [raGridProperties]="raGridProperties"></kt-ra-grid-offline>
+        </div>
+      </div>
+    </kt-portlet-body>
+    <mat-divider class="mt-10"></mat-divider>
+    <!-- <div class="kt-portlet__foot">
+      <div class="kt-form__actions kt-form__actions">
+        <div class="row ">
+          <div class="col-lg-12 text-right" *ngIf="creditNoteMaster?.isAllowedRole">
+            <button (click)="workflow(action.Reject)" class="mr-5 danger__btn" mat-raised-button>Reject</button>
+            <button (click)="workflow(action.Approve)" class="success__btn" mat-raised-button>Approve</button>
+          </div>
+        </div>
+      </div>
+    </div> -->
+  </kt-portlet>
+</div>

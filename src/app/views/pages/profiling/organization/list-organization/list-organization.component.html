@@ -1,0 +1,9 @@
+<kt-portlet>
+  <kt-portlet-header [title]="'Organizations'"></kt-portlet-header>
+  <kt-portlet-body>
+    <kt-btn-action (clickEvent)="openDialog()"
+      [permissionz]="permissions.ORGANIZATION_CREATE" btnText="Add Organization">
+    </kt-btn-action>
+    <kt-ra-grid-offline [raGridProperties]="raGridProperties"></kt-ra-grid-offline>
+  </kt-portlet-body>
+</kt-portlet>

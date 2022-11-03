@@ -1,0 +1,68 @@
+  <div class="row">
+      <div class="col-lg-9 col-md-9 col-12">
+        <div [ktBusy]="isLoading" type="SINGLE_CONTENT" ngbDropdown placement="top-end">
+          <div (click)="on_click()" class="btn d-flex align-items-center " id="dropdownBasic3" ngbDropdownToggle>
+            <div>
+              <div class="symbol symbol-40 symbol-lg-35 symbol-circle symbol-light-success mr-2">
+            <span class="symbol-label font-size-lg font-weight-bold app-text-primary">
+                {{ currentOrganization?.organizationName || 'N/A' |firstLetter}}
+              </span>
+              </div>
+            </div>
+            <div style="text-overflow: ellipsis; overflow: hidden;" class="font-weight-bold mx-auto">
+              <span class="app-text-primary">{{currentOrganization?.organizationName}}</span>
+            </div>
+            <div class="float-right arrow_toggle_hide"><i id="atag" class="fa fa-angle-double-up rotate"></i></div>
+          </div>
+          <div ngbDropdownMenu aria-labelledby="dropdownBasic3" class="drop_menu_cont" >
+            <ng-container *ngFor="let org of userOrganisations">
+              <ng-container
+                *ngIf="currentOrganization && org.organizationId != currentOrganization.organizationId; else selected">
+                <div ngbDropdownItem (click)="switchOrganisation(org.organizationId)"
+                    class="btn d-flex align-items-center cursor-pointer items__select">
+                  <div>
+                    <div class="symbol symbol-40 symbol-lg-35 symbol-circle symbol-light-success mr-2">
+                  <span class="symbol-label font-size-sm font-weight-bold">
+                      {{ org.organizationName || 'N/A' |firstLetter}}
+                  </span>
+                    </div>
+                  </div>
+                  <div  style="text-overflow: ellipsis; overflow: hidden;" >
+                    <span class="app-text-primary">{{org.organizationName || 'N/A'}}</span>
+                  </div>
+                  <div class="float-right arrow_toggle_hide">
+                    <!-- <i class="fas fa-retweet color-grey"
+                      title="Switch to {{org.organizationName}}"></i> -->
+                  </div>
+                </div>
+              </ng-container>
+              <ng-template #selected>
+                <div disabled ngbDropdownItem class="btn d-flex align-items-center items__select">
+                  <div>
+                    <div class="symbol symbol-40 symbol-lg-35 symbol-circle symbol-light-success mr-2">
+                  <span class="symbol-label font-size-sm font-weight-bold">
+                      {{org.organizationName |firstLetter}}
+                  </span>
+                    </div>
+                  </div>
+                  <div style="text-overflow: ellipsis; overflow: hidden;" class="text-dark mr-1">
+                    <span class="app-text-primary">{{org.organizationName || 'N/A'}}</span>
+                  </div>
+                  <div class=" arrow_toggle_hide ml-auto">
+                    <i class="fas fa-check color-green"
+                      title="Current Organisation {{org.organizationName}}"></i>
+                  </div>
+                </div>
+              </ng-template>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-3 col-12 text-center pl-0">
+        <button class="btn btn-icon btn-setting-collapse  pulse pulse-primary mt-3" (click)="editOrganization()">
+          <i class="flaticon2-gear app-text-primary"></i>
+          <span class="pulse-ring"></span>
+        </button>
+
+      </div>
+  </div>

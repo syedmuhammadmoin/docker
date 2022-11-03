@@ -1,0 +1,136 @@
+<div [ktBusy]="isLoading" class="kt-portlet">
+  <div class="kt-portlet__head">
+    <div class="kt-portlet__head-caption">
+      <div class="kt-portlet__head-title">
+        <span class="kt-portlet__head-icon kt-hide"></span>
+        <h3 class="kt-portlet__head-text modal-header">
+          {{formName}}
+            <span (click)="onCloseDialog()" class="dialog-cross"><i
+          class="fa fa-times float-right"></i></span></h3>
+      </div>
+    </div>
+  </div>
+  <!-- form start -->
+  <form autocomplete="off" #formDirective="ngForm" (ngSubmit)="onSubmit()" [formGroup]="deptForm"
+        class="kt-form kt-form--label-align-right">
+    <!-- portlet body starts -->
+    <div class="kt-portlet__body">
+      <!-- form first section starts -->
+      <div class="kt-form__section kt-form__section--first">
+
+
+        <div class="col-md-12 col-lg-12 col-sm-12">
+          <!-- first row starts -->
+          <div class="row" style="justify-content: space-between;">
+            <div class="col-lg-6 col-md-6">
+              <div class="form-group kt-form__group pt-2 pb-0 mb-0">
+                <label class="col-form-label pt-0">Department: <i class="fa fa-asterisk" aria-hidden="true" style="color: #eb4c5d;font-size: 8px;position: relative;top: -5px;"></i></label>
+                <kt-input-field
+                  [errorMessage]="vs.errTEXT(deptForm, 'name', 'Department Name', {min: 2})"
+                  formControlName="name"
+                  placeholder="Enter Department Name">
+                </kt-input-field>
+              </div>
+            </div>
+
+            <div class="col-lg-6 col-md-6">
+              <div class="form-group kt-form__group pt-2 pb-0 mb-0">
+                <label class="col-form-label pt-0">H.O.D:</label>
+                <kt-input-field
+                  hintText="Optional"
+                  formControlName="headOfDept"
+                  [errorMessage]="vs.errTEXT(deptForm, 'headOfDept', 'Head Of Department')"
+
+                  placeholder="Enter Head of Department">
+                </kt-input-field>
+              </div>
+            </div>
+          </div>
+          <!-- first row ends -->
+          <!-- second row starts -->
+          <div class="row" style="justify-content: space-between;">
+            <div class="col-lg-4 col-md-4">
+              <div class="form-group kt-form__group pt-2 pb-0 mb-0">
+                <label class="col-form-label pt-0">Country: <i class="fa fa-asterisk" aria-hidden="true" style="color: #eb4c5d;font-size: 8px;position: relative;top: -5px;"></i></label>
+                <kt-simple-dropdown
+                  (blurEvent)="logValidationErrors(deptForm, formErrors, validationMessages)"
+                  (selectionChange)="onChangeCountry($event.value)"
+                  [errorMessage]="formErrors.country"
+                  [isDisabled]="disableDropdown"
+                  [optionList]="countryList"
+                  formControlName="country"
+                  matFormFieldClass="full-width"
+                  placeholder="Select Country"
+                  propertyName="name"
+                  propertyValue="id"
+                  searchPlaceholder="Search Country">
+                </kt-simple-dropdown>
+              </div>
+            </div>
+
+            <div class="col-lg-4 col-md-4">
+              <div class="form-group kt-form__group pt-2 pb-0 mb-0">
+                <label class="col-form-label pt-0">State: <i class="fa fa-asterisk" aria-hidden="true" style="color: #eb4c5d;font-size: 8px;position: relative;top: -5px;"></i></label>
+                <kt-simple-dropdown
+                  (blurEvent)="logValidationErrors(deptForm, formErrors, validationMessages)"
+                  (selectionChange)="onChangeState($event.value)"
+                  [errorMessage]="formErrors.state"
+                  [isDisabled]="disableDropdown"
+                  [optionList]="stateList2"
+                  formControlName="state"
+                  matFormFieldClass="full-width"
+                  placeholder="Select State"
+                  propertyName="name"
+                  propertyValue="id"
+                  searchPlaceholder="Search State">
+                </kt-simple-dropdown>
+              </div>
+            </div>
+
+            <div class="col-lg-4 col-md-4">
+              <div class="form-group kt-form__group pt-2 pb-0 mb-0">
+                <label class="col-form-label pt-0">City: <i class="fa fa-asterisk" aria-hidden="true" style="color: #eb4c5d;font-size: 8px;position: relative;top: -5px;"></i></label>
+                <kt-simple-dropdown
+                  (blurEvent)="logValidationErrors(deptForm, formErrors, validationMessages)"
+                  [errorMessage]="formErrors.city"
+                  [isDisabled]="disableDropdown"
+                  [optionList]="cityList2"
+                  formControlName="city"
+                  matFormFieldClass="full-width"
+                  placeholder="Select City"
+                  propertyName="name"
+                  propertyValue="id"
+                  searchPlaceholder="Search City">
+                </kt-simple-dropdown>
+              </div>
+            </div>
+          </div>
+          <!-- second row ends -->
+          <!-- third row starts -->
+          <div class="row">
+            <div class="col-md-8 col-lg-8 col-sm-8">
+              <div class="form-group kt-form__group mb-0">
+                <label class="col-form-label">Address:</label>
+                <kt-input-field
+                  [errorMessage]="vs.errTEXT(deptForm, 'address', 'Address')"
+                  hintText="Optional"
+                  placeholder="Enter Address">
+                </kt-input-field>
+              </div>
+            </div>
+          </div>
+          <!-- third row ends -->
+        </div>
+      </div>
+      <!-- form first section ends -->
+    </div>
+    <kt-btn-form-actions
+      [editDisplay]="isEditButtonShow"
+      [permissionz]="permissions.DEPARTMENTS_EDIT"
+      [validate]="{form:deptForm, errors: formErrors, messages: validationMessages}"
+      (resetAction)="reset()"
+      (toggleEdit)="toggleEdit()"
+    ></kt-btn-form-actions>
+  </form>
+  <!-- form ends -->
+</div>

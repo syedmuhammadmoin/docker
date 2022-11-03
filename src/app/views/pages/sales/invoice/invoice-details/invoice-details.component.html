@@ -1,0 +1,234 @@
+<div [ktBusy]="isLoading">
+  <kt-portlet>
+    <kt-portlet-header [class]="'card-head-lg ribbon ribbon-clip ribbon-right'"
+                       [title]="'Invoice Detail'">
+      <ng-container  ktPortletTools>
+        <div class="ribbon-target"><span
+          class="ribbon-inner {{invoiceMaster?.status}}"></span> {{invoiceMaster?.status}}</div>
+      </ng-container>
+    </kt-portlet-header>
+    <kt-portlet-body>
+      <div class="col-md-12 col-lg-12 mb-5">
+        <div class="row">
+          <div class="col-md-12 col-12 pb-3 text-right">
+            <ng-container ktPortletTools>
+              <button [routerLink]="'/' + INVOICE.ID_BASED_ROUTE('print', invoiceMaster?.id)"
+                      class="btn-detail-print mr-3"
+                      type="button">
+                <i class="fa fa-print"></i> Print Invoice
+              </button>
+              <button *ngIf="invoiceMaster?.state === docStatus.Draft"
+                      [disabled]="!(permission.isGranted(permissions.INVOICE_EDIT))"
+                      [ngClass]="!(permission.isGranted(permissions.INVOICE_EDIT)) ? 'disable' : '' "
+                      [queryParams]="{q: invoiceMaster?.id, 'isInvoice': true}"
+                      [routerLink]="'/' + INVOICE.ID_BASED_ROUTE('edit', invoiceMaster?.id)"
+                      class="mr-3 app-edit-btn" type="button"><i class="fa fa-edit"></i> Edit
+              </button>
+              <button (click)="openDialog()"
+                      *ngIf="(invoiceMaster?.ledgerId)"
+                      [disabled]="!(permission.isGranted(permissions.PAYMENT_CREATE))"
+                      [ngClass]="!(permission.isGranted(permissions.PAYMENT_CREATE)) ? 'disable' : '' "
+                      class="btn app-default-btn btn-gradient mr-3"
+                      type="button"> Register Payment
+              </button>
+              <button
+                *ngIf="(invoiceMaster?.ledgerId)"
+                [disabled]="!(permission.isGranted(permissions.CREDITNOTE_CREATE))"
+                [ngClass]="!(permission.isGranted(permissions.CREDITNOTE_CREATE)) ? 'disable' : '' "
+                [queryParams]="{q: invoiceMaster?.id, 'isInvoice': true}" [routerLink]="'/' + CREDIT_NOTE.CREATE"
+                class="btn app-default-btn btn-gradient mr-3"
+                type="button">
+                Create Credit Note
+              </button>
+              <button (click)="resetToDraft()"
+                      *ngIf="invoiceMaster?.ledgerId"
+                      class="mr-3 app-edit-btn" type="button"><i class="fa fa-undo-alt"></i> Reset to Draft
+              </button>
+              <div ngbDropdown placement="bottom-start" class="d-inline-block">
+                <button type="button" class="btn app-default-btn btn-gradient mr-3" id="dropdownBasic14" ngbDropdownToggle> <i class="fa fa-history p-0"></i></button>
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic14" class="custom-placement">
+                  <h3 class="fancy-heading">Audit trail</h3>
+                  <div class="d-flex align-items-center flex-wrap viz-bg-light p-3 mb-3 rounded">
+                    <!--begin::Symbol-->
+                    <!--end::Symbol-->
+                    <!--begin::Text-->
+                    <div class="d-flex flex-column flex-grow-1 mr-2">
+                      <a href="#" class="font-weight-bold app-text-primary font-size-lg ">Top Authors <span class="label label-light label-inline my-lg-0 my-2 float-right bg-gradient">25 OCT</span></a>
+                      <span class="font-weight-bold app-text-primary">Lorem Ipsum is simply dummy text.</span>
+                    </div>
+                    <!--end::Text-->
+                  </div>
+
+                  <div class="d-flex align-items-center flex-wrap viz-bg-light p-3 mb-3 rounded">
+                    <!--begin::Symbol-->
+                    <!--end::Symbol-->
+                    <!--begin::Text-->
+                    <div class="d-flex flex-column flex-grow-1 mr-2">
+                      <a href="#" class="font-weight-bold app-text-primary font-size-lg ">Top Authors <span class="label label-light label-inline my-lg-0 my-2 float-right bg-gradient">25 OCT</span></a>
+                      <span class="font-weight-bold app-text-primary">Lorem Ipsum is simply dummy text Lorem Ipsum is simply dummy text Lorem Ipsum is simply dummy text.</span>
+                    </div>
+                    <!--end::Text-->
+
+                  </div>
+                  <div class="d-flex align-items-center flex-wrap viz-bg-light p-3 mb-3 rounded">
+                    <!--begin::Symbol-->
+
+                    <!--end::Symbol-->
+                    <!--begin::Text-->
+                    <div class="d-flex flex-column flex-grow-1 mr-2">
+                      <a href="#" class="font-weight-bold app-text-primary font-size-lg ">Top Authors <span class="label label-light label-inline my-lg-0 my-2 float-right bg-gradient">25 OCT</span></a>
+                      <span class="font-weight-bold app-text-primary">Lorem Ipsum is simply dummy text.</span>
+                    </div>
+                    <!--end::Text-->
+
+                  </div>
+
+
+                </div>
+              </div>
+
+              <mat-divider class="mt-3"></mat-divider>
+
+            </ng-container>
+          </div>
+
+          <div class="col-md-4 col-lg-4  mt-3">
+            <div class="print-box">
+              <h4>Invoice No:
+                <span class="float-right">{{invoiceMaster?.docNo}}</span></h4>
+            </div>
+            <div class="print-box">
+              <h4>Customer Name:
+                <span class="float-right" style="font-weight: 400;">{{invoiceMaster?.customerName}}</span></h4>
+            </div>
+            <div class="print-box">
+              <h4>Invoice Date:
+                <span class="float-right"
+                      style="font-weight: 400;">{{invoiceMaster?.invoiceDate | date: 'MMM d, y'}}</span></h4>
+            </div>
+            <div class="print-box">
+              <h4>Due Date:
+                <span class="float-right" style="font-weight: 400;">{{invoiceMaster?.dueDate | date: 'MMM d, y'}}</span>
+              </h4>
+            </div>
+            <div class="print-box">
+              <h4>Contact:
+                <span class="float-right"
+                      style="font-weight: 400;">{{invoiceMaster?.contact ? invoiceMaster?.contact : "-"}}</span></h4>
+            </div>
+            <!-- <div class="print-box partner__box" >
+                <h4 >{{paymentMaster?.businessPartnerName}}</h4>
+                <p class="mb-0" >24 Dummy Street Area, Location, Lorem Ipsum, 570xx59x</p>
+            </div> -->
+          </div>
+          <kt-ra-grid-offline [raGridProperties]="raGridProperties"></kt-ra-grid-offline>
+          <div *ngIf="bpUnReconPaymentList.length > 0" class="col-md-6 col-6 mt-3">
+            <table class="table table-bordered text-center styled-table">
+              <thead>
+              <tr>
+                <th>Doc No</th>
+                <th>Amount</th>
+                <th>Action</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let unReconPay of bpUnReconPaymentList; let i = index">
+                <td>
+                  <a
+                    [routerLink]="(unReconPay?.docType === docType.Receipt) ? (PAYMENT.CONDITIONAL_ROUTE('receipt') + PAYMENT.ID_BASED_ROUTE('details', unReconPay?.id)) : unReconPay?.docType == docType.JournalEntry ? ('/' + JOURNAL_ENTRY.ID_BASED_ROUTE('details' , unReconPay?.id)) : ('/' + CREDIT_NOTE.ID_BASED_ROUTE('details' , unReconPay?.id))">
+                    {{unReconPay.docNo}}
+                  </a>
+                </td>
+                <td>{{valueFormatter(unReconPay.amount)}}</td>
+                <td>
+                  <button (click)="reconcile(unReconPay)" class="btn app-default-btn btn-gradient">Reconcile
+                  </button>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="col-md-4 col-lg-4  ml-auto mt-3">
+
+            <div class="bottom-print-box">
+              <h4 >Total Before Tax :
+                <span class="float-right" style="font-weight: 400;">{{valueFormatter(totalBeforeTax || 0)}}</span>
+              </h4>
+            </div>
+            <div class="bottom-print-box">
+              <h4 >Total Tax :
+                <span class="float-right" style="font-weight: 400;">{{valueFormatter(totalTax || 0)}}</span>
+              </h4>
+            </div>
+            <div class="bottom-print-box">
+              <h4 >Grand Total :
+                <span class="float-right" style="font-weight: 400;">{{valueFormatter(totalInvoiceAmount || 0)}}</span>
+              </h4>
+            </div>
+
+            <div *ngIf="paidAmountList.length > 0" class="bottom-print-box">
+              <mat-accordion>
+                <mat-expansion-panel>
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      Paid Amount :
+                    </mat-panel-title>
+                    <mat-panel-description>
+                      {{valueFormatter(paidAmount || 0)}}
+                    </mat-panel-description>
+                  </mat-expansion-panel-header>
+                  <table class="table text-center table-bordered paid-amount-table">
+                    <tr>
+                      <th>Doc #</th>
+                      <th>Amount</th>
+                      <th>Action</th>
+                    </tr>
+                    <tr *ngFor="let pay of paidAmountList">
+                      <td><a
+                        [routerLink]="(pay?.docType === docType.Receipt) ? (PAYMENT.CONDITIONAL_ROUTE('receipt') + PAYMENT.ID_BASED_ROUTE('details', pay?.id)) : pay?.docType == docType.JournalEntry ? ('/' + JOURNAL_ENTRY.ID_BASED_ROUTE('details' , pay?.id)) : ('/' + CREDIT_NOTE.ID_BASED_ROUTE('details' , pay?.id))"
+                        class="links">{{pay?.docNo}}</a></td>
+                      <td>
+                        <a
+                          [routerLink]="(pay?.docType === docType.Receipt) ? (PAYMENT.CONDITIONAL_ROUTE('receipt') + PAYMENT.ID_BASED_ROUTE('details', pay?.id)) : pay?.docType == docType.JournalEntry ? ('/' + JOURNAL_ENTRY.ID_BASED_ROUTE('details' , pay?.id)) : ('/' + CREDIT_NOTE.ID_BASED_ROUTE('details' , pay?.id))"
+                          class="links">{{valueFormatter(pay.amount || 0)}}</a>
+                      </td>
+                      <td matTooltip="UNRECONCILE">
+                        <button (click)="unReconcile(pay)" class="btn  app-unreconsile-btn"
+                                >
+                          <!--<i  class="fas fa-undo"></i> --><i class="fas fa-undo-alt pr-0"
+                                                                 ></i></button>
+                      </td>
+                    </tr>
+                  </table>
+                </mat-expansion-panel>
+              </mat-accordion>
+            </div>
+
+            <div *ngIf="(invoiceMaster?.ledgerId) && pendingAmount !== 0" class="bottom-print-box">
+              <h4 >Balance Amount :
+                <span class="float-right" style="font-weight: 400;">{{valueFormatter(pendingAmount || 0)}}</span>
+              </h4>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </kt-portlet-body>
+
+    <mat-divider></mat-divider>
+
+    <div class="kt-portlet__foot">
+      <div class="kt-form__actions kt-form__actions">
+        <div class="row ">
+          <div *ngIf="invoiceMaster?.isAllowedRole" class="col-lg-12 text-right">
+            <button (click)="workflow(action.Reject)" class="mr-5 danger__btn" mat-raised-button>Reject</button>
+            <button (click)="workflow(action.Approve)" class="success__btn" mat-raised-button>Approve</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </kt-portlet>
+</div>
+
+

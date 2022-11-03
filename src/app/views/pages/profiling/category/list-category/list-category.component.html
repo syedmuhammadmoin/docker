@@ -1,0 +1,9 @@
+<kt-portlet>
+  <kt-portlet-header [title]="'Categories'"></kt-portlet-header>
+  <kt-portlet-body>
+    <kt-btn-action (clickEvent)="openDialog()"
+      [permissionz]="permissions.CATEGORIES_CREATE" btnText="Add Category">
+    </kt-btn-action>
+    <kt-ra-grid #raGrid [raGridProperties]="raGridProperties"></kt-ra-grid>
+  </kt-portlet-body>
+</kt-portlet>

@@ -1,0 +1,49 @@
+<div>
+  <mat-form-field [ngClass]="matFormFieldClass" appearance="outline">
+    <mat-select #customSelect (blur)="blur()" (selectionChange)="selectionChangeEvent($event)" [disabled]="isDisabled"
+                [formControl]="control"
+                [multiple]="isMultiple" [ngClass]="matSelectClass" [placeholder]="placeholder" [required]="isRequired">
+      <mat-option>
+        <ngx-mat-select-search [formControl]="filterControl" [noEntriesFoundLabel]="'No Record Found...'"[placeholderLabel]="searchPlaceholder || 'Search...'"></ngx-mat-select-search>
+      </mat-option>
+      <!--      {{(isLoading | async) | json}}-->
+      <mat-option *ngIf="!hasRequired()" [value]="undefined" id="None">-- None --</mat-option>
+      <mat-option *ngIf="isLoading" [ktBusy]="isLoading" style="padding: 0"
+                  type="SINGLE_CONTENT"></mat-option>
+      <!-- <ng-container *ngIf="isLoading$; else loading">
+         <mat-option  [ktBusy]="(isLoading$ | async)" style="padding: 0"
+                     type="SINGLE_CONTENT"></mat-option>
+       </ng-container>
+       <ng-template #loading>
+         <mat-option *ngIf="isLoading" [ktBusy]="isLoading" style="padding: 0"
+                      type="SINGLE_CONTENT"></mat-option>
+       </ng-template>-->
+      <ng-container *ngFor="let option of filteredOptionList | async">
+        <mat-option [disabled]="isOptionDisabled(propertyValue !== undefined ? option[propertyValue] : option)"
+                    [value]="propertyValue !== undefined || null ? option[propertyValue] : option">
+          <span *ngIf="isInnerHtml" [innerHTML]="option[propertyName]" style="font-size: 14px;"></span>
+          <span *ngIf="!isInnerHtml" style="font-size: 14px;">{{option[propertyName]}}</span>
+          <span *ngIf="secondaryPropertyName && isSecondaryInnerHtml"
+                [innerHTML]="'-' + option[secondaryPropertyName]" style="font-size: 12px !important;"></span>
+          <span *ngIf="secondaryPropertyName && !isSecondaryInnerHtml"
+                style="font-size: 12px !important;">&nbsp;-&nbsp;&nbsp;{{option[secondaryPropertyName]}}</span>
+        </mat-option>
+      </ng-container>
+      <mat-option *ngIf="clickEvent && clickEventButtonName" style="padding: 0px">
+        <button (click)="emitClickEvent()" class="btn btn-light" mat-flat-button style="width: 100%">{{
+          clickEventButtonName ||
+          'clickEventButtonName' }}</button>
+      </mat-option>
+      <!--    <mat-option disabled="true" *ngIf="(filteredOptionList | async).length <= 0">No results Found</mat-option>-->
+    </mat-select>
+    <mat-hint align="end" *ngIf="!hasRequired()">Optional</mat-hint>
+    <!-- <mat-error *ngIf="formControlDirective && !formControlDirective.control.valid
+      && formControlDirective.control.touched">
+      <strong>{{ errorMessage }}</strong>
+    </mat-error> -->
+    <mat-error *ngIf="formControlDirective && !formControlDirective.control.valid &&
+             (formControlDirective.control.touched || formControlDirective.control.untouched)">
+      <strong>{{ errorMessage }}</strong>
+    </mat-error>
+  </mat-form-field>
+</div>

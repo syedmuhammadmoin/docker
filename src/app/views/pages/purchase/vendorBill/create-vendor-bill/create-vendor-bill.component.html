@@ -1,0 +1,306 @@
+<div [ktBusy]="isLoading">
+  <kt-portlet>
+    <kt-portlet-header [title]="titleName + ' Vendor Bill'"></kt-portlet-header>
+    <!--begin::Form-->
+    <form autocomplete="off" [formGroup]="vendorBillForm" (ngSubmit)="onSubmit()" #formDirective="ngForm" class="kt-form kt-form--label-align-right">
+      <div class="kt-portlet__body">
+        <div class="kt-form__section kt-form__section--first">
+
+          <div class="col-lg-12 col-md-12">
+            <div class="row mt-8">
+              <div class="col-lg-3 col-sm-3 col-md-3">
+                <div class="form-group kt-form__group mb-0">
+                  <label class="col-form-label">Vendor Name: <i class="fa fa-asterisk" aria-hidden="true" style="color: #eb4c5d;font-size: 8px;position: relative;top: -5px;"></i></label>
+                  <kt-simple-dropdown
+                    propertyName="name"
+                    propertyValue="id"
+                    searchPlaceholder="Search Vendor"
+                    placeholder="Select Vendor"
+                    matFormFieldClass="full-width"
+                    (blurEvent)="logValidationErrors(vendorBillForm, formErrors, validationMessages)"
+                    formControlName="vendorName"
+                    [optionList]="ngxsService.businessPartners$"
+                    clickEventButtonName="Add New Vendor"
+                    (clickEvent)="openBusinessPartnerDialog()"
+                    [errorMessage]="formErrors.vendorName">
+                  </kt-simple-dropdown>
+                </div>
+              </div>
+              <div class="col-lg-3 col-sm-3 col-md-3">
+                <div class="form-group kt-form__group mb-0">
+                  <label class="col-form-label">Bill Date: <i class="fa fa-asterisk" aria-hidden="true" style="color: #eb4c5d;font-size: 8px;position: relative;top: -5px;"></i></label>
+                  <kt-date-input
+                    formControlName="billDate"
+                    placeholder="Bill Date"
+                    matFormFieldClass="full-width "
+                    (blurEvent)="logValidationErrors(this.vendorBillForm, formErrors, validationMessages)"
+                    [errorMessage]="formErrors.billDate"
+                    [maxDate]="maxDate">
+                  </kt-date-input>
+                </div>
+              </div>
+
+              <div class="col-lg-3 col-sm-3 col-md-3">
+                <div class="form-group kt-form__group mb-0">
+                  <label class="col-form-label">Due Date: <i class="fa fa-asterisk" aria-hidden="true" style="color: #eb4c5d;font-size: 8px;position: relative;top: -5px;"></i></label>
+                  <kt-date-input
+                    formControlName="dueDate"
+                    placeholder="Due Date"
+                    matFormFieldClass="full-width "
+                    (blurEvent)="logValidationErrors(this.vendorBillForm, formErrors, validationMessages)"
+                    [errorMessage]="formErrors.dueDate"
+                    [minDate]="minDate"
+                    dateCondition="dateCondition"
+                    dateMessage="Bill">
+                  </kt-date-input>
+                </div>
+              </div>
+
+              <div class="col-lg-3 col-sm-3 col-md-3">
+                <div class="form-group kt-form__group mb-0">
+                  <label class="col-form-label">Contact:</label>
+                  <kt-input-field
+                    [errorMessage]="vs.errNUM(vendorBillForm, 'contact', 'Contact')"
+                    formControlName="contact"
+                    placeholder="Enter Contact"
+                    matFormFieldClass="full-width "
+                    hintText="Optional"
+                    [type]="'tel'"
+                  >
+                  </kt-input-field>
+                </div>
+              </div>
+            </div>
+
+            <!--New Row-->
+
+
+            <div class="row mt-5">
+              <div class="col-lg-12 col-md-12 col-sm-12">
+                <div class="example-container">
+                  <ng-container formArrayName="vendorBillLines">
+                    <div class="table-responsive">
+                      <mat-table #table [dataSource]="vendorBillForm.get('vendorBillLines')['controls']">
+                        <!-- Account Column -->
+                        <ng-container matColumnDef="itemId">
+                          <mat-header-cell *matHeaderCellDef class="flex-1"> Item</mat-header-cell>
+                          <mat-cell *matCellDef="let element;  let i = index" [formGroup]="element" class="flex-1">
+                            <div class="col-lg-12 col-sm-12 mt-2">
+                              <kt-simple-dropdown
+                                [isRequired]="false"
+                                hintText="Optional"
+                                propertyName="productName"
+                                propertyValue="id"
+                                [optionList]="ngxsService.products$"
+                                clickEventButtonName="Add New Item"
+                                (clickEvent)="openProductDialog()"
+                                formControlName="itemId"
+                                placeholder="Select Item"
+                                matFormFieldClass="mobile-label full-width input_d_1"
+                                (selectionChange)="onItemSelected($event.value, i)">
+                              </kt-simple-dropdown>
+                            </div>
+                          </mat-cell>
+                        </ng-container>
+                        <!--Partner Column-->
+                        <ng-container matColumnDef="description">
+                          <mat-header-cell *matHeaderCellDef class="flex-1"> Description <i class="fa fa-asterisk" aria-hidden="true" style="color: #eb4c5d;font-size: 8px;position: relative;top: -5px;"></i></mat-header-cell>
+                          <mat-cell *matCellDef="let element;  let i = index" [formGroup]="element" class="flex-1">
+                            <div class="col-lg-12 col-sm-12 mt-2">
+                              <kt-input-field
+                                formControlName="description"
+                                matFormFieldClass="mobile-label full-width input_d_1"
+                                placeholder="Enter Description"
+                                (blurEvent)="logValidationErrors(this.vendorBillForm, formErrors, validationMessages)"
+                                [errorMessage]="[{ condition : vendorBillForm.get('vendorBillLines')['controls'][i].controls.description.errors?.required &&
+                                                                  vendorBillForm.get('vendorBillLines')['controls'][i].controls.description.touched ,
+                                                      error : 'Description is required' }]">
+                              </kt-input-field>
+                            </div>
+                          </mat-cell>
+                        </ng-container>
+                        <!-- Description Column -->
+                        <ng-container matColumnDef="accountId">
+                          <mat-header-cell *matHeaderCellDef class="flex-1"> Account <i class="fa fa-asterisk" aria-hidden="true" style="color: #eb4c5d;font-size: 8px;position: relative;top: -5px;"></i></mat-header-cell>
+                          <mat-cell *matCellDef="let element;  let i = index" [formGroup]="element" class="flex-1">
+                            <div class="col-lg-12 col-sm-12 mt-2">
+                              <kt-simple-dropdown
+                                placeholder="Select Account"
+                                propertyValue="id"
+                                propertyName="name"
+                                formControlName="accountId"
+                                matFormFieldClass="mobile-label full-width input_d_1"
+                                errorMessage="Account is required"
+                                [optionList]="ngxsService.otherAccountsLevel4$">
+                              </kt-simple-dropdown>
+                            </div>
+                          </mat-cell>
+                        </ng-container>
+                        <!-- Debit Column -->
+                        <ng-container matColumnDef="quantity">
+                          <mat-header-cell *matHeaderCellDef class="flex-1"> Quantity <i class="fa fa-asterisk" aria-hidden="true" style="color: #eb4c5d;font-size: 8px;position: relative;top: -5px;"></i></mat-header-cell>
+                          <mat-cell *matCellDef="let element;  let i = index" [formGroup]="element" class="flex-1">
+                            <div class="col-lg-12 col-sm-12 mt-2">
+                              <kt-input-field
+                                formControlName="quantity"
+                                matFormFieldClass="mobile-label full-width input_d_1"
+                                placeholder="Enter Quantity"
+                                #itemName
+                                type="number"
+                                (blurEvent)="logValidationErrors(this.vendorBillForm, formErrors, validationMessages)"
+                                [errorMessage]="[{ condition : vendorBillForm.get('vendorBillLines')['controls'][i].controls.quantity.errors?.required &&
+                                                                  vendorBillForm.get('vendorBillLines')['controls'][i].controls.quantity.touched ,
+                                                      error : 'Quantity is required' },
+                                                    { condition : vendorBillForm.get('vendorBillLines')['controls'][i].controls.quantity.errors?.min &&
+                                                                  vendorBillForm.get('vendorBillLines')['controls'][i].controls.quantity.touched ,
+                                                      error : 'Minimum value is one' }]"
+                                (change)="onChangeEvent($event , i , itemName)"
+                                (keyup)="onChangeEvent($event , i , itemName)">
+                              </kt-input-field>
+                            </div>
+                          </mat-cell>
+                        </ng-container>
+                        <!-- Credit Column -->
+                        <ng-container matColumnDef="cost">
+                          <mat-header-cell *matHeaderCellDef class="flex-1"> Cost <i class="fa fa-asterisk" aria-hidden="true" style="color: #eb4c5d;font-size: 8px;position: relative;top: -5px;"></i></mat-header-cell>
+                          <mat-cell *matCellDef="let element;  let i = index" [formGroup]="element" class="flex-1">
+                            <div class="col-lg-12 col-sm-12 mt-2">
+                              <kt-input-field
+                                formControlName="cost"
+                                matFormFieldClass="mobile-label full-width input_d_1"
+                                placeholder="Enter Cost"
+                                #itemName
+                                type="number"
+                                (blurEvent)="logValidationErrors(this.vendorBillForm, formErrors, validationMessages)"
+                                [errorMessage]="[{ condition : vendorBillForm.get('vendorBillLines')['controls'][i].controls.cost.errors?.required &&
+                                                                  vendorBillForm.get('vendorBillLines')['controls'][i].controls.cost.touched ,
+                                                      error : 'Cost is required'},
+                                                      { condition : vendorBillForm.get('vendorBillLines')['controls'][i].controls.cost.errors?.min &&
+                                                                    vendorBillForm.get('vendorBillLines')['controls'][i].controls.cost.touched ,
+                                                        error : 'Cost cannot be zero' }]"
+                                (change)="onChangeEvent($event , i , itemName)"
+                                (keyup)="onChangeEvent($event , i , itemName)">
+                              </kt-input-field>
+                            </div>
+                          </mat-cell>
+                        </ng-container>
+                        <!-- Location Column -->
+                        <ng-container matColumnDef="tax">
+                          <mat-header-cell *matHeaderCellDef class="flex-1"> Tax%</mat-header-cell>
+                          <mat-cell *matCellDef="let element;  let i = index" [formGroup]="element" class="flex-1">
+                            <div class="col-lg-12 col-sm-12 mt-2">
+                              <kt-input-field
+                                hintText="Optional"
+                                formControlName="tax"
+                                matFormFieldClass="mobile-label full-width input_d_1"
+                                placeholder="Enter Tax %"
+                                #itemName
+                                type="number"
+                                (blurEvent)="logValidationErrors(this.vendorBillForm, formErrors, validationMessages)"
+                                [errorMessage]="[{ condition : (vendorBillForm.get('vendorBillLines')['controls'][i].controls.tax.errors?.min ||
+                                                                  vendorBillForm.get('vendorBillLines')['controls'][i].controls.tax.errors?.max) &&
+                                                                  vendorBillForm.get('vendorBillLines')['controls'][i].controls.tax.touched ,
+                                                      error : 'Tax % should be between 0 and 100'}]"
+                                (change)="onChangeEvent($event , i , itemName)"
+                                (keyup)="onChangeEvent($event , i , itemName)">
+                              </kt-input-field>
+                            </div>
+                          </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="subTotal">
+                          <mat-header-cell *matHeaderCellDef class="flex-1"> SubTotal</mat-header-cell>
+                          <mat-cell *matCellDef="let element;  let i = index" [formGroup]="element" class="flex-1">
+                            <div class="col-lg-12 col-sm-12 mt-2">
+                              <kt-input-field
+                                formControlName="subTotal"
+                                matFormFieldClass="mobile-label full-width input_d_1">
+                              </kt-input-field>
+                            </div>
+                          </mat-cell>
+                        </ng-container>
+                        <!-- Location Column -->
+                        <ng-container matColumnDef="locationId">
+                          <mat-header-cell *matHeaderCellDef class="flex-1"> Location</mat-header-cell>
+                          <mat-cell *matCellDef="let element;  let i = index" [formGroup]="element" class="flex-1">
+                            <div class="col-lg-12 col-sm-12 mt-2">
+                              <kt-group-dropdown
+                                (clickEvent)="openLocationDialog()"
+                                [errorMessage]="'Location is Required'"
+                                [optionList]="ngxsService.locations$"
+                                clickEventButtonName="Add New Location"
+                                formControlName="locationId"
+                                groupChildrenName="locations"
+                                groupPropertyName="warehouse"
+                                matFormFieldClass="mobile-label full-width input_d_1"
+                                placeholder="Location">
+                              </kt-group-dropdown>
+                            </div>
+                          </mat-cell>
+                        </ng-container>
+                        <!-- Action Column -->
+                        <ng-container matColumnDef="action">
+                          <mat-header-cell *matHeaderCellDef class="flex-1">Action</mat-header-cell>
+                          <mat-cell *matCellDef="let element;  let i = index" [formGroup]="element" class="flex-1">
+                            <!-- <mat-icon class="delete-button" (click)="removeJournalEntryLineClick(i);">delete_forever
+                            </mat-icon> -->
+
+                            <button class=" app-remove-btn" type="button"
+                                    (click)="removeVendorBillLineClick(i); totalCalculation()">
+                              <i class="fas fa-trash" aria-hidden="true"></i>
+                            </button>
+                          </mat-cell>
+                        </ng-container>
+                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                      </mat-table>
+                    </div>
+                  </ng-container>
+
+                  <ng-container>
+                    <div class="row">
+                      <div class="col-md-12 col-sm-12">
+                        <button class=" app-add-new-line-btn" type="button" (click)="addVendorBillLineClick()">
+                          <i class="fas fa-plus" aria-hidden="true"> </i> Add New Line
+                        </button>
+                      </div>
+                    </div>
+                  </ng-container>
+
+                </div>
+              </div>
+            </div>
+
+
+            <div class="row mt-10">
+              <div class="col-md-4 col-lg-4  ml-auto mt-3">
+                <div class="bottom-print-box">
+                  <h4 >Total Before Tax :
+                    <span class="float-right" style="font-weight: 400;">{{valueFormatter(totalBeforeTax || 0)}}</span>
+                  </h4>
+                </div>
+                <div class="bottom-print-box">
+                  <h4 >Total Tax :
+                    <span class="float-right" style="font-weight: 400;">{{valueFormatter(totalTax || 0)}}</span>
+                  </h4>
+                </div>
+                <div class="bottom-print-box">
+                  <h4 >Grand Total :
+                    <span class="float-right" style="font-weight: 400;">{{valueFormatter(grandTotal || 0)}}</span>
+                  </h4>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <kt-btn-form-draft
+        [validate]="{form:vendorBillForm, errors: formErrors, messages: validationMessages}"
+        (resetAction)="reset()"
+        (submitAction)="isSubmit($event)"
+      ></kt-btn-form-draft>
+    </form>
+    <!--end::Form-->
+  </kt-portlet>
+</div>
+

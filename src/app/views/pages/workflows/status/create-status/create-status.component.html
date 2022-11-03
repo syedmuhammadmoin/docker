@@ -1,0 +1,58 @@
+<div [ktBusy]="isLoading" class="kt-portlet" style="overflow :hidden;">
+    <div class="kt-portlet__head">
+      <div class="kt-portlet__head-caption">
+        <div class="kt-portlet__head-title">
+          <h3 class="kt-portlet__head-text modal-header">
+            {{titleName}} <span (click)="onCloseStatusDialog()" class="dialog-cross"><i class="fa fa-times float-right"></i></span>
+          </h3>
+        </div>
+      </div>
+    </div>
+    <form autocomplete="off" [formGroup]="statusForm" (ngSubmit)="onSubmit()" class="kt-form kt-form--label-align-right">
+      <div class="kt-portlet__body">
+        <div class="kt-form__section kt-form__section--first">
+          <!-- first row start -->
+          <div class="col-md-12 col-lg-12 col-sm-12">
+            <div class="row">
+              <div class="col-lg-6 col-md-6 col-sm-6">
+                <label class="col-form-label">Status:</label>
+                <div class="form-group kt-form__group">
+                  <kt-input-field
+                   formControlName="status"
+                   [errorMessage]="vs.errTEXT(statusForm, 'status', 'Status')"
+                   placeholder="Enter Status"
+                   [errorMessage]="[{ condition : formErrors.status , error : formErrors.status }]">
+                  </kt-input-field>
+                </div>
+              </div>
+
+              <div class="col-lg-6 col-md-6 col-sm-6">
+                <label class="col-form-label">Select State:</label>
+                <div class="form-group kt-form__group">
+                  <kt-simple-dropdown
+                    formControlName="state"
+                    (blurEvent)="logValidationErrors(this.statusForm, this.formErrors, this.validationMessages)"
+                    propertyName="viewValue"
+                    propertyValue="id"
+                    matFormFieldClass='full-width'
+                    [errorMessage]="formErrors.state"
+                    [optionList]="workflowStates"
+                    searchPlaceholder="Search state..."
+                    placeholder="Select state">
+                  </kt-simple-dropdown>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- first row end -->
+        </div>
+        <!-- form section end -->
+      </div>
+      <kt-btn-form-actions
+        [editDisplay]="isEditButtonShow"
+        [validate]="{form:statusForm, errors: formErrors, messages: validationMessages}"
+        (resetAction)="reset()"
+        (toggleEdit)="toggleEdit()"
+      ></kt-btn-form-actions>
+    </form>
+  </div>

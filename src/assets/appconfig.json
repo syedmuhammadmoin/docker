@@ -1,0 +1,5 @@
+{
+  "remoteServiceBaseUrl": "http://testapi.vizalys.com/api/",
+  "appBaseUrl": "http://localhost:4200",
+  "websiteBaseUrl": "http://localhost:4300"
+}

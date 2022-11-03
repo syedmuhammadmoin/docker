@@ -1,0 +1,112 @@
+<div [ktBusy]="isLoading" class="kt-portlet" style="overflow : hidden;">
+  <div class="kt-portlet__head">
+    <div class="kt-portlet__head-caption">
+      <div class="kt-portlet__head-title">
+        <h3 class="kt-portlet__head-text modal-header"> {{title}}
+          <span (click)="onCloseDialog()" class="dialog-cross"><i class="fa fa-times float-right"></i></span>
+        </h3>
+      </div>
+    </div>
+  </div>
+  <!--begin::Form-->
+  <form autocomplete="off" #formDirective="ngForm" (ngSubmit)="onSubmit()" [formGroup]="bankAccountForm"
+        class="kt-form kt-form--label-align-right">
+    <div class="kt-portlet__body ">
+      <div class="kt-form__section kt-form__section--first">
+        <div class="col-md-12 col-lg-12 col-sm-12">
+          <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6">
+              <div class="form-group kt-form__group mb-0">
+                <label class="col-form-label pt-0">Account Number: <i class="fa fa-asterisk" aria-hidden="true" style="color: #eb4c5d;font-size: 8px;position: relative;top: -5px;"></i></label>
+                <kt-input-field
+                [errorMessage]="vs.errNUM(bankAccountForm, 'accountNumber', 'Account Number', {max: 20})"
+                  formControlName="accountNumber"
+                  placeholder="Enter Account Number"
+                  [type]="'number'">
+                </kt-input-field>
+              </div>
+            </div>
+
+            <div class="col-lg-6 col-md-6 col-sm-6">
+              <div class="form-group kt-form__group mb-0">
+                <label class="col-form-label pt-0">Bank: <i class="fa fa-asterisk" aria-hidden="true" style="color: #eb4c5d;font-size: 8px;position: relative;top: -5px;"></i></label>
+                <kt-input-field
+                  [errorMessage]="vs.errTEXT(bankAccountForm, 'bankName', 'Bank Name')"
+                  formControlName="bankName"
+                  placeholder="Enter Bank Name">
+                </kt-input-field>
+              </div>
+            </div>
+          </div>
+          <!-- first row ends -->
+          <!-- second row starts -->
+          <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6">
+              <div class="form-group kt-form__group mb-0">
+                <label class="col-form-label pt-0">Branch Name:</label>
+                <kt-input-field
+                  hintText="Optional"
+                  [errorMessage]="vs.errTEXT(bankAccountForm, 'branch', 'Branch Name')"
+                  formControlName="branch"
+                  placeholder="Enter branch name">
+                </kt-input-field>
+              </div>
+            </div>
+
+            <div class="col-lg-6 col-md-6 col-sm-6">
+              <div class="form-group kt-form__group mb-0">
+                <label class="col-form-label pt-0">Opening Balance: <i class="fa fa-asterisk" aria-hidden="true" style="color: #eb4c5d;font-size: 8px;position: relative;top: -5px;"></i></label>
+                <kt-input-field
+                  [errorMessage]="this.vs.errAMOUNT(this.bankAccountForm, 'openingBalance', 'Opening Balance')"
+                  formControlName="openingBalance"
+                  placeholder="Enter Opening Balance"
+                  [type]="'number'">
+                </kt-input-field>
+              </div>
+            </div>
+          </div>
+          <!-- second row ends -->
+          <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6">
+              <div class="form-group kt-form__group mb-0">
+                <label class="col-form-label pt-0">Account Title: <i class="fa fa-asterisk" aria-hidden="true" style="color: #eb4c5d;font-size: 8px;position: relative;top: -5px;"></i></label>
+                <kt-input-field
+                  [errorMessage]="vs.errTEXT(bankAccountForm, 'accountTitle', 'Account Title')"
+                  formControlName="accountTitle"
+                  placeholder="Enter Account Title">
+                </kt-input-field>
+              </div>
+            </div>
+
+            <div class="col-lg-6 col-md-6 col-sm-6">
+              <div class="form-group kt-form__group mb-0">
+                <label class="col-form-label pt-0">Opening Balance Date: <i class="fa fa-asterisk" aria-hidden="true" style="color: #eb4c5d;font-size: 8px;position: relative;top: -5px;"></i></label>
+                <kt-date-input
+                  (blurEvent)="logValidationErrors(this.bankAccountForm, this.formErrors, this.validationMessages)"
+                  [errorMessage]="formErrors.OBDate"
+                  [maxDate]="currentDate"
+                  formControlName="OBDate"
+                  matFormFieldClass="full-width"
+                  placeholder="Opening Balance Date">
+                </kt-date-input>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--second row-->
+      </div>
+    </div>
+
+    <kt-btn-form-actions
+      [editDisplay]="isEditButtonShow"
+      [permissionz]="permissions.BANKACCOUNT_EDIT"
+      [validate]="{
+        form: bankAccountForm,
+        errors: formErrors,
+        messages: validationMessages
+      }"
+      (resetAction)="reset()"
+      (toggleEdit)="toggleEdit()"
+    ></kt-btn-form-actions>
+  </form>
+</div>

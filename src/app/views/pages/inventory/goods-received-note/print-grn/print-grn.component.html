@@ -1,0 +1,109 @@
+<div class="container ">
+  <div class="col-lg-10 mx-auto text-right">
+    <div class="row">
+      <button
+        [useExistingCss]="true"
+        class="app-default-btn"
+        ngxPrint
+        printSectionId="main"
+        printTitle="Goods Received Note"
+        style="margin-bottom: 20px;"
+        type="button"><i class="fas fa-print"></i> Print
+      </button>
+    </div>
+  </div>
+  <div class="col-lg-10 mx-auto" id="main">
+    <div class="row">
+      <div class="bg-white">
+        <div class="print_header_area justify-content-center align-items-center">
+          <div class="print-col-6">
+            <div class="logo_and_title">
+              <span class="top-heading">Goods Received Note</span>
+            </div>
+          </div>
+          <div class="print-col-6 text-right">
+            <img alt="" src="assets/img/logos/admin-logo.png" style="height: 40px;">
+          </div>
+        </div>
+        <div class="print_body_area mt-5">
+          <div class="print-col-5" style="margin-top: 3%;">
+            <div class="print-box">
+              <h4 style="font-size: 22px;font-weight: 600;color: #2988bc;">{{grnMaster?.vendorName}}</h4>
+              <p style="font-size: 15px;font-weight: 400;color: #2988bc;">24 Dummy Street Area, Location, Lorem Ipsum,
+                570xx59x</p>
+            </div>
+          </div>
+
+          <div class="print-col-5 ml-auto">
+            <div class="id_num">
+              <div class="print-box">
+                <h4 style="font-size: 16px;letter-spacing: 3px;font-weight: 600;">GRN No: <span class="float-right"
+                                                                                                style="font-weight: 400;">{{grnMaster?.docNo}}</span>
+                </h4>
+                <p style="margin-bottom: 0px;"></p>
+              </div>
+              <div class="print-box">
+                <h4 style="font-size: 16px;letter-spacing: 3px;font-weight: 600;margin-top: 10px;">GRN Date: <span
+                  class="float-right" style="font-weight: 400;">{{grnMaster?.docDate | date: 'MMM d, y'}}</span></h4>
+              </div>
+            </div>
+          </div>
+
+          <div class="print-col-12" style="margin-top: 3%;">
+            <div class="table-responsive">
+              <table class="table table-bordered" style="background-color: #fff;">
+                <thead class="thead-dark_color" >
+                <tr style="background-color: #e4edf3; color: #2988bc;">
+                  <th style="background-color: #e4edf3; color: #2988bc;">S.No</th>
+                  <th style="background-color: #e4edf3; color: #2988bc;">Item</th>
+                  <th style="background-color: #e4edf3; color: #2988bc;">Description</th>
+                  <th style="background-color: #e4edf3; color: #2988bc;">Quantity</th>
+                </tr>
+                <tr *ngFor="let line of grnLines; index as i">
+                  <td style="font-weight: 500;">{{i + 1}}</td>
+                  <td style="font-weight: 500;">{{line?.itemName || '---'}}</td>
+                  <td style="font-weight: 500;"> {{line?.description}}</td>
+                  <td style="font-weight: 500;">{{valueFormatter(line?.quantity || 0)}}</td>
+                </tr>
+                </thead>
+              </table>
+            </div>
+          </div>
+
+          <div class="print-col-12" style=" margin-top: 2%;">
+            <img alt="" class="mb-5" src="../../../../../../assets/img/logos/final-logo-new-xs.png"
+                 style="height: 40px;">
+            <div class="print-box">
+              <p style="font-size: 18px;color: #2988bc;
+            font-weight: 500;">Terms and conditions:</p>
+            </div>
+            <div class="print-box">
+              <h4 style="font-size: 14px;line-height:18px;font-weight: 300;color: #2988bc;">Lorem Ipsum is simply dummy
+                text of the printing and typesetting industry.
+              </h4>
+            </div>
+
+            <div class="print-box" style="margin-top: 25px;">
+              <p style="
+              font-family: inherit; font-weight: bold;color: #2988bc;
+              font-size: 22px;">Thankyou for your Business</p>
+            </div>
+
+          </div>
+
+
+          <div class="print-col-4" style=" margin-top: 8%;color: #2988bc;">
+            _________________________________
+            <p class="text-center">Authorised Sign</p>
+          </div>
+        </div>
+
+        <!-- <div class="print-foot-area">
+          <div class="print-col-12 text-center">
+            <p style="margin-bottom: 0px;">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+          </div>
+        </div> -->
+      </div>
+    </div>
+  </div>
+</div>

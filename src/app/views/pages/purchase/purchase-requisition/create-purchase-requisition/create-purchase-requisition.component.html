@@ -1,0 +1,162 @@
+<div [ktBusy]="isLoading">
+  <kt-portlet>
+    <kt-portlet-header [title]="formName + ' Purchase Requisition'"></kt-portlet-header>
+    <!--      <mat-divider></mat-divider>-->
+    <!--begin::Form-->
+    <form autocomplete="off" #formDirective="ngForm" (ngSubmit)="onSubmit()" [formGroup]="purchaseOrderForm"
+          class="kt-form kt-form--label-align-right">
+      <div class="kt-portlet__body">
+        <div class="kt-form__section kt-form__section--first">
+          <div class="col-lg-12 col-md-12 col-sm-12">
+            <div class="row mt-8 mb-5">
+              <div class="col-4">
+                <div class="form-group kt-form__group mb-0">
+                  <label class="col-form-label pt-0">Vendor Name: <i class="fa fa-asterisk" aria-hidden="true" style="color: #eb4c5d;font-size: 8px;position: relative;top: -5px;"></i></label>
+                  <kt-simple-dropdown
+                    (blurEvent)="logValidationErrors(this.purchaseOrderForm, this.formErrors, this.validationMessages)"
+                    (clickEvent)="openBusinessPartnerDialog()"
+                    [errorMessage]="formErrors.vendorName"
+                    [optionList]="ngxsService.businessPartners$"
+                    clickEventButtonName="Add New Vendor"
+                    formControlName="vendorName"
+                    matFormFieldClass="full-width "
+                    placeholder="Select Vendor"
+                    propertyName="name"
+                    propertyValue="id"
+                    searchPlaceholder="Search Vendors...">
+                  </kt-simple-dropdown>
+                </div>
+              </div>
+
+              <div class="col-4">
+                <div class="form-group kt-form__group mb-0">
+                  <label class="col-form-label pt-0">Requisition Date: <i class="fa fa-asterisk" aria-hidden="true" style="color: #eb4c5d;font-size: 8px;position: relative;top: -5px;"></i></label>
+                  <kt-date-input
+                    (blurEvent)="logValidationErrors(this.purchaseOrderForm, formErrors, validationMessages)"
+                    [errorMessage]="formErrors.requisitionDate"
+                    [maxDate]="maxDate"
+                    formControlName="requisitionDate"
+                    placeholder="Purchase Date">
+                  </kt-date-input>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-lg-12 col-md-12 col-sm-12">
+                <div class="example-container">
+                  <ng-container formArrayName="purchaseOrderLines">
+                    <div class="table-responsive">
+                      <mat-table #table [dataSource]="purchaseOrderForm.get('purchaseOrderLines')['controls']">
+                        <!-- Item Column -->
+                        <ng-container matColumnDef="itemId">
+                          <mat-header-cell *matHeaderCellDef class="flex-1"> Item <i class="fa fa-asterisk" aria-hidden="true" style="color: #eb4c5d;font-size: 8px;position: relative;top: -5px;"></i></mat-header-cell>
+                          <mat-cell *matCellDef="let element;  let i = index" [formGroup]="element" class="flex-1">
+                            <div class="col-lg-12 col-sm-12 mt-2">
+                              <kt-simple-dropdown
+                                (clickEvent)="openProductDialog()"
+                                [errorMessage]="'Item is Required'"
+                                [optionList]="ngxsService.products$"
+                                clickEventButtonName="Add New Item"
+                                formControlName="itemId"
+                                matFormFieldClass="mobile-label full-width input_d_1"
+                                placeholder="Select Item"
+                                propertyName="productName"
+                                propertyValue="id"
+                                searchPlaceholder="Select Item">
+                              </kt-simple-dropdown>
+                            </div>
+                          </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="description">
+                          <mat-header-cell *matHeaderCellDef class="flex-1"> Description <i class="fa fa-asterisk" aria-hidden="true" style="color: #eb4c5d;font-size: 8px;position: relative;top: -5px;"></i></mat-header-cell>
+                          <mat-cell *matCellDef="let element;  let i = index" [formGroup]="element" class="flex-1">
+                            <div class="col-lg-12 col-sm-12 mt-2">
+                              <kt-input-field
+                                [errorMessage]="vs.errTEXT(element, 'description', 'Description')"
+                                formControlName="description"
+                                matFormFieldClass="mobile-label full-width input_d_1"
+                                placeholder="Enter Description">
+                              </kt-input-field>
+                            </div>
+                          </mat-cell>
+                        </ng-container>
+
+                        <!-- Quantity Column -->
+                        <ng-container matColumnDef="quantity">
+                          <mat-header-cell *matHeaderCellDef class="flex-1"> Quantity <i class="fa fa-asterisk" aria-hidden="true" style="color: #eb4c5d;font-size: 8px;position: relative;top: -5px;"></i></mat-header-cell>
+                          <mat-cell *matCellDef="let element;  let i = index" [formGroup]="element" class="flex-1">
+                            <div class="col-lg-12 col-sm-12 mt-2">
+                              <kt-input-field
+                                #itemName
+                                [errorMessage]="vs.errAMOUNT(element, 'quantity', 'Quantity', {min: 1})"
+                                formControlName="quantity"
+                                matFormFieldClass="mobile-label full-width input_d_1"
+                                placeholder="0"
+                                type="number">
+                              </kt-input-field>
+                            </div>
+                          </mat-cell>
+                        </ng-container>
+
+                        <!-- Action Column -->
+                        <ng-container matColumnDef="action">
+                          <mat-header-cell *matHeaderCellDef class="flex-1">Action </mat-header-cell>
+                          <mat-cell *matCellDef="let element;  let i = index" [formGroup]="element" class="flex-1">
+                            <button (click)="removePurchaseOrderLineClick(i)" class="app-remove-btn"
+                                    type="button">
+                              <i aria-hidden="true" class="fas fa-trash"></i>
+                            </button>
+                          </mat-cell>
+                        </ng-container>
+                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                      </mat-table>
+                    </div>
+                  </ng-container>
+
+                  <ng-container>
+                    <div class="row">
+                      <div class="col-md-12 col-sm-12">
+                        <button (click)="addPurchaseOrderLineClick()" class="app-add-new-line-btn" type="button">
+                          <i aria-hidden="true" class="fas fa-plus"> </i> Add New Line
+                        </button>
+                      </div>
+                    </div>
+                  </ng-container>
+
+                </div>
+              </div>
+            </div>
+
+
+            <div class="row mt-10">
+              <div class="col-lg-4 col-md-4 ml-auto mt-3">
+                <div class="bottom-print-box">
+                  <h4 >Total Before Tax :
+                    <span class="float-right" style="font-weight: 400;">{{valueFormatter(totalBeforeTax || 0)}}</span>
+                  </h4>
+                </div>
+                <div class="bottom-print-box">
+                  <h4 >Total Tax :
+                    <span class="float-right" style="font-weight: 400;">{{valueFormatter(totalTax || 0)}}</span>
+                  </h4>
+                </div>
+                <div class="bottom-print-box">
+                  <h4 >Grand Total :
+                    <span class="float-right" style="font-weight: 400;">{{valueFormatter(grandTotal || 0)}}</span>
+                  </h4>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <kt-btn-form-draft
+        [validate]="{form:purchaseOrderForm, errors: formErrors, messages: validationMessages}"
+        (resetAction)="reset()"
+        (submitAction)="isSubmit($event)"
+      ></kt-btn-form-draft>
+    </form>
+  </kt-portlet>
+</div>

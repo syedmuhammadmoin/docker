@@ -1,0 +1,9 @@
+<kt-portlet>
+  <kt-portlet-header [title]="'Business Partners'"></kt-portlet-header>
+  <kt-portlet-body>
+    <kt-btn-action (clickEvent)="openDialog()"
+      [permissionz]="permissions.BUSINESSPARTNER_CREATE" btnText="Add Business Partner">
+    </kt-btn-action>
+    <kt-ra-grid #raGrid [raGridProperties]="raGridProperties"></kt-ra-grid>
+  </kt-portlet-body>
+</kt-portlet>

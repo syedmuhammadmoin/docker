@@ -1,0 +1,15 @@
+  <ag-grid-angular
+    (gridReady)="setApi($event); gridReady($event);"
+    (firstDataRendered)="onFirstDataRendered($event)"
+    [rowData]="raGridProperties.rowData"
+    [columnDefs]="raGridProperties.columnDefs"
+    [tooltipShowDelay]="raGridProperties.tooltipShowDelay"
+    [pagination]="true"
+    [rowSelection]="raGridProperties.rowSelection"
+    [overlayLoadingTemplate]="raGridProperties.overlayLoadingTemplate"
+    [rowMultiSelectWithClick]="true"
+    (rowSelected)="raGridProperties.rowSelected($event)"
+    [ngStyle]="raGridProperties?.style"
+    class="ag-theme-alpine grid_measurement"
+    style="height: 500px"
+  ></ag-grid-angular>

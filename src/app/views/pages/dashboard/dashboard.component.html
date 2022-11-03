@@ -1,0 +1,262 @@
+<div *ngIf="!isLoading" class="container">
+  <div class="row">
+    <!--region Widgets-->
+    <div class="col-lg-6 col-md-6 col-sm-12 mb-2">
+      <div class="card card-custom card-stretch gutter-b p-3">
+        <!--begin::Header-->
+        <div class="card-header dashboard-card-header  mb-2">
+          <h3 class="card-title align-items-start flex-column">
+            <span class="card-label font-weight-bold font-size-h4 app-text-primary mb-3">Total Receivable:</span>
+            <span class="text-muted font-weight-bold  font-size-sm">Rs {{valueFormatter(receivable?.receivablesPayables || 0)}}</span>
+          </h3>
+        </div>
+        <!--end::Header-->
+        <!--begin::Body-->
+        <div class="card-body pt-2">
+          <!--begin::Table-->
+          <div class="table-responsive">
+            <table class="table table-borderless mb-0">
+              <tbody>
+                <!--begin::Item-->
+                <tr>
+                  <td class="w-40px align-middle pb-6 pl-0 pr-2">
+                    <!--begin::Symbol-->
+                    <div class="symbol symbol-40 symbol-light-theme">
+                      <span class="symbol-label">
+                        <span class="svg-icon svg-icon-lg svg-icon-theme">
+                          <!--begin::Svg Icon | -->
+                          <svg height="24px" version="1.1" viewBox="0 0 24 24" width="24px"
+                               xmlns="http://www.w3.org/2000/svg">
+                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                <rect x="0" y="0" width="24" height="24"/>
+                                <path
+                                  d="M5,19 L20,19 C20.5522847,19 21,19.4477153 21,20 C21,20.5522847 20.5522847,21 20,21 L4,21 C3.44771525,21 3,20.5522847 3,20 L3,4 C3,3.44771525 3.44771525,3 4,3 C4.55228475,3 5,3.44771525 5,4 L5,19 Z"
+                                  fill="#000000" fill-rule="nonzero"/>
+                                <path
+                                  d="M8.7295372,14.6839411 C8.35180695,15.0868534 7.71897114,15.1072675 7.31605887,14.7295372 C6.9131466,14.3518069 6.89273254,13.7189711 7.2704628,13.3160589 L11.0204628,9.31605887 C11.3857725,8.92639521 11.9928179,8.89260288 12.3991193,9.23931335 L15.358855,11.7649545 L19.2151172,6.88035571 C19.5573373,6.44687693 20.1861655,6.37289714 20.6196443,6.71511723 C21.0531231,7.05733733 21.1271029,7.68616551 20.7848828,8.11964429 L16.2848828,13.8196443 C15.9333973,14.2648593 15.2823707,14.3288915 14.8508807,13.9606866 L11.8268294,11.3801628 L8.7295372,14.6839411 Z"
+                                  fill="#000000" fill-rule="nonzero" opacity="0.3"
+                                  transform="translate(14.000019, 10.749981) scale(1, -1) translate(-14.000019, -10.749981) "/>
+                            </g>
+                          </svg>
+
+                          <!--end::Svg Icon-->
+                        </span>
+                      </span>
+                    </div>
+                    <!--end::Symbol-->
+                  </td>
+                  <td class="font-size-lg font-weight-bolder align-middle w-150px app-text-primary pb-6">Total Receivable Amount:</td>
+                  <td class="font-weight-bold text-muted text-right align-middle pb-6">&nbsp;</td>
+                  <td class="font-weight-bolder font-size-lg text-right  align-middle pb-6 " >
+                    <span class="app-text-primary" [matTooltip]="valueFormatter(receivable?.receivablesPayables || 0)">Rs {{valueFormatter(receivable?.receivablesPayables || 0)}}</span>
+                  </td>
+                </tr>
+                <!--end::Item-->
+                <!--begin::Item-->
+                <tr>
+                  <td class="w-40px pb-6 pl-0 pr-2">
+                    <!--begin::Symbol-->
+                    <div class="symbol symbol-40 symbol-light-danger align-middle">
+                      <span class="symbol-label">
+                        <i class="text-danger flaticon-warning-sign"></i>
+                      </span>
+                    </div>
+                    <!--end::Symbol-->
+                  </td>
+                  <td class="font-size-lg font-weight-bolder app-text-primary w-150px align-middle pb-6">Unpaid Invoices</td>
+                  <td class="font-weight-bold text-muted text-right align-middle pb-6">&nbsp;</td>
+                  <td class="font-weight-bolder font-size-lg  text-right align-middle pb-6 app-text-primary">{{this.receivable?.unpaidInvoicesBill}}</td>
+                </tr>
+                <!--end::Item-->
+
+
+              </tbody>
+            </table>
+          </div>
+          <!--end::Table-->
+        </div>
+        <!--end::Body-->
+      </div>
+    </div>
+    <div class="col-lg-6 col-md-6 col-sm-12 mb-2">
+      <div class="card card-custom card-stretch gutter-b p-3">
+        <!--begin::Header-->
+        <div class="card-header dashboard-card-header  mb-2">
+          <h3 class="card-title align-items-start flex-column">
+            <span class="card-label font-weight-bold font-size-h4 text-dark-75 app-text-primary mb-3">Total Payable:</span>
+            <span class="text-muted font-weight-bold font-size-sm app-text-primary">Rs {{valueFormatter(payable?.receivablesPayables || 0)}}</span>
+          </h3>
+        </div>
+        <!--end::Header-->
+        <!--begin::Body-->
+        <div class="card-body pt-2">
+          <!--begin::Table-->
+          <div class="table-responsive">
+            <table class="table table-borderless mb-0">
+              <tbody>
+                <!--begin::Item-->
+                <tr>
+                  <td class="w-40px align-middle pb-6 pl-0 pr-2">
+                    <!--begin::Symbol-->
+                    <div class="symbol symbol-40 symbol-light-theme">
+                      <span class="symbol-label">
+                        <span class="svg-icon svg-icon-lg svg-icon-theme">
+                          <!--begin::Svg Icon | path:/metronic/theme/html/demo1/dist/assets/media/svg/icons/Shopping/Cart3.svg-->
+                          <svg height="24px" version="1.1" viewBox="0 0 24 24" width="24px"
+                               xmlns="http://www.w3.org/2000/svg">
+                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                <rect x="0" y="0" width="24" height="24"/>
+                                <path
+                                  d="M5,19 L20,19 C20.5522847,19 21,19.4477153 21,20 C21,20.5522847 20.5522847,21 20,21 L4,21 C3.44771525,21 3,20.5522847 3,20 L3,4 C3,3.44771525 3.44771525,3 4,3 C4.55228475,3 5,3.44771525 5,4 L5,19 Z"
+                                  fill="#000000" fill-rule="nonzero"/>
+                                <path
+                                  d="M8.7295372,14.6839411 C8.35180695,15.0868534 7.71897114,15.1072675 7.31605887,14.7295372 C6.9131466,14.3518069 6.89273254,13.7189711 7.2704628,13.3160589 L11.0204628,9.31605887 C11.3857725,8.92639521 11.9928179,8.89260288 12.3991193,9.23931335 L15.358855,11.7649545 L19.2151172,6.88035571 C19.5573373,6.44687693 20.1861655,6.37289714 20.6196443,6.71511723 C21.0531231,7.05733733 21.1271029,7.68616551 20.7848828,8.11964429 L16.2848828,13.8196443 C15.9333973,14.2648593 15.2823707,14.3288915 14.8508807,13.9606866 L11.8268294,11.3801628 L8.7295372,14.6839411 Z"
+                                  fill="#000000" fill-rule="nonzero" opacity="0.3"
+                                  transform="translate(14.000019, 10.749981) scale(1, -1) translate(-14.000019, -10.749981) "/>
+                            </g>
+                          </svg>
+                          <!--end::Svg Icon-->
+                        </span>
+                      </span>
+                    </div>
+                    <!--end::Symbol-->
+                  </td>
+                  <td class="font-size-lg font-weight-bolder text-dark-75 align-middle app-text-primary w-150px pb-6">Total Payable Amount:</td>
+                  <td class="font-weight-bold text-muted text-right align-middle pb-6">&nbsp;</td>
+                  <td class="font-weight-bolder font-size-lg text-dark-75 text-right align-middle pb-6" >
+                    <span class="app-text-primary" [matTooltip]="valueFormatter(payable?.receivablesPayables || 0)">Rs {{valueFormatter(payable?.receivablesPayables || 0)}}</span>
+                  </td>
+                </tr>
+                <!--end::Item-->
+                <!--begin::Item-->
+                <tr>
+                  <td class="w-40px pb-6 pl-0 pr-2">
+                    <!--begin::Symbol-->
+                    <div class="symbol symbol-40 symbol-light-danger align-middle">
+                      <span class="symbol-label">
+                        <i class="text-danger flaticon-warning-sign"></i>
+                      </span>
+                    </div>
+                    <!--end::Symbol-->
+                  </td>
+                  <td class="font-size-lg font-weight-bolder text-dark-75 w-150px app-text-primary align-middle pb-6">
+                    Unpaid Bills
+                  </td>
+                  <td class="font-weight-bold text-muted text-right align-middle pb-6">&nbsp;</td>
+                  <td
+                    class="font-weight-bolder font-size-lg text-dark-75 text-right align-middle pb-6 app-text-primary">{{this.payable?.unpaidInvoicesBill}}</td>
+                </tr>
+                <!--end::Item-->
+
+
+              </tbody>
+            </table>
+          </div>
+          <!--end::Table-->
+        </div>
+        <!--end::Body-->
+      </div>
+    </div>
+    <!--region Graphs-->
+    <div class="col-md-6 mb-5">
+      <div class="card card-custom card-stretch gutter-b p-3" id="pie-chart">
+        <apx-chart
+          [chart]="pieChartOptions.chart"
+          [colors]="pieChartOptions.colors"
+          [dataLabels]="pieChartOptions.dataLabels"
+          [fill]="pieChartOptions.fill"
+          [labels]="pieChartOptions.labels"
+          [legend]="pieChartOptions.legend"
+          [responsive]="pieChartOptions.responsive"
+          [series]="pieChartOptions.series"
+          [title]="pieChartOptions.title"
+        ></apx-chart>
+
+      </div>
+    </div>
+    <div class="col-lg-6 col-md-6 col-sm-12 mb-5">
+      <div class="card card-custom card-stretch gutter-b p-3 h-100">
+        <!--begin::Header-->
+        <div class="card-header dashboard-card-header  mb-2">
+          <h3 class="card-title align-items-start flex-column">
+            <span class="card-label font-weight-bold font-size-h4 text-dark-75 app-text-primary mb-3">Cash & Cash Equivalents:</span>
+            <span class="text-muted font-weight-bold font-size-sm app-text-primary">Rs {{valueFormatter(bankAccountSummary?.totalBankAndCashAmount || 0)}}</span>
+          </h3>
+        </div>
+        <!--end::Header-->
+        <!--begin::Body-->
+        <div class="card-body pt-2 custom-scroll-y">
+          <!--begin::Table-->
+          <div class="table-responsive">
+            <table class="table table-borderless mb-0">
+              <tbody>
+                <!--begin::Item-->
+                <tr *ngFor="let acc of bankAccountSummary.bankAndCashList">
+                  <td class="w-40px align-middle pb-6 pl-0 pr-2">
+                    <!--begin::Symbol-->
+                    <div class="symbol symbol-40 symbol-light-theme">
+                      <span class="symbol-label">
+                        <span class="svg-icon svg-icon-lg svg-icon-theme">
+                          <!--begin::Svg Icon | path:/metronic/theme/html/demo1/dist/assets/media/svg/icons/Shopping/Cart3.svg-->
+                          <svg height="24px" version="1.1" viewBox="0 0 24 24" width="24px"
+                               xmlns="http://www.w3.org/2000/svg">
+                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                <rect x="0" y="0" width="24" height="24"/>
+                                <path
+                                  d="M5,19 L20,19 C20.5522847,19 21,19.4477153 21,20 C21,20.5522847 20.5522847,21 20,21 L4,21 C3.44771525,21 3,20.5522847 3,20 L3,4 C3,3.44771525 3.44771525,3 4,3 C4.55228475,3 5,3.44771525 5,4 L5,19 Z"
+                                  fill="#000000" fill-rule="nonzero"/>
+                                <path
+                                  d="M8.7295372,14.6839411 C8.35180695,15.0868534 7.71897114,15.1072675 7.31605887,14.7295372 C6.9131466,14.3518069 6.89273254,13.7189711 7.2704628,13.3160589 L11.0204628,9.31605887 C11.3857725,8.92639521 11.9928179,8.89260288 12.3991193,9.23931335 L15.358855,11.7649545 L19.2151172,6.88035571 C19.5573373,6.44687693 20.1861655,6.37289714 20.6196443,6.71511723 C21.0531231,7.05733733 21.1271029,7.68616551 20.7848828,8.11964429 L16.2848828,13.8196443 C15.9333973,14.2648593 15.2823707,14.3288915 14.8508807,13.9606866 L11.8268294,11.3801628 L8.7295372,14.6839411 Z"
+                                  fill="#000000" fill-rule="nonzero" opacity="0.3"
+                                  transform="translate(14.000019, 10.749981) scale(1, -1) translate(-14.000019, -10.749981) "/>
+                            </g>
+                          </svg>
+                          <!--end::Svg Icon-->
+                        </span>
+                      </span>
+                    </div>
+                    <!--end::Symbol-->
+                  </td>
+                  <td class="font-size-lg font-weight-bolder text-dark-75 align-middle app-text-primary w-150px pb-6">{{acc.name}}</td>
+                  <td class="font-weight-bold text-muted text-right align-middle pb-6">&nbsp;</td>
+                  <td class="font-weight-bolder font-size-lg text-dark-75 text-right align-middle pb-6" >
+                    <span class="app-text-primary" [matTooltip]="valueFormatter(acc.amount || 0)"> Rs {{valueFormatter(acc.amount || 0)}}</span>
+                  </td>
+                </tr>
+                <!--end::Item-->
+              </tbody>
+            </table>
+          </div>
+          <!--end::Table-->
+        </div>
+        <!--end::Body-->
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div *ngIf="isLoading" class="row">
+  <div *ngFor="let line of [1, 2, 3, 4]" class="col-lg-3 col-md-6 col-sm-12 mb-3">
+    <skltn-root>
+      <div class="media card_1 shadow" style="height: 150px">
+        <div class="skltn-card__avatar card-title mr-4" skltn-bone type="rect"></div>
+        <div class="media-body">
+          <div class="skltn-card__line w-75 mr-4" skltn-bone></div>
+          <div *ngFor="let line of [1]" class="skltn-card__line" skltn-bone></div>
+        </div>
+      </div>
+    </skltn-root>
+  </div>
+  <div *ngFor="let line of [1, 2]" class="col-lg-6 col-md-12 col-sm-12 mb-3">
+    <skltn-root>
+      <div class="media card_1 shadow" style="height: 250px">
+        <div class="skltn-card__avatar card-title mr-4" skltn-bone type="rect"></div>
+        <div class="media-body">
+          <div class="skltn-card__line w-75 mr-4" skltn-bone></div>
+          <div *ngFor="let line of [1]" class="skltn-card__line" skltn-bone></div>
+        </div>
+      </div>
+    </skltn-root>
+  </div>
+</div>

@@ -1,0 +1,276 @@
+<div [ktBusy]="isLoading" class="kt-portlet">
+  <div class="kt-portlet__head">
+    <div class="kt-portlet__head-caption">
+      <div class="kt-portlet__head-title">
+        <h3 class="kt-portlet__head-text modal-header">Organization Settings <span (click)="onCloseDialog()" class="dialog-cross"><i
+          class="fa fa-times float-right"></i></span></h3>
+      </div>
+    </div>
+  </div>
+  <!-- form start -->
+  <form autocomplete="off" (ngSubmit)="onSubmit()" [formGroup]="organizationForm" class="kt-form kt-form--label-align-right ">
+    <!-- portlet body starts -->
+    <div class="kt-portlet__body">
+      <!-- form first section starts -->
+      <div class="kt-form__section kt-form__section--first">
+
+        <div class="col-md-12 col-lg-12 col-sm-12">
+          <!-- first row starts -->
+          <div class="row">
+            <div class="col-lg-6 col-md-6">
+              <div class="form-group kt-form__group mb-0 pt-2 pb-0">
+                <label class="col-form-label pt-0">Name:</label>
+                <kt-input-field
+                  [errorMessage]="vs.errTEXT(organizationForm, 'name', 'Name')"
+                  placeholder="Enter Name"
+                  formControlName="name"
+                  readonly="true">
+                </kt-input-field>
+              </div>
+            </div>
+
+            <div class="col-lg-6 col-md-6">
+              <div class="form-group kt-form__group mb-0 pt-2 pb-0">
+                <label class="col-form-label pt-0">Website:</label>
+                <kt-input-field
+                  (blurEvent)="logValidationErrors(this.organizationForm, formErrors, validationMessages)"
+                  [errorMessage]="[{ condition : formErrors.website , error : formErrors.website }]"
+                  hintText="Optional"
+                  formControlName="website"
+                  placeholder="Enter Website">
+                </kt-input-field>
+              </div>
+            </div>
+          </div>
+          <!-- first row ends -->
+          <!-- second row starts -->
+          <div class="row">
+            <div class="col-lg-4 col-md-4">
+              <div class="form-group kt-form__group mb-0 pt-2 pb-0">
+                <label class="col-form-label pt-0">Country:</label>
+                <kt-simple-dropdown
+                  (selectionChange)="onChangeCountry($event.value)"
+                  [isRequired]="false"
+                  [optionList]="countryList"
+                  formControlName="country"
+                  hintText="Optional"
+                  matFormFieldClass="full-width"
+                  placeholder="Select Country"
+                  propertyName="name"
+                  propertyValue="id"
+                  searchPlaceholder="Search Country">
+                </kt-simple-dropdown>
+              </div>
+            </div>
+
+            <div class="col-lg-4 col-md-4">
+              <div class="form-group kt-form__group mb-0 pt-2 pb-0">
+                <label class="col-form-label pt-0">State:</label>
+                <kt-simple-dropdown
+                  (selectionChange)="onChangeState($event.value)"
+                  [isRequired]="false"
+                  [optionList]="stateList2"
+                  formControlName="state"
+                  hintText="Optional"
+                  matFormFieldClass="full-width"
+                  placeholder="Select State"
+                  propertyName="name"
+                  propertyValue="id"
+                  searchPlaceholder="Search State">
+                </kt-simple-dropdown>
+              </div>
+            </div>
+
+            <div class="col-lg-4 col-md-4">
+              <div class="form-group kt-form__group mb-0 pt-2 pb-0">
+                <label class="col-form-label pt-0">City:</label>
+                <kt-simple-dropdown
+                  [isRequired]="false"
+                  [optionList]="cityList2"
+                  formControlName="city"
+                  hintText="Optional"
+                  matFormFieldClass="full-width"
+                  placeholder="Select City"
+                  propertyName="name"
+                  propertyValue="id"
+                  searchPlaceholder="Search City">
+                </kt-simple-dropdown>
+              </div>
+            </div>
+          </div>
+          <!-- second row ends -->
+
+          <!-- third row starts -->
+          <div class="row">
+            <div class="col-lg-4 col-md-4">
+              <div class="form-group kt-form__group mb-0 pt-2 pb-0">
+                <label class="col-form-label pt-0">Contact:</label>
+                <kt-input-field
+                  (blurEvent)="logValidationErrors(organizationForm, formErrors, validationMessages)"
+                  [errorMessage]="[{condition: formErrors.phone, error: formErrors.phone}]"
+                  hintText="Optional"
+                  formControlName="phone"
+                  placeholder="Enter Contact">
+                </kt-input-field>
+              </div>
+            </div>
+
+            <div class="col-lg-4 col-md-4">
+              <div class="form-group kt-form__group mb-0 pt-2 pb-0">
+                <label class="col-form-label pt-0">Fax:</label>
+                <kt-input-field
+                  (blurEvent)="logValidationErrors(organizationForm, formErrors, validationMessages)"
+                  [errorMessage]="[{condition: formErrors.fax, error: formErrors.fax}]"
+                  hintText="Optional"
+                  formControlName="fax"
+                  placeholder="Enter Fax Number">
+                </kt-input-field>
+              </div>
+            </div>
+
+            <div class="col-lg-4 col-md-4">
+              <div class="form-group kt-form__group mb-0 pt-2 pb-0">
+                <label class="col-form-label pt-0">Email:</label>
+                <kt-input-field
+                  hintText="Optional"
+                  formControlName="email"
+                  placeholder="Enter Email">
+                </kt-input-field>
+              </div>
+            </div>
+          </div>
+          <!-- third row ends -->
+
+          <!-- fourth row starts -->
+          <div class="row">
+            <div class="col-lg-4 col-md-4">
+              <div class="form-group kt-form__group mb-0 pt-2 pb-0">
+                <label class="col-form-label pt-0">Currency:</label>
+                <kt-simple-dropdown
+                  [isRequired]="false"
+                  [optionList]="currency"
+                  formControlName="currency"
+                  hintText="Optional"
+                  matFormFieldClass="full-width"
+                  placeholder="Select Currency"
+                  propertyName="name"
+                  propertyValue="symbol"
+                  searchPlaceholder="Search Currency">
+                </kt-simple-dropdown>
+              </div>
+            </div>
+
+            <div class="col-lg-4 col-md-4">
+              <div class="form-group kt-form__group mb-0 pt-2 pb-0">
+                <label class="col-form-label pt-0">Industry:</label>
+                <kt-input-field
+                  hintText="Optional"
+                  formControlName="industry"
+                  placeholder="Enter Industry">
+                </kt-input-field>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-4">
+              <div class="form-group kt-form__group mb-0 pt-2 pb-0">
+                <label class="col-form-label pt-0">Income Tax Id: </label>
+                <kt-input-field
+                  hintText="Optional"
+                  formControlName="incomeTaxId"
+                  placeholder="Enter Income Tax Id">
+                </kt-input-field>
+              </div>
+            </div>
+          </div>
+          <!-- fourth row ends -->
+
+          <!-- fifth row starts -->
+          <div class="row">
+            <div class="col-lg-6 col-md-6">
+              <div class="form-group kt-form__group mb-0 pt-2 pb-0">
+                <label class="col-form-label pt-0">Fiscal Year Start:</label>
+                <kt-date-input
+                  formControlName="startDate"
+                  matFormFieldClass="full-width"
+                  placeholder="Fiscal Year Start">
+                </kt-date-input>
+              </div>
+            </div>
+            <div class="col-lg-6 col-md-6">
+              <div class="form-group kt-form__group mb-0 pt-2 pb-0">
+                <label class="col-form-label pt-0">Fiscal Year End: </label>
+                <kt-date-input
+                  formControlName="endDate"
+                  matFormFieldClass="full-width"
+                  placeholder="Fiscal Year End">
+                </kt-date-input>
+              </div>
+            </div>
+          </div>
+          <!-- fifth row ends -->
+
+          <!-- six  row starts -->
+          <div class="row">
+            <div class="col-lg-6 col-md-6">
+              <div class="form-group kt-form__group mb-0 pt-2 pb-0">
+                <label class="col-form-label pt-0">Organization Legal Status:</label>
+                <kt-input-field
+                  hintText="Optional"
+                  formControlName="legalStatus"
+                  placeholder="Enter Legal Status">
+                </kt-input-field>
+              </div>
+            </div>
+            <div class="col-lg-6 col-md-6">
+              <div class="form-group kt-form__group mb-0 pt-2 pb-0">
+                <label class="col-form-label pt-0">GST Registration no:</label>
+                <kt-input-field
+                  hintText="Optional"
+                  formControlName="gstRegistrationNo"
+                  placeholder="Enter Registration Number">
+                </kt-input-field>
+              </div>
+            </div>
+          </div>
+          <!-- six row ends -->
+          <!-- seven row starts -->
+          <div class="row">
+            <div class="col-lg-12 col-md-12">
+              <div class="form-group kt-form__group mb-0 pt-2 pb-0">
+                <label class="col-form-label pt-0">Address:</label>
+                <kt-input-field
+                  hintText="Optional"
+                  [errorMessage]="vs.errTEXT(organizationForm, 'address', 'Address')"
+                  formControlName="address"
+                  placeholder="Enter Address">
+                </kt-input-field>
+              </div>
+            </div>
+          </div>
+          <!-- seven row ends -->
+        </div>
+      </div>
+      <!-- form first section ends -->
+    </div>
+    <!-- portlet body ends -->
+    <mat-divider></mat-divider>
+    <!-- portlet footer start -->
+    <div class="kt-portlet__foot p-5">
+      <!-- form action starts -->
+      <div class="kt-form__actions ">
+        <div class="row">
+          <div class="col-lg-12 text-right">
+            <!--              <button class="mr-3 btn_white" mat-raised-button type="reset">Reset</button>-->
+            <button (click)="logValidationErrors(this.organizationForm, this.formErrors, this.validationMessages)"
+                    class="app-default-btn"
+                    type="submit"><i class="fas fa-save"></i>
+              Submit
+            </button>&nbsp;
+          </div>
+        </div>
+      </div>
+      <!-- form action ends-->
+    </div>
+    <!-- portlet footer ends -->
+  </form>
+  <!-- form ends -->
+</div>

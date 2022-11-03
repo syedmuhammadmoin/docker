@@ -1,0 +1,28 @@
+<mat-form-field [ngClass]="matFormFieldClass" appearance="outline" class="full-width">
+  <input (blur)="blur()"
+         (change)="onChange($event)"
+         (keyup)="onChange($event)"
+         [defaultValue]="defaultValue"
+         [formControl]="control"
+         [id]="id"
+         [max]="max"
+         [min]="min"
+         [ngClass]="inputClass"
+         [placeholder]="placeholder"
+         [readonly]="readonly"
+         [type]="type"
+         [value]="value"
+         matInput>
+  <mat-error *ngFor="let error of errorMessage">
+    <strong *ngIf="error.condition">{{error.error}}</strong>
+  </mat-error>
+
+  <mat-error *ngFor="let error of errorMessage2" [ngClass]="error.condition  ? 'text-danger' : 'text-success'">
+    <i [ngClass]="error.condition ? 'text-danger' : 'text-success' " class="material-icons"
+       style="vertical-align: middle !important;">
+      {{ error.condition ? 'cancel' : 'check_circle' }}
+    </i>
+    <strong class="font-size-11">{{error.error}}</strong>
+  </mat-error>
+  <mat-hint *ngIf="hintText" align="end">{{hintText}}</mat-hint>
+</mat-form-field>

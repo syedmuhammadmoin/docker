@@ -1,0 +1,12 @@
+<mat-radio-group [attr.class]="inputClass"
+[disabled]="isDisabled" (change)="onChange($event)"
+  [formControl]="control" aria-label="Select an option">
+  <mat-radio-button *ngFor="let item of list" [value]="item?.id">
+    {{item?.title}}
+  </mat-radio-button>
+  <mat-error *ngFor="let result of errorMessage">
+    <strong  style="font-size: 8px;" *ngIf="result.condition">
+      {{ result.error }}
+    </strong>
+  </mat-error>
+</mat-radio-group>

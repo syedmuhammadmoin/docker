@@ -1,0 +1,35 @@
+<!-- begin: Header -->
+<div ktHeader #ktHeader class="header " [ngClass]="headerClasses" id="kt_header">
+
+
+  <button (click)="toggleDarkTheme()" class="btn btn-icon btn-default ml-3 mt-5 bg_icon">
+    <span class="svg-icon svg-icon-primary svg-icon-2x fill_oth ">
+      <i [ngClass]="(this.classToggled) ? 'icon-xl la la-sun sun-color ' : 'fa fa-moon moon-color'"></i>
+    </span>
+  </button>
+  <!--begin::Container-->
+  <div [ngClass]="headerContainerClasses" class="d-flex align-items-stretch justify-content-between">
+
+    <ng-container *ngIf="(loader.progress$|async) > 0">
+      <!-- <mat-progress-bar class="loading-bar" height="3px" mode="indeterminate"></mat-progress-bar> -->
+      <ngb-progressbar class="loading-bar" [value]="loader.progress$|async" height="3px"></ngb-progressbar>
+    </ng-container>
+    <ng-container *ngIf="headerMenuSelfDisplay">
+      <kt-menu-horizontal [headerLogo]="headerLogo" [headerMenuSelfDisplay]="headerMenuSelfDisplay"
+        [headerMenuClasses]="headerMenuClasses"></kt-menu-horizontal>
+    </ng-container>
+    <!-- end: Header Menu -->
+
+    <!-- begin:: Header Topbar -->
+    <!-- empty div to fix topbar to stay on the right when menu-horizontal is hidden -->
+    <ng-container *ngIf="!headerMenuSelfDisplay">
+      <div></div>
+    </ng-container>
+    <!--begin::Topbar-->
+    <kt-topbar class="topbar"></kt-topbar>
+    <!--end::Topbar-->
+    <!-- end:: Header Topbar -->
+  </div>
+  <!--end::Container-->
+</div>
+<!-- end: Header -->

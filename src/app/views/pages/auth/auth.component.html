@@ -1,0 +1,29 @@
+<div *ngIf="authService.showOverlay | async; else notLoggedIn" class="my-overlay">
+  <div>
+    <img alt="" class="loader-img" src="./assets/img/logos/loader.gif">
+  </div>
+  <!--<div class="spinner-border text-primary " role="status"  style="margin: auto;" id="text">
+      <span class="sr-only">Please wait...</span>
+  </div>-->
+</div>
+<ng-template #notLoggedIn>
+  <div class="login-2">
+    <!-- <div class="top-vector">
+      <img src="../../../../assets/img/fly-01.png">
+    </div> -->
+    <div class="container">
+      <div class="row ">
+
+        <div class="col-lg-4 col-md-12 form-info d-flex mx-auto">
+          <router-outlet></router-outlet>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="middle-vector">
+      <img src="../../../../assets/img/ring-02.png">
+    </div>
+    <div class="bottom-vector">
+      <img src="../../../../assets/img/fly-02.png">
+    </div> -->
+  </div>
+</ng-template>

@@ -1,0 +1,75 @@
+<!--<ng-template #notLoggedIn>-->
+<div class="form-section">
+  <div class="logo clearfix mb-5">
+    <img alt="logo" src="assets/img/logos/final-logo-new-xs.png">
+  </div>
+  <!-- <h3 >Welcome to Vizalys</h3> -->
+  <div class="login-inner-form">
+    <form autocomplete="off" [formGroup]="loginForm" autocomplete="off" novalidate="novalidate">
+      <div class="form-group form-box">
+        <input aria-label="Email Address" class="form-control" formControlName="email" placeholder="Email Address"
+               type="email">
+        <!-- <input formControlName="email" type="email" class="form-control" id="floatingInput" placeholder="name@example.com"> -->
+        <span>
+          <i class="fa fa-envelope pass_toggle"></i>
+        </span>
+        <mat-error *ngIf="isControlHasError('email', 'required')">
+          <p class="text-left error_msg">
+            {{ "AUTH.VALIDATION.REQUIRED_FIELD" | translate }} <i class="fas fa-exclamation"
+                                                                  style="color: #f64e60;"></i>
+          </p>
+        </mat-error>
+        <mat-error *ngIf="isControlHasError('email', 'email')">
+          <p class="text-left error_msg">
+            {{ "AUTH.VALIDATION.INVALID_FIELD" | translate }} <i class="fas fa-exclamation"
+                                                                 style="color: #f64e60;"></i>
+          </p>
+        </mat-error>
+      </div>
+      <div class="form-group form-box">
+        <input [type]="password" class="form-control" class="form-control" formControlName="password"
+               placeholder="Password">
+        <!-- <i class="flaticon-password"></i> -->
+
+        <span (click)="onClick()">
+          <i *ngIf="!show" aria-hidden="true" class="fas fa-eye-slash pass_toggle"></i>
+          <i *ngIf="show" aria-hidden="true" class="fas fa-eye pass_toggle"></i>
+        </span>
+        <mat-error *ngIf="isControlHasError('password', 'required')">
+          <p class="text-left error_msg_pass">
+            {{ "AUTH.VALIDATION.REQUIRED_FIELD" | translate }} <i class="fas fa-exclamation"
+                                                                  style="color: #f64e60;"></i>
+          </p>
+        </mat-error>
+        <mat-error *ngIf="isControlHasError('password', 'minlength')">
+          <p class="text-left error_msg_pass">
+            {{ "AUTH.VALIDATION.MIN_LENGTH_FIELD" | translate }} 5 <i class="fas fa-exclamation"
+                                                                      style="color: #f64e60;"></i>
+          </p>
+        </mat-error>
+        <mat-error *ngIf="isControlHasError('password', 'maxlength')">
+          <p class="text-left error_msg_pass">
+            {{ "AUTH.VALIDATION.MAX_LENGTH_FIELD" | translate }} 50 <i class="fas fa-exclamation"
+                                                                       style="color: #f64e60;"></i>
+          </p>
+        </mat-error>
+      </div>
+      <div class="checkbox form-group form-box">
+        <div class="form-check checkbox-theme">
+          <input class="form-check-input" id="rememberMe" type="checkbox" value="">
+          <label class="form-check-label" for="rememberMe">Remember me</label>
+        </div>
+        <a (click)="resetPassword()" class="ml-auto" href="javascript:void(0);">Forgot Password</a>
+      </div>
+      <div class="form-group mb-0">
+        <button (click)="submit()" [ngClass]="{
+          'spinner spinner-right spinner-md spinner-light': loading
+          }" class="btn-md btn-theme w-100" id="kt_login_signin_submit"
+                >{{ "AUTH.LOGIN.BUTTON" | translate }}</button>
+      </div>
+      <p class="text">Don't have an account?<a [href]="appconst.websiteBaseUrl + '/app/pricing'"> Register here</a>
+      </p>
+    </form>
+  </div>
+</div>
+<!--</ng-template>-->

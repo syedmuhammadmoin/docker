@@ -1,0 +1,12 @@
+<kt-portlet>
+	<kt-portlet-header [title]="'Roles'"></kt-portlet-header>
+  <kt-portlet-body>
+    <!-- [permissionz]="permissions.ROLE_CREATE" -->
+    <kt-btn-action
+      (clickEvent)="onRowDoubleClicked()"
+      [permissionz]="permissions.ROLE_CREATE"
+      btnText="Add Role"
+    ></kt-btn-action>
+    <kt-ra-grid-offline [raGridProperties]="raGridProperties"></kt-ra-grid-offline>
+  </kt-portlet-body>
+</kt-portlet>

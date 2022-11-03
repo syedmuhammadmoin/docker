@@ -1,0 +1,16 @@
+<ag-grid-angular
+  (gridReady)="setApi($event); gridReady($event);"
+  (firstDataRendered)="raGridProperties.firstDataRendered($event)"
+  (paginationChanged)="paginationHelper.onPaginationChanged(raGridProperties.pageName, $event)"
+  (rowDoubleClicked)="raGridProperties.rowDoubleClicked($event)"
+  [columnDefs]="raGridProperties?.columnDefs"
+  [components]="raGridProperties.components"
+  [defaultColDef]="raGridProperties.defaultColDef"
+  [frameworkComponents]="raGridProperties.frameworkComponents"
+  [gridOptions]="raGridProperties.gridOptions"
+  [rowData]="raGridProperties.rowData"
+  [tooltipShowDelay]="raGridProperties.tooltipShowDelay"
+  [ngStyle]="raGridProperties?.style"
+  class="ag-theme-alpine"
+  style="width: 100%; height: 500px; margin-top: 10px;"
+></ag-grid-angular>

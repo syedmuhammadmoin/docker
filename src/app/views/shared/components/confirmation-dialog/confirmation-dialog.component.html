@@ -1,0 +1,19 @@
+
+
+
+
+  <h1 mat-dialog-title class="mb-0 dialog-heading" >You have unsaved changes</h1>
+  <!-- <hr> -->
+  <mat-dialog-content class="mx-auto text-center">
+    <!-- <div class="mx-auto">What would you like to do?</div> -->
+    <div class="mx-auto"><img src="../../../../../assets/media/logos/warning.png" class="mb-4 dialog-img" /></div>
+    <div class="mx-auto" style="    font-size: 16px;">
+      Are you sure you want to leave this page?
+    </div>
+    
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button class="btn_white"  mat-raised-button (click)="onClickCancel()">STAY</button>
+    <button class="btn btn-danger" mat-raised-button (click)="onClickConfirm()" style="border-radius: 15px/60% !important;">LEAVE</button>
+  </mat-dialog-actions>
+

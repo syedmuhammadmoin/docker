@@ -1,0 +1,45 @@
+#chart {
+  max-width: 650px;
+  //margin: 35px auto;
+  padding: 15px;
+}
+
+#pie-chart {
+  padding: 15px;
+  max-width: 650px;
+  height: 100%;
+  //margin: 35px auto;
+  //padding: 0;
+}
+
+.skltn-card {
+  margin: 20px 0 48px;
+  &__avatar {
+    width: 35px;
+    height: 35px;
+    margin-bottom: 24px;
+  }
+  &__title {
+    height: 32px;
+    margin-bottom: 26px;
+  }
+  &__line {
+    height: 16px;
+    margin-bottom: 16px;
+    &:last-child {
+      width: 60%;
+    }
+  }
+}
+
+.card_1
+{
+  padding: 20px;
+}
+
+.skltn-chart {
+  height: 100px;
+  margin-top: 36px;
+}
+
+

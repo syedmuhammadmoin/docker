@@ -1,0 +1,62 @@
+<!doctype html>
+<!--
+Theme: Metronic - The Ultimate Bootstrap Admin Theme
+Author: KeenThemes
+Website: http://www.keenthemes.com/
+Contact: support@keenthemes.com
+Follow: www.twitter.com/keenthemes
+Dribbble: www.dribbble.com/keenthemes
+Like: www.facebook.com/keenthemes
+License: You must have a valid license purchased only from https://themeforest.net/item/metronic-responsive-admin-dashboard-template/4021469/ in order to legally use the theme for your project.
+-->
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Vizalys</title>
+  <base href="/">
+
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <link href="assets/img/logos/favicon.png" rel="icon" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link id="global-theme" type="text/css" rel="stylesheet" href="assets/css/themes/theme.scss">
+
+
+
+  <head>
+
+    <!-- reduced for brevity -->
+
+    <!-- inline spinner styles to be able to display spinner right away -->
+    <style type="text/css">
+      body,
+      html {
+        height: 100%;
+      }
+
+      .app-loading {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+      }
+    </style>
+  </head>
+
+<body id="kt_body" kt-root>
+  <!-- loading layout replaced by app after startupp -->
+  <div class="app-loading">
+    <div class="logo">
+      <img alt="" class="spinner" src="assets/img/logos/loader.gif" style="height: 80px;">
+      <p class="text-center"> Loading... </p>
+    </div>
+  </div>
+  <!--<div *ngIf="loader ">
+  <kt-loader></kt-loader>
+</div>-->
+</body>
+
+</html>

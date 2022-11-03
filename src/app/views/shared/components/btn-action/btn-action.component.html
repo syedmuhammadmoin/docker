@@ -1,0 +1,11 @@
+<div class="col-lg-12 col-md-12 mb-4 text-right">
+  <button
+    (click)="clickEvent.emit()"
+    [disabled]="!(permission.isGranted(permissionz))"
+    [ngClass]="!(permission.isGranted(permissionz)) ? 'disable' : ''"
+    class="app-default-btn"
+    [matTooltip]="btnText" >
+    {{ btnText }}
+  </button>
+</div>
+<mat-divider></mat-divider>

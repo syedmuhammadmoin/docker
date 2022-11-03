@@ -1,0 +1,47 @@
+<mat-form-field [ngClass]="matFormFieldClass" appearance="outline">
+  <mat-select
+    #customGroupSelect
+    (blur)="blur()"
+    (selectionChange)="selectionChange($event)"
+    [attr.disabled]="isDisabled"
+    [formControl]="control"
+    [multiple]="isMultiple"
+    [ngClass]="matSelectClass"
+    [placeholder]="'Select ' + placeholder"
+    [required]="hasRequired()"
+  >
+    <mat-option>
+      <ngx-mat-select-search
+        [formControl]="filterControl"
+        [noEntriesFoundLabel]="'No Record Found...'"
+        [placeholderLabel]="'Search ' + placeholder"
+      ></ngx-mat-select-search>
+    </mat-option>
+    <mat-option *ngIf="!hasRequired()" id="None">-- None --</mat-option>
+    <mat-option *ngIf="isLoading" [ktBusy]="isLoading" style="padding: 0"
+                type="SINGLE_CONTENT"></mat-option>
+    <ng-container *ngFor="let group of filteredOptionList | async">
+      <mat-optgroup [label]="group[groupPropertyName]">
+        <ng-container *ngFor="let options of group[groupChildrenName]">
+          <mat-option [disabled]="isOptionDisabled(propertyValue !== undefined ? options[propertyValue] : options)" [value]="propertyValue !== undefined || null ? options[propertyValue] : options">
+            <span style="font-size: 14px;">{{options[propertyName]}}</span>
+            <span *ngIf="secondaryPropertyName !== undefined"
+                  style="font-size: 12px !important;">-{{options[secondaryPropertyName]}}</span>
+          </mat-option>
+        </ng-container>
+      </mat-optgroup>
+    </ng-container>
+    <mat-option *ngIf="clickEvent && clickEventButtonName" style="padding: 0px">
+      <button (click)="emitClickEvent()" class="btn btn-light"
+              mat-flat-button
+              style="width: 100%">{{ clickEventButtonName || 'clickEventButtonName' }}</button>
+    </mat-option>
+    <!--    <mat-option disabled="true" *ngIf="(filteredOptionList | async).length <= 0">No results Found</mat-option>-->
+  </mat-select>
+  <!-- <mat-hint align="end">{{hintText}}</mat-hint> -->
+  <mat-hint align="end" *ngIf="!hasRequired()">Optional</mat-hint>
+
+  <mat-error *ngIf="control?.invalid && control?.touched">
+    <strong>{{ errorMessage || 'Field is Required'}}</strong>
+  </mat-error>
+</mat-form-field>

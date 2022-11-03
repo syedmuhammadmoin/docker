@@ -1,0 +1,86 @@
+<div class="container " >
+  <div class="col-lg-10 mx-auto text-right">
+    <div class="row">
+      <button
+      id="payment_print"
+        printSectionId="main"
+        printTitle="Balance Sheet"
+        ngxPrint
+        type="button"
+        [useExistingCss]="true"
+        class="app-default-btn"
+        style="margin-bottom: 20px;"><i class="fas fa-print"></i> Print
+      </button>
+    </div>
+  </div>
+  <div class="col-lg-10 mx-auto" id="main">
+    <div class="row">
+      <div class="bg-white">
+
+        <div class="print_header_area justify-content-center align-items-center">
+          <div class="print-col-6">
+            <div class="logo_and_title">
+              <!-- <img src="../../../../../../assets/img/logos/admin-logo.png" style="height: 40px;" alt=""> -->
+              <span class="top-heading ml-0">Balance Sheet</span>
+            </div>
+          </div>
+          <div class="print-col-6 text-right">
+            <img src="../../../../../../assets/img/logos/admin-logo.png" style="height: 40px;" alt="">
+          </div>
+
+        </div>
+
+
+        <div class="print_body_area">
+
+          <div class="print-col-5" style="margin-top: 3%;">
+
+            <div class="print-box" >
+              <h4 style="font-size: 22px;font-weight: 600;color: #2988BC;"> </h4>
+              <!-- <p style="font-size: 16px;font-weight: 600;color: #2988BC;margin-bottom: 2px;"></p> -->
+              <p style="font-size: 15px;font-weight: 400;color: #2988BC;">24 Dummy Street Area, Location, Lorem Ipsum, 570xx59x</p>
+            </div>
+          </div>
+
+          <div class="print-col-5 ml-auto">
+            <div class="id_num">
+              <div class="print-box">
+                <h4 style="font-size: 16px;letter-spacing: 3px;font-weight: 600;color: #2988BC;">
+                  Date:<span class="float-right" style="font-weight: 400;">{{date | date: 'MMM dd, y'}}</span></h4>
+              </div>
+            </div>
+          </div>
+
+          <ng-container *ngFor="let key of rowData.keys()">
+          <div class="print-content-area" >
+            <div class="print-col-12 mt-0">
+              <div class="color-cinnabar">
+                <h3 class="head-parent mb-5">> {{key}}</h3>
+              </div>
+            </div>
+
+            <div class="print-col-10 mx-auto">
+              <table class="table">
+                <tr>
+                  <th style="background-color: #2988BC;
+                  color: white;">Account</th>
+                  <th style="background-color: #2988BC;
+                  color: white;" class="text-right">Balance</th>
+                </tr>
+                <tr *ngFor="let summaryHead of rowData.get(key)">
+                  <td>{{summaryHead.transactional}}</td>
+                  <td class="text-right">{{valueFormatter(summaryHead.balance)}}</td>
+                </tr>
+                <tr>
+                  <th style="background-color: #e4edf3; border-bottom: 1px solid #2988BC;" >Total</th>
+                  <th class="text-right" style="background-color: #e4edf3; border-bottom: 1px solid #2988BC;">{{valueFormatter(calculateTotal(rowData.get(key), 'balance').balance)}}</th>
+                </tr>
+              </table>
+            </div>
+          </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

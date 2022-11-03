@@ -1,0 +1,170 @@
+<div class="container " >
+  <div class="col-lg-10 mx-auto text-right">
+    <div class="row">
+      <button
+      id="payment_print"
+        printSectionId="main"
+        printTitle="Profit N Loss"
+        ngxPrint
+        type="button"
+        [useExistingCss]="true"
+        class="app-default-btn"
+        style="margin-bottom: 20px;"><i class="fas fa-print"></i> Print
+      </button>
+    </div>
+  </div>
+  <div class="col-lg-10 mx-auto" id="main">
+    <div class="row">
+      <div class="bg-white">
+
+        <div class="print_header_area justify-content-center align-items-center">
+          <div class="print-col-6">
+            <div class="logo_and_title">
+              <!-- <img src="../../../../../../assets/img/logos/admin-logo.png" style="height: 40px;" alt=""> -->
+              <span class="top-heading ml-0">Profit N Loss</span>
+            </div>
+          </div>
+          <div class="print-col-6 text-right">
+            <img src="../../../../../../assets/img/logos/admin-logo.png" style="height: 40px;" alt="">
+          </div>
+          
+        </div>
+
+        
+        <div class="print_body_area">
+
+          <div class="print-col-5" style="margin-top: 3%;">
+            
+            <div class="print-box" >
+              <h4 style="font-size: 22px;font-weight: 600;color: #2988BC;"> </h4>
+              <!-- <p style="font-size: 16px;font-weight: 600;color: #2988BC;margin-bottom: 2px;"></p> -->
+              <p style="font-size: 15px;font-weight: 400;color: #2988BC;">24 Dummy Street Area, Location, Lorem Ipsum, 570xx59x</p>
+            </div>
+          </div>
+
+          <div class="print-col-5 ml-auto">
+            <div class="id_num">
+              <div class="print-box">
+                <h4 style="font-size: 16px;letter-spacing: 3px;font-weight: 600;color: #2988BC;">
+                  Date:<span class="float-right" style="font-weight: 400;">{{profitNlossModel.docDate | date: 'MMM dd, yyyy'}} - {{profitNlossModel.docDate2 | date: 'MMM dd, yyyy'}}</span></h4>
+              </div>
+              <div class="print-box">
+                <h4 style="font-size: 16px;letter-spacing: 3px;font-weight: 600;color: #2988BC;">
+                  Account:<span class="float-right" style="font-weight: 400;">{{profitNlossModel.transactional}}</span></h4>
+              </div>
+              <div class="print-box">
+                <h4 style="font-size: 16px;letter-spacing: 3px;font-weight: 600;color: #2988BC;">
+                  Department:<span class="float-right" style="font-weight: 400;">{{profitNlossModel.department}}</span></h4>
+              </div>
+              <div class="print-box">
+                <h4 style="font-size: 16px;letter-spacing: 3px;font-weight: 600;color: #2988BC;">
+                  Location:<span class="float-right" style="font-weight: 400;">{{profitNlossModel.location}}</span></h4>
+              </div>
+              <div class="print-box">
+                <h4 style="font-size: 16px;letter-spacing: 3px;font-weight: 600;color: #2988BC;">
+                  Warehouse:<span class="float-right" style="font-weight: 400;">{{profitNlossModel.warehouse}}</span></h4>
+              </div>
+            </div>
+          </div>
+
+          <ng-container *ngFor="let key of rowData.keys()">
+          <div class="print-content-area" >
+            <div class="print-col-12 mt-0">
+              <div class="color-cinnabar">
+                <h3 class="head-parent mb-5">> {{key}} <span class="float-right">{{valueFormatter(calculateTotal(rowData.get(key), 'balance').balance)}}</span></h3>
+              </div>
+            </div>
+          
+            <div class="print-col-10 mx-auto">
+              <table class="table">
+                <tr>
+                  <th style="background-color: #2988BC;
+                  color: white;">Account</th>
+                  <th style="background-color: #2988BC;
+                  color: white;" class="text-right">Balance</th>
+                </tr>
+                <tr *ngFor="let summaryHead of rowData.get(key)">
+                  <td>{{summaryHead.transactional}}</td>
+                  <td class="text-right">{{valueFormatter(summaryHead.balance)}}</td>
+                </tr>
+                <tr>
+                  <th style="background-color: #e4edf3; border-bottom: 1px solid #2988BC;" >Total</th>
+                  <th class="text-right" style="background-color: #e4edf3; border-bottom: 1px solid #2988BC;">{{valueFormatter(calculateTotal(rowData.get(key), 'balance').balance)}}</th>
+                </tr>
+              </table>
+            </div>
+          
+            
+          
+            
+          
+            
+          
+            
+           
+          </div>
+
+          </ng-container>
+
+
+          <div class="print-col-12">
+            <div class="row">
+              <div class="print-col-10  mx-auto" style="margin-bottom:1%;margin-top:2%;padding: 0;">
+                <table class="table table-striped" style="margin-bottom: 0;">
+                  <tr class="bg_dark">
+                    <th style="width: 70%;">Net Deficit / Surplus <span>(Rs)</span>
+                    </th>
+                    <th class="text-center" style="background-color: #d9dae2;"> {{valueFormatter(netProfit)}} <!--(1,218,100.00)--> 
+                    </th>
+                  </tr>
+  
+                </table>
+              </div>
+            </div>
+           
+          </div>
+
+
+          <!-- <div class="print-col-12" style=" margin-top: 2%;">
+            <img src="../../../../../../assets/img/logos/final-logo-new-xs.png" style="height: 40px;" class="mb-5" alt="">
+            <div class="print-box">
+              <p style="font-size: 18px;
+            font-weight: 500;color: #2988BC;">Terms and conditions:</p>
+            </div>
+            <div class="print-box">
+              <h4 style="font-size: 14px;line-height:18px;font-weight: 300;color: #2988BC;">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+              </h4>
+            </div>
+
+            <div class="print-box" style="margin-top: 25px;">
+              <p style="
+              font-family: inherit; font-weight: bold;
+              font-size: 22px;color: #2988BC;">Thankyou for your Business</p>
+            </div>
+            
+          </div>
+
+          
+
+          <div class="print-col-4" style=" margin-top: 8%;color: #2988BC;">
+            _________________________________
+            <p class="text-center">Resident Auditor</p>
+          </div>
+
+
+          <div class="print-col-4" style=" margin-top: 8%;color: #2988BC;">
+            _________________________________
+            <p class="text-center">Director Finance</p>
+          </div> -->
+          
+        </div>
+
+      
+
+
+
+
+      </div>
+    </div>
+  </div>
+</div>

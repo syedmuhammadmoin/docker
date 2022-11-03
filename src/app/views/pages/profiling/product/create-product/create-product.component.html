@@ -1,0 +1,137 @@
+<div [ktBusy]="isLoading" class="kt-portlet" style="overflow : hidden;">
+  <div class="kt-portlet__head">
+    <div class="kt-portlet__head-caption">
+      <div class="kt-portlet__head-title">
+        <h3 class="kt-portlet__head-text modal-header"> {{formName}}
+          <span (click)="onCloseDialog()" class="dialog-cross"><i class="fa fa-times float-right"></i></span>
+        </h3>
+      </div>
+    </div>
+  </div>
+  <!-- form start -->
+  <form autocomplete="off" (ngSubmit)="onSubmit()" #formDirective="ngForm" [formGroup]="productForm"
+    class="kt-form kt-form--label-align-right">
+    <!-- portlet body starts -->
+    <div class="kt-portlet__body">
+      <!-- form first section starts -->
+      <div class="kt-form__section kt-form__section--first">
+
+        <div class="col-md-12 col-lg-12 col-sm-12">
+          <!-- first row starts -->
+          <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6">
+              <div class="form-group kt-form__group mb-0">
+                <label class="col-form-label pt-0">Product: <i class="fa fa-asterisk" aria-hidden="true"
+                    style="color: #eb4c5d;font-size: 8px;position: relative;top: -5px;"></i></label>
+                <kt-input-field [errorMessage]="vs.errTEXT(productForm, 'name', 'Product Name')"
+                  formControlName="name" placeholder="Enter Product Name">
+                </kt-input-field>
+              </div>
+            </div>
+
+            <div class="col-lg-6 col-md-6 col-sm-6">
+              <div class="form-group kt-form__group mb-0">
+
+                <label class="col-form-label pt-0">Select Category: <i class="fa fa-asterisk" aria-hidden="true"
+                    style="color: #eb4c5d;font-size: 8px;position: relative;top: -5px;"></i></label>
+                <kt-simple-dropdown [isDisabled]="disableDropdown"
+                  (blurEvent)="logValidationErrors(this.productForm, this.formErrors, this.validationMessages)"
+                  (clickEvent)="openCategoryDialog()" [errorMessage]="formErrors.category"
+                  [optionList]="ngxsService.categories$" clickEventButtonName="Add New Category"
+                  formControlName="category" matFormFieldClass="full-width" placeholder="Category" propertyName="name"
+                  propertyValue="id" searchPlaceholder="Search Category...">
+                </kt-simple-dropdown>
+              </div>
+            </div>
+          </div>
+          <!-- first row ends -->
+          <!-- second row starts -->
+          <div class="row mb-4">
+            <div class="col-lg-6 col-md-6 col-sm-6">
+              <div class="form-group kt-form__group mb-0">
+                <label class="col-form-label pt-0">Product Type: <i class="fa fa-asterisk" aria-hidden="true"
+                    style="color: #eb4c5d;font-size: 8px;position: relative;top: -5px;"></i></label>
+                <div class="kt-radio-list">
+                  <kt-radio-button [errorMessage]="vs.errAMOUNT(productForm, 'productType', 'Product Type')"
+                    [list]="[{id: 1, title: 'Consumable'}, {id: 2, title: 'Service'}]" formControlName="productType">
+                  </kt-radio-button>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6">
+              <div class="form-group kt-form__group mb-0">
+                <label class="col-form-label pt-0">
+                  Product State: <i class="fa fa-asterisk" aria-hidden="true"
+                    style="color: #eb4c5d;font-size: 8px;position: relative;top: -5px;"></i></label>
+                <div class="kt-radio-list">
+                  <kt-radio-button [errorMessage]="vs.errAMOUNT(productForm, 'purchasedOrSold', 'Purchased Or Sold')"
+                  [list]="[{id: 1, title: 'Purchased'}, {id: 2, title: 'Sold'}]" formControlName="purchasedOrSold">
+                </kt-radio-button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- second row ends -->
+          <!-- third row starts -->
+          <div class="row ">
+            <div class="col-lg-6 col-md-6 col-sm-6">
+              <div class="form-group kt-form__group mb-0">
+                <label class="col-form-label pt-0">Sales Price: <i class="fa fa-asterisk" aria-hidden="true"
+                    style="color: #eb4c5d;font-size: 8px;position: relative;top: -5px;"></i></label>
+                <kt-input-field [errorMessage]="vs.errAMOUNT(productForm, 'salesPrice', 'Sales Price')"
+                  formControlName="salesPrice" placeholder="Enter Sales Price" type="number">
+                </kt-input-field>
+              </div>
+            </div>
+
+            <div class="col-lg-6 col-md-6 col-sm-6">
+              <div class="form-group kt-form__group mb-0">
+                <label class="col-form-label pt-0">Cost: <i class="fa fa-asterisk" aria-hidden="true"
+                    style="color: #eb4c5d;font-size: 8px;position: relative;top: -5px;"></i></label>
+                <kt-input-field formControlName="cost"
+                  [errorMessage]="vs.errAMOUNT(productForm, 'cost', 'Cost', {min:1})"
+                  placeholder="Enter Cost" type="number">
+                </kt-input-field>
+              </div>
+            </div>
+          </div>
+          <!-- third row ends -->
+          <!-- fourth row starts -->
+          <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6">
+              <div class="form-group kt-form__group mb-0">
+                <label class="col-form-label pt-0">Sales Tax %: <i class="fa fa-asterisk" aria-hidden="true"
+                    style="color: #eb4c5d;font-size: 8px;position: relative;top: -5px;"></i></label>
+                <kt-input-field
+                  [errorMessage]="vs.errAMOUNT(productForm, 'salesTax', ' Sales Tax %', {max:100})"
+                  formControlName="salesTax" placeholder="Enter Sales Tax %" type="number">
+                </kt-input-field>
+              </div>
+            </div>
+
+            <div class="col-lg-6 col-md-6 col-sm-6">
+              <div class="form-group kt-form__group mb-0">
+                <label class="col-form-label pt-0">Barcode:</label>
+                <kt-input-field (blurEvent)="logValidationErrors(this.productForm, formErrors, validationMessages)"
+                  formControlName="barcode" hintText="(Optional)" placeholder="Enter Barcode">
+                </kt-input-field>
+              </div>
+            </div>
+          </div>
+          <!-- fourth row ends -->
+        </div>
+
+
+      </div>
+      <!-- form first section ends -->
+    </div>
+    <kt-btn-form-actions
+      [editDisplay]="isEditButtonShow"
+      [permissionz]="permissions.PRODUCT_EDIT"
+      [validate]="{form:productForm, errors: formErrors, messages: validationMessages}"
+      (resetAction)="reset()"
+      (toggleEdit)="toggleEdit()"
+    ></kt-btn-form-actions>
+  </form>
+  <!-- form ends -->
+</div>

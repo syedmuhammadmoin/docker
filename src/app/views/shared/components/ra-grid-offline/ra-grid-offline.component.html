@@ -1,0 +1,14 @@
+<ag-grid-angular
+  (gridReady)="setApi($event)"
+  (firstDataRendered)="raGridProperties.firstDataRendered($event)"
+  (rowDoubleClicked)="raGridProperties?.rowDoubleClicked($event)"
+  [columnDefs]="raGridProperties?.columnDefs"
+  [gridOptions]="raGridProperties.gridOptions"
+  [rowData]="raGridProperties?.rowData"
+  [autoGroupColumnDef]="raGridProperties?.autoGroupColumnDef"
+  [ngStyle]="raGridProperties.style"
+  class="ag-theme-alpine custom-grid"
+  style="width: 100%; height: 500px; margin-top: 10px;"
+  [frameworkComponents]="raGridProperties.frameworkComponents"
+></ag-grid-angular>
+<!-- [suppressAggFuncInHeader]="raGridProperties?.suppressAggFuncInHeader" -->

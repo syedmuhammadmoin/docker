@@ -1,0 +1,10 @@
+<kt-portlet>
+	<kt-portlet-header [title]="'Status'">
+		<ng-container ktPortletTools>
+			<button (click)="addStatusDialog()" mat-raised-button  matTooltip="Add Status" class="btn_white">Add Status</button>
+		</ng-container>
+	</kt-portlet-header>
+  <kt-portlet-body>
+    <kt-ra-grid-offline [raGridProperties]="raGridProperties"></kt-ra-grid-offline>
+  </kt-portlet-body>
+</kt-portlet>

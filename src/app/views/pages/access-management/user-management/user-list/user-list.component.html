@@ -1,0 +1,12 @@
+<kt-portlet>
+	<kt-portlet-header [title]="'Users'"></kt-portlet-header>
+  <kt-portlet-body>
+    <div class="col-lg-12 col-md-12 mb-4 text-right">
+      <button (click)="createUserDialog()" matTooltip="New User" class="app-default-btn">Invite User</button>
+    </div>
+    <mat-divider></mat-divider>
+    <div class="col-lg-12 col-md-12 col-sm-12 my-5">
+      <kt-ra-grid-offline [raGridProperties]="raGridProperties"></kt-ra-grid-offline>
+    </div>
+  </kt-portlet-body>
+</kt-portlet>

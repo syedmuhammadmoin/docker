@@ -1,0 +1,199 @@
+<div [ktBusy]="isLoading" class="kt-portlet" style="overflow :hidden;">
+  <div class="kt-portlet__head">
+    <div class="kt-portlet__head-caption">
+      <div class="kt-portlet__head-title">
+        <h3 class="kt-portlet__head-text modal-header"> {{title}} {{formName}}
+          <span (click)="onCloseDialog()" class="dialog-cross"><i class="fa fa-times float-right"></i></span>
+        </h3>
+      </div>
+    </div>
+  </div>
+
+  <form autocomplete="off" [formGroup]="paymentForm" #formDirective="ngForm" (ngSubmit)="onSubmit()" class="kt-form kt-form--label-align-right">
+    <div class="kt-portlet__body">
+      <div class="kt-form__section kt-form__section--first">
+        <div class="col-md-12 col-lg-12 col-sm-12">
+          <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6">
+              <div class="form-group kt-form__group mb-0">
+                <label class="col-form-label pt-0">Date: <i class="fa fa-asterisk" aria-hidden="true" style="color: #eb4c5d;font-size: 8px;position: relative;top: -5px;"></i></label>
+                <kt-date-input
+                  matFormFieldClass="full-width"
+                  [maxDate]="currentDate"
+                  formControlName="date"
+                  placeholder="Payment Date"
+                  (blurEvent)="logValidationErrors(this.paymentForm, this.formErrors, this.validationMessages)"
+                  [errorMessage]="formErrors.date">
+                </kt-date-input>
+              </div>
+            </div>
+
+            <div class="col-lg-6 col-md-6 col-sm-6">
+              <div class="form-group kt-form__group mb-0">
+                <label class="col-form-label pt-0">Register Type: <i class="fa fa-asterisk" aria-hidden="true" style="color: #eb4c5d;font-size: 8px;position: relative;top: -5px;"></i></label>
+                <div class="kt-radio-list mt-3">
+                  <mat-radio-group class="full-width" (change)="loadAccountList($event)" formControlName="registerType"
+                                   aria-label="Select an option">
+                    <mat-radio-button [value]="1">Cash Account</mat-radio-button>
+                    <mat-radio-button [value]="2">Bank Account</mat-radio-button>
+                    <mat-error *ngIf="formErrors.registerType">
+                      <strong style="font-size: 8px;">{{formErrors.registerType}}</strong>
+                    </mat-error>
+                  </mat-radio-group>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-4">
+              <div class="form-group kt-form__group mb-0">
+                <label class="col-form-label pt-0">Payment Register: <i class="fa fa-asterisk" aria-hidden="true" style="color: #eb4c5d;font-size: 8px;position: relative;top: -5px;"></i></label>
+                <kt-simple-dropdown
+                  placeholder="Select Payment Register"
+                  searchPlaceholder="Search Accounts..."
+                  [propertyValue]="propertyValue"
+                  [propertyName]="propertyName"
+                  formControlName="paymentRegister"
+                  matFormFieldClass="full-width"
+                  (blurEvent)="logValidationErrors(this.paymentForm, this.formErrors, this.validationMessages)"
+                  [errorMessage]="formErrors.paymentRegister"
+                  [optionList]="paymentRegisterList?paymentRegisterList:paymentMaster.paymentRegister?.name">
+                </kt-simple-dropdown>
+              </div>
+            </div>
+
+            <div class="col-lg-4 col-md-4 col-sm-4">
+              <div class="form-group kt-form__group mb-0">
+                <label class="col-form-label pt-0">Business Partner: <i class="fa fa-asterisk" aria-hidden="true" style="color: #eb4c5d;font-size: 8px;position: relative;top: -5px;"></i></label>
+                <kt-simple-dropdown
+                  formControlName="businessPartner"
+                  (blurEvent)="logValidationErrors(this.paymentForm, this.formErrors, this.validationMessages)"
+                  propertyName="name"
+                  propertyValue="id"
+                  matFormFieldClass="full-width"
+                  [errorMessage]="formErrors.businessPartner"
+                  [optionList]="ngxsService.businessPartners$"
+                  clickEventButtonName="Add New Business Partner"
+                  (clickEvent)="openBusinessPartnerDialog()"
+                  searchPlaceholder="Search Business Partners..."
+                  placeholder="Select Business Partner">
+                </kt-simple-dropdown>
+              </div>
+            </div>
+
+            <div class="col-lg-4 col-md-4 col-sm-4">
+              <div class="form-group kt-form__group mb-0">
+                <label class="col-form-label pt-0">Account: <i class="fa fa-asterisk" aria-hidden="true" style="color: #eb4c5d;font-size: 8px;position: relative;top: -5px;"></i></label>
+                <kt-simple-dropdown
+                  placeholder="Select Account"
+                  searchPlaceholder="Search Accounts..."
+                  propertyValue="id"
+                  propertyName="name"
+                  formControlName="account"
+                  matFormFieldClass="full-width"
+                  [errorMessage]="formErrors.account"
+                  (blurEvent)="logValidationErrors(this.paymentForm, this.formErrors, this.validationMessages)"
+                  [optionList]="ngxsService.accountsLevel4$">
+                </kt-simple-dropdown>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-lg-3 col-md-3 col-sm-3">
+              <div class="form-group kt-form__group mb-0">
+                <label class="col-form-label pt-0">Gross Payment: <i class="fa fa-asterisk" aria-hidden="true" style="color: #eb4c5d;font-size: 8px;position: relative;top: -5px;"></i></label>
+                <kt-input-field
+                  formControlName="grossPayment"
+                  type="number"
+                  placeholder="Enter Gross Payment"
+                  [errorMessage]="vs.errAMOUNT(paymentForm, 'grossPayment', 'Gross Payment', {min: 1})"
+                  >
+                </kt-input-field>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-3 col-sm-3">
+              <div class="form-group kt-form__group mb-0">
+                <label class="col-form-label pt-0">Discount:</label>
+                <kt-input-field
+                  hintText="Optional"
+                  formControlName="discount"
+                  type="number"
+                  placeholder="Enter Discount"
+                  [errorMessage]="vs.errAMOUNT(paymentForm, 'discount', 'Discount')"
+                  >
+                </kt-input-field>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-3 col-sm-3">
+              <div class="form-group kt-form__group mb-0">
+                <label class="col-form-label pt-0">Sales Tax W/H:</label>
+                <kt-input-field
+                  hintText="Optional"
+                  formControlName="salesTax"
+                  type="number"
+                  placeholder="Enter Sales Tax"
+                  [errorMessage]="vs.errAMOUNT(paymentForm, 'salesTax', 'Sales Tax')"
+                  >
+                </kt-input-field>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-3 col-sm-3">
+              <div class="form-group kt-form__group mb-0">
+                <label class="col-form-label pt-0">Income Tax W/H:</label>
+                <kt-input-field
+                  hintText="Optional"
+                  formControlName="incomeTax"
+                  type="number"
+                  placeholder="Enter Income Tax"
+                  [errorMessage]="vs.errAMOUNT(paymentForm, 'incomeTax', 'Income Tax')"
+                  >
+                </kt-input-field>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6">
+              <div class="form-group kt-form__group mb-0">
+                <label class="col-form-label pt-0">Description: <i class="fa fa-asterisk" aria-hidden="true" style="color: #eb4c5d;font-size: 8px;position: relative;top: -5px;"></i></label>
+                <kt-input-field
+                  formControlName="description"
+                  placeholder="Enter Description"
+                  [errorMessage]="vs.errTEXT(paymentForm, 'description', 'Description')"
+                ></kt-input-field>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <mat-divider></mat-divider>
+    <div class="kt-portlet__foot p-5">
+      <div class="kt-form__actions kt-form__actions">
+        <div class="row justify-content-center align-items-center">
+          <div class="col-lg-6 ">
+            <h6 class="app-text-primary">Net Payment:
+              <strong>{{ netPayment | number: "1.2-2" }}</strong></h6>
+          </div>
+          <div class="col-lg-6 text-right">
+              <button type="button" (click)="reset()" class="mr-3 app-reset-btn" ><i class="fas fa-undo"></i> Reset</button>
+              <button  class="mr-3 app-save-btn" type="submit"
+                      (click)="logValidationErrors(this.paymentForm, this.formErrors, this.validationMessages); isSubmit(0)"><i class="far fa-save"></i>
+                Save
+              </button>
+              <button  class="app-default-btn" type="submit"
+                      (click)="logValidationErrors(this.paymentForm, this.formErrors, this.validationMessages); isSubmit(1)"><i class="far fa-save"></i>
+                Submit
+              </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+

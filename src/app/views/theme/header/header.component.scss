@@ -1,0 +1,79 @@
+:host {
+	::ng-deep {
+		.loading-bar {
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			width: 100%;
+
+			.progress-bar {
+				// brand color
+				background-color: #5d78ff;
+			}
+		}
+
+		.topbar-item {
+			height: 100%;
+		}
+
+		@media (min-width: 1025px) {
+			.topbar, .topbar-item-wrapper {
+				height: 100%;
+			}
+		}
+	}
+}
+
+
+
+.my-overlay {
+    left: 0 !important;
+    top: 0 !important;
+    z-index: 10000 !important;
+    width: 100% !important;
+    height: 100% !important;
+    position: fixed !important;
+    background-color: rgba(77, 73, 73, 0.2) !important;
+    cursor: pointer !important;
+    visibility: visible !important;
+    transition: visibility 0s,  opacity 0.2 linear !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    // cursor: wait !important;
+}
+// .my-overlay i.fa.fa-spinner.fa-spin, .spinner-big {
+//     font-size: 100px !important;
+// }
+.loader-img{
+
+    left:47% !important;
+    top: 25% !important;
+    z-index: 99 !important;
+    width: 80px !important;
+    height: 100px !important;
+    position: fixed !important;
+
+    visibility: visible !important;
+    transition: visibility 0s,  opacity 0.2 linear !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.btn.btn-default .fill_oth svg g [fill]
+{
+    fill: #ccc301 !important;
+}
+
+.moon-color
+{
+    color: #B5B5C3 !important;
+}
+
+.sun-color
+{
+    color: #ffbf71 !important;
+}

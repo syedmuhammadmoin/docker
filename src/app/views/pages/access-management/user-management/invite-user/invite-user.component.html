@@ -1,0 +1,94 @@
+<div [ktBusy]="isLoading" class="kt-portlet" style="overflow :hidden;">
+  <div class="kt-portlet__head">
+    <div class="kt-portlet__head-caption">
+      <div class="kt-portlet__head-title">
+        <h3 class="kt-portlet__head-text modal-header">
+          Invite User <span (click)="onCloseUserDialog()" class="dialog-cross"><i
+          class="fa fa-times float-right"></i></span>
+        </h3>
+      </div>
+    </div>
+  </div>
+  <!-- form start -->
+  <form autocomplete="off" #formDirective='ngForm' (ngSubmit)="onSubmit()" [formGroup]="inviteUserForm"
+        class="kt-form kt-form--label-align-right">
+
+    <div class="kt-portlet__body">
+      <div class="kt-form__section kt-form__section--first">
+        <mat-tab-group [(selectedIndex)]="currentIndex">
+          <mat-tab label="Details">
+            <!-- first row start -->
+            <div class="col-md-12 col-lg-12 col-sm-12">
+              <div class="row">
+                <div class="col-lg-7 col-md-7 col-sm-7 mx-auto">
+                  <label class="col-form-label">Email:</label>
+                  <div class="form-group kt-form__group">
+                    <kt-input-field
+                      inputClass="input_transform_none"
+                      formControlName="email"
+                      matFormFieldClass="full-width"
+                      placeholder="Email"
+                      [errorMessage]="[{condition: formErrors.email , error: formErrors.email}]"
+                      (blurEvent)="logValidationErrors(this.inviteUserForm, formErrors, validationMessages)">
+                    </kt-input-field>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- second row start -->
+          </mat-tab>
+          <mat-tab label="Roles">
+            <div class="row mx-auto">
+              <ng-container>
+                <div class="col-md-12 search_sticky">
+                  <div class="p-1 input_style  shadow-sm mb-4">
+                    <div class="input-group">
+                      <input type="text" [(ngModel)]="searchText" [ngModelOptions]="{standalone: true}"
+                             placeholder="Search Roles..." aria-describedby="button-addon1"
+                             class="form-control border-0 input-field-sty">
+                      <div class="input-group-append">
+                        <button id="button-addon1" type="submit" class="btn btn-link text-primary" ><i
+                          class="fa fa-search"></i></button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+              <ng-container *ngFor="let role of userRole | filter:searchText">
+                <div class="col-md-6">
+                  <!-- <div class="checkbox-with-label"> -->
+                  <mat-checkbox [checked]="role.selected"
+                                (change)="onRoleChange(role, $event)">
+                    {{role.roleName}}
+                  </mat-checkbox>
+                  <!-- </div> -->
+                </div>
+              </ng-container>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+    </div>
+
+
+    <mat-divider></mat-divider>
+    <div class="kt-portlet__foot p-5">
+      <div class="kt-form__actions ">
+        <div class="row">
+          <div class="col-lg-12 col-md-8 col-sm-8 col-9">
+            <div class="float-right">
+              <button (click)="reset()" class="mr-3 app-reset-btn mr-2" type="button"><i class="fas fa-undo"></i> Reset
+              </button>
+              <button class="app-default-btn" type="submit"
+                      (click)="logValidationErrors(this.inviteUserForm, this.formErrors, this.validationMessages)">
+                <i class="far fa-save"></i>
+                Submit
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+  <!-- form ends -->
+</div>

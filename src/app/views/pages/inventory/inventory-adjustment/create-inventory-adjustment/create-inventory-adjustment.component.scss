@@ -1,0 +1,50 @@
+
+::ng-deep .mat-table {
+    
+    mat-cell, mat-header-cell, mat-footer-cell
+    {
+        justify-content: center;
+    }
+    mat-cell:first-of-type, mat-header-cell:first-of-type, mat-footer-cell:first-of-type
+    {
+        padding-left: 0px !important;
+    }
+    mat-row
+    {
+        padding-top: 20px;
+        // align-items: end;
+    }
+    .mat-header-cell {
+        color: #424e63;
+        font-weight: bold;
+        font-size: 15px;
+        border-right: 2px solid #88a9d733;
+    }
+    mat-header-row
+    {
+      // background-color: #8aacdb85;
+      background-color: #e4e6ef;
+      min-height: 46px;
+    }
+  }
+
+  ::ng-deep .input_d_1{
+    
+    margin-top: 2px;
+    
+
+    // .mat-form-field-infix input
+    // {
+    //     text-align: center !important;
+    // }
+
+    
+    // .mat-focused > .mat-form-field-outline
+    // {
+    //     border-bottom: 2px solid #424e63 !important;
+    // }
+    
+  }
+
+
+

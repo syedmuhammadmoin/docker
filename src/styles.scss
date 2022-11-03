@@ -1,0 +1,115 @@
+///* You can add global styles to this file, and also import other style files */
+//// Global vendors
+@import "~bootstrap/dist/css/bootstrap.css";
+@import "~material-design-icons/iconfont/material-icons.css";
+@import '@angular/material/prebuilt-themes/deeppurple-amber.css';
+//
+//// Global fonts
+@import "~socicon/css/socicon.css";
+@import "~@fortawesome/fontawesome-free/css/all.min.css";
+@import "./assets/plugins/flaticon/flaticon.css";
+@import "./assets/plugins/flaticon2/flaticon.css";
+@import "./assets/plugins/keenthemes-icons/font/ki.css";
+@import "./assets/plugins/line-awesome-1.3.0/1.3.0/css/line-awesome.min.css";
+//
+//// Metronic styles
+@import "./assets/sass/style.angular.scss";
+@import "./assets/sass/vendors/angular/material/angular-material";
+@import "./assets/sass/vendors/angular/material/include";
+//
+//// Default Layout themes
+@import "./assets/sass/themes/layout/header/base/light.scss";
+@import "./assets/sass/themes/layout/header/menu/light.scss";
+// @import "./assets/sass/themes/layout/brand/dark.scss";
+// @import "./assets/sass/themes/layout/aside/dark.scss";
+
+// For Ag Grid
+@import "../node_modules/ag-grid-community/dist/styles/ag-grid.css";
+@import "../node_modules/ag-grid-community/dist/styles/ag-theme-alpine.css";
+
+// custom theme
+@import "assets/css/themes/theme.scss";
+// @import "assets/css/themes/dark-theme.scss";
+// custom fonts
+@import "assets/css/all-fonts.scss";
+
+// toast
+// @import '~ngx-toastr/toastr';
+
+// Header themes
+// .header-base-light {
+//   @import "./assets/sass/themes/layout/header/base/light.scss";
+// }
+
+// .header-base-dark {
+//   @import "./assets/sass/themes/layout/header/base/dark.scss";
+// }
+
+// Header Menu themes
+// .header-menu-light {
+//   @import "./assets/sass/themes/layout/header/menu/light.scss";
+// }
+// .header-menu-dark {
+//   @import "./assets/sass/themes/layout/header/menu/dark.scss";
+// }
+
+// Brand themes
+// .brand-dark {
+//   @import "./assets/sass/themes/layout/brand/dark.scss";
+// }
+
+.brand-light {
+  @import "./assets/sass/themes/layout/brand/light.scss";
+}
+
+
+// Aside themes
+// .aside-dark {
+//   @import "./assets/sass/themes/layout/aside/dark.scss";
+// }
+
+// .aside-light {
+//   @import "./assets/sass/themes/layout/aside/light.scss";
+// }
+
+//kt-Busy Loader CSS
+// .custom-loading-container {
+//   background: rgba(0, 0, 0, 0.12) none repeat scroll 0% 0%;
+// }
+
+.custom-loading-parent-div {
+  width: 150px !important;
+  height: 150px !important;
+}
+
+.custom-loading {
+  display: flex;
+  justify-content: center;
+}
+
+.custom-loading::after {
+  content: "";
+  border-radius: 50%;
+  animation: custom-loading 1s ease infinite;
+  z-index: 9999;
+}
+
+.single-content {
+  //border: 2px solid white;
+  //border-top-color: #1d233b;
+  height: 3rem;
+  width: 3em;
+}
+
+.whole-content {
+  //border: 5px solid white;
+  //border-top-color: #1d233b;
+  height: 8rem;
+  width: 8rem;
+}
+
+@keyframes custom-loading {
+  to {
+    transform: rotate(1turn);
+  }
+}

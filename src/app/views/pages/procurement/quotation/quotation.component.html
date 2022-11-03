@@ -1,0 +1,339 @@
+
+<kt-portlet>
+    <kt-portlet-header style="color:white !important;" [title]="'Quotation'"></kt-portlet-header>
+    <!--begin::Form-->
+    <kt-portlet-body>
+        <form autocomplete="off" [formGroup]="quotationForm" (ngSubmit)="onSubmit()" class="kt-form kt-form--label-align-right">
+            <div class="kt-portlet__body">
+             <div class="kt-form__section kt-form__section--first">
+                    <div class="form-group kt-form__group row">
+                        <label class="col-lg-2 col-form-label">Customer Name:</label>
+                        <div class="col-lg-2">
+                            <mat-form-field>
+                                <input type="text" matInput placeholder="Enter Customer Name" formControlName="customerName"
+                                    [matAutocomplete]="auto" (blur)="logValidationErrors()">
+                                <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete"
+                                    [displayWith]="displayQuotation.bind(this)">
+                                    <mat-option *ngFor="let customer of filteredQuotation | async" [value]="customer.id">
+                                        {{ customer.name }}
+                                    </mat-option>
+                                </mat-autocomplete>
+                                <mat-error *ngIf="formErrors.customerName">
+                                    <strong>{{formErrors.customerName}}</strong>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <label class="col-lg-2 col-form-label">Bill Date:</label>
+                        <div class="col-lg-2">
+                            <mat-form-field>
+                                <mat-label>Invoice Date</mat-label>
+                                <input matInput [matDatepicker]="updateFromPicker" formControlName="billDate"
+                                    (blur)="logValidationErrors()" [readonly]="'true'">
+                                <mat-datepicker-toggle matSuffix [for]="updateFromPicker"></mat-datepicker-toggle>
+                                <mat-datepicker #updateFromPicker></mat-datepicker>
+                                <mat-error *ngIf="formErrors.billDate">
+                                    <strong>{{formErrors.billDate}}</strong>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div class="form-group kt-form__group row">
+                        <label class="col-lg-2 col-form-label">Payment Terms:</label>
+                        <div class="col-lg-2">
+                            <mat-form-field>
+                                <input matInput placeholder="Enter payment terms" formControlName="paymentTerms"
+                                    (blur)="logValidationErrors()">
+                                    <!-- <mat-select placeholder="Payment Terms" formControlName="paymentTerms" (blur)="logValidationErrors()">
+                                        <mat-option *ngFor="let group of groups" [value]="group.viewValue">
+                                            {{ group.viewValue }}
+                                        </mat-option>
+                                    </mat-select> -->
+                                <mat-error *ngIf="formErrors.paymentTerms">
+                                    <strong>{{formErrors.paymentTerms}}</strong>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <label class="col-lg-2 col-form-label">Due Date:</label>
+                         <div class="col-lg-2">
+                            <mat-form-field>
+                                <mat-label>Due Date</mat-label>
+                                <input matInput [matDatepicker]="updateToPicker" formControlName="dueDate"
+                                    (blur)="logValidationErrors()" [readonly]="'true'">
+                                <mat-datepicker-toggle matSuffix [for]="updateToPicker"></mat-datepicker-toggle>
+                                <mat-datepicker #updateToPicker></mat-datepicker>
+                                <mat-error *ngIf="formErrors.dueDate">
+                                    <strong>{{formErrors.dueDate}}</strong>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group kt-form__group row">
+                        <label class="col-lg-2 col-form-label">From:</label>
+                        <div class="col-lg-2">
+                            <mat-form-field>
+                                <input matInput placeholder="Select From" formControlName="from"
+                                    (blur)="logValidationErrors()">
+                                <mat-error *ngIf="formErrors.from">
+                                    <strong>{{formErrors.from}}</strong>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <label class="col-lg-2 col-form-label">To:</label>
+                        <div class="col-lg-2">
+                            <mat-form-field>
+                                <input matInput placeholder="Select To" formControlName="to"
+                                    (blur)="logValidationErrors()">
+                                <mat-error *ngIf="formErrors.to">
+                                    <strong>{{formErrors.to}}</strong>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+
+                     <!--New Row-->
+                     <div class="form-group kt-form__group row">
+                        <label class="col-lg-2 col-form-label">Vehicle No:</label>
+                        <div class="col-lg-2">
+                            <mat-form-field>
+                                <input matInput placeholder="Enter Vehicle Number" formControlName="vehicleNo"
+                                    (blur)="logValidationErrors()">
+                                <mat-error *ngIf="formErrors.vehicleNo">
+                                    <strong>{{formErrors.vehicleNo}}</strong>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <label class="col-lg-2 col-form-label">Contact:</label>
+                        <div class="col-lg-2">
+                            <mat-form-field>
+                                <input matInput placeholder="Enter Contact" formControlName="contactNo"
+                                    (blur)="logValidationErrors()">
+                                <mat-error *ngIf="formErrors.contactNo">
+                                    <strong>{{formErrors.contactNo}}</strong>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+
+
+              <div class="form-group kt-form__group row">
+                <div class="col-lg-12">
+                    <button mat-raised-button color="primary" type="button" (click)="addQuotationLineClick()">Add row</button>
+                </div>
+                <div class="col-lg-12">
+                    <ng-container formArrayName="quotationLines">
+                        <mat-table #table [dataSource]="quotationForm.get('quotationLines')['controls']">
+
+                            <!--- Note that these columns can be defined in any order.
+                                The actual rendered columns are set as a property on the row definition" -->
+
+                            <!-- Item Column -->
+                            <ng-container matColumnDef="itemId">
+                                <mat-header-cell *matHeaderCellDef> Item </mat-header-cell>
+                                <mat-cell *matCellDef="let element;  let i = index" [formGroup]="element">
+                                    <mat-form-field class="mobile-label">
+                                        <input matInput placeholder="item" formControlName="itemId"
+                                            [id]="'itemId'+i" [matAutocomplete]="autoItem">
+                                        <mat-autocomplete #autoItem="matAutocomplete"
+                                            [displayWith]="displayItems.bind(this)"
+                                            (optionSelected)='onItemSelected($event.option.value, i)'>
+                                            <mat-option *ngFor="let option of filteredItem[i] | async"
+                                                [value]="option.id">
+                                                {{option.productName}}
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                        <mat-error *ngIf="quotationForm.get('quotationLines')['controls'][i].controls.itemId.errors?.incorrect &&
+                                        quotationForm.get('quotationLines')['controls'][i].controls.itemId.touched">
+                                            <strong>Please enter valid item name</strong>
+                                        </mat-error>
+                                    </mat-form-field>
+                                </mat-cell>
+                            </ng-container>
+                            <!-- Description Column -->
+                            <ng-container matColumnDef="description">
+                                <mat-header-cell *matHeaderCellDef> Description </mat-header-cell>
+                                <mat-cell *matCellDef="let element;  let i = index" [formGroup]="element">
+                                    <mat-form-field class="mobile-label">
+                                        <input matInput placeholder="Enter Description"
+                                            formControlName="description" [id]="'description'+i">
+                                        <mat-error
+                                        *ngIf="quotationForm.get('quotationLines')['controls'][i].controls.description.errors?.required &&
+                                        quotationForm.get('quotationLines')['controls'][i].controls.description.touched">
+                                            <strong>Description is required</strong>
+                                        </mat-error>
+                                    </mat-form-field>
+                                </mat-cell>
+                            </ng-container>
+                            <!-- Price Column -->
+                            <ng-container matColumnDef="salesPrice">
+                                <mat-header-cell *matHeaderCellDef> Price </mat-header-cell>
+                                <mat-cell *matCellDef="let element;  let i = index" [formGroup]="element">
+                                    <mat-form-field class="mobile-label">
+                                        <input matInput type="number" placeholder="Enter Price" formControlName="salesPrice"
+                                            [id]="'salesPrice'+i" (keyup)="onChangeEvent($event, i)"
+                                            (change)="onChangeEvent($event, i)">
+                                        <mat-error
+                                            *ngIf="quotationForm.get('quotationLines')['controls'][i].controls.salesPrice.errors?.required &&
+                                        quotationForm.get('quotationLines')['controls'][i].controls.salesPrice.touched">
+                                            <strong>Price is required</strong>
+                                        </mat-error>
+                                    </mat-form-field>
+                                </mat-cell>
+                            </ng-container>
+                            <!-- Quantity Column -->
+                            <ng-container matColumnDef="quantity">
+                                <mat-header-cell *matHeaderCellDef> Quantity </mat-header-cell>
+                                <mat-cell *matCellDef="let element;  let i = index" [formGroup]="element">
+                                    <mat-form-field class="mobile-label">
+                                        <input matInput type="number" placeholder="Enter Quantity"
+                                            formControlName="quantity" [id]="'quantity'+i"
+                                            (keyup)="onChangeEvent($event, i)" (change)="onChangeEvent($event, i)">
+                                        <mat-error *ngIf="quotationForm.get('quotationLines')['controls'][i].controls.quantity.errors?.required &&
+                                        quotationForm.get('quotationLines')['controls'][i].controls.quantity.touched">
+                                            <strong>Quantity is required</strong>
+                                        </mat-error>
+                                        <mat-error *ngIf="quotationForm.get('quotationLines')['controls'][i].controls.quantity.errors?.min &&
+                                        quotationForm.get('quotationLines')['controls'][i].controls.quantity.touched">
+                                            <strong>Minimum value is one</strong>
+                                        </mat-error>
+                                    </mat-form-field>
+                                </mat-cell>
+                            </ng-container>
+                            <!-- Tax Column -->
+                            <ng-container matColumnDef="salesTax">
+                                <mat-header-cell *matHeaderCellDef> Tax% </mat-header-cell>
+                                <mat-cell *matCellDef="let element;  let i = index" [formGroup]="element">
+                                    <mat-form-field class="mobile-label">
+                                        <input matInput type="number" placeholder="Enter Tax %"
+                                            formControlName="salesTax" [id]="'salesTax'+i"
+                                            (change)="onChangeEvent($event, i)">
+                                        <mat-error *ngIf="(quotationForm.get('quotationLines')['controls'][i].controls.salesTax.errors?.min ||
+                                        quotationForm.get('quotationLines')['controls'][i].controls.salesTax.errors?.max) &&
+                                        quotationForm.get('quotationLines')['controls'][i].controls.salesTax.touched">
+                                            <strong>Tax % should be between 0 and 100</strong>
+                                        </mat-error>
+                                    </mat-form-field>
+                                </mat-cell>
+                            </ng-container>
+                            <!-- SubTotal Column -->
+                            <ng-container matColumnDef="subTotal">
+                                <mat-header-cell *matHeaderCellDef> SubTotal </mat-header-cell>
+                                <mat-cell *matCellDef="let element;  let i = index" [formGroup]="element">
+                                    <mat-form-field class="mobile-label">
+                                        <input matInput formControlName="subTotal" [id]="'subTotal'+i">
+                                    </mat-form-field>
+                                </mat-cell>
+                            </ng-container>
+                            <!-- Account Column -->
+                            <ng-container matColumnDef="accountId">
+                                <mat-header-cell *matHeaderCellDef> Account </mat-header-cell>
+                                <mat-cell *matCellDef="let element;  let i = index" [formGroup]="element">
+                                    <mat-form-field class="mobile-label">
+                                        <input matInput placeholder="Select Account" formControlName="accountId"
+                                            [id]="'accountId'+i" [matAutocomplete]="autoAccount">
+                                        <mat-autocomplete #autoAccount="matAutocomplete"
+                                            [displayWith]="displayAccount.bind(this)">
+                                            <mat-option *ngFor="let option of filteredAccount[i] | async"
+                                                [value]="option.id">
+                                                {{option.name}}
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                        <mat-error *ngIf="quotationForm.get('quotationLines')['controls'][i].controls.accountId.errors?.incorrect &&
+                                        quotationForm.get('quotationLines')['controls'][i].controls.accountId.touched">
+                                            <strong>Please select valid account</strong>
+                                        </mat-error>
+                                        <mat-error *ngIf="quotationForm.get('quotationLines')['controls'][i].controls.accountId.errors?.required &&
+                                        quotationForm.get('quotationLines')['controls'][i].controls.accountId.touched">
+                                            <strong>Account is required</strong>
+                                        </mat-error>
+                                    </mat-form-field>
+                                </mat-cell>
+                            </ng-container>
+                            <!-- Location Column -->
+                            <ng-container matColumnDef="locationId">
+                                <mat-header-cell *matHeaderCellDef> Location </mat-header-cell>
+                                <mat-cell *matCellDef="let element;  let i = index" [formGroup]="element">
+                                    <mat-form-field class="mobile-label">
+                                        <input matInput placeholder="Select Location" formControlName="locationId"
+                                            [id]="'locationId'+i" [matAutocomplete]="autoLocation">
+                                        <mat-autocomplete #autoLocation="matAutocomplete"
+                                            [displayWith]="displayLocation.bind(this)">
+                                            <mat-option *ngFor="let option of filteredLocation[i] | async"
+                                                [value]="option.id">
+                                                {{option.name}}
+                                            </mat-option>
+                                        </mat-autocomplete>
+                                        <mat-error
+                                            *ngIf="quotationForm.get('quotationLines')['controls'][i].controls.locationId.errors?.incorrect &&
+                                        quotationForm.get('quotationLines')['controls'][i].controls.locationId.touched">
+                                            <strong>Please select valid location</strong>
+                                        </mat-error>
+                                        <mat-error
+                                            *ngIf="quotationForm.get('quotationLines')['controls'][i].controls.locationId.errors?.required &&
+                                        quotationForm.get('quotationLines')['controls'][i].controls.locationId.touched">
+                                            <strong>Location is required</strong>
+                                        </mat-error>
+                                    </mat-form-field>
+                                </mat-cell>
+                            </ng-container>
+                            <!-- Action Column -->
+                            <ng-container matColumnDef="action">
+                                <mat-header-cell *matHeaderCellDef>Action</mat-header-cell>
+                                <mat-cell *matCellDef="let element;  let i = index" [formGroup]="element">
+                                    <mat-icon class="delete" (click)="removeQuotationLineClick(i); totalCalculation()">delete_forever
+                                    </mat-icon>
+                                </mat-cell>
+                            </ng-container>
+
+                            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                        </mat-table>
+                    </ng-container>
+                   </div>
+                 </div>
+               </div>
+            </div>
+
+
+
+            <div class="row">
+               <div class="col-lg-9"></div>
+                 <div class="col-lg-3">
+                  <div class="row">
+                     <div class="col-lg-7 amount-font">Total Before Tax :</div>
+                     <div class="col-lg-3 amount">{{totalBeforeTax}}</div>
+                  </div>
+                  <div class="row">
+                     <div class="col-lg-7 amount-font" >Total Tax :</div>
+                     <div class="col-lg-3 amount">{{totalTax}}</div>
+                  </div>
+                  <div class="row">
+                     <div class="col-lg-7 amount-font">Grand Total :</div>
+                     <div class="col-lg-3 amount">{{grandTotal}}</div>
+                  </div>
+               </div>
+            </div>
+
+
+
+            <mat-divider style="margin: 35px -30px;"></mat-divider>
+            <div class="kt-portlet__foot">
+                <div class="kt-form__actions kt-form__actions">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <button mat-raised-button  style="padding: 0px 8px; font-size:11px; background-color: #283655;
+                            background-image: linear-gradient(to right, #2e303b, #2b335d); color: white;" type="submit" (click)="logValidationErrors()">Submit</button>&nbsp;
+                            <button mat-raised-button  style="padding: 0px 8px; font-size:11px; background-color: white; color:black;" (click)="reset()" type="reset">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </kt-portlet-body>
+    <!--end::Form-->
+    </kt-portlet>
+

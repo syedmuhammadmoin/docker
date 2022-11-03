@@ -1,0 +1,62 @@
+<div [ktBusy]="isLoading">
+  <kt-portlet>
+    <kt-portlet-header [class]="'card-head-lg ribbon ribbon-clip ribbon-right'" [title]="'Goods Dispatch Note'">
+      <ng-container  ktPortletTools>
+        <div class="ribbon-target "><span class="ribbon-inner {{dispatchNoteMaster?.status}}"></span>
+          {{dispatchNoteMaster?.status}}</div>
+      </ng-container>
+    </kt-portlet-header>
+    <kt-portlet-body>
+      <div class="col-md-12 col-lg-12 mx-auto">
+        <div class="row">
+          <div class="col-md-12 col-12 pb-3 text-right">
+            <ng-container ktPortletTools>
+              <button [routerLink]="'/'+ DISPATCH_NOTE.ID_BASED_ROUTE ('print',dispatchNoteMaster?.id)"
+                class="btn-detail-print mr-3" type="button">
+                <i class="fa fa-print"></i>&nbsp;Print
+              </button>
+              <button *ngIf="dispatchNoteMaster?.state === docStatus.Draft" [queryParams]="{q: dispatchNoteMaster?.id, 'isGDN': true}"
+                [routerLink]="'/'+ DISPATCH_NOTE.ID_BASED_ROUTE ('edit',dispatchNoteMaster?.id)"
+                class="app-edit-btn mr-3" type="button">
+                <i class="fa fa-edit"></i>&nbsp;Edit
+              </button>
+              <mat-divider class="mt-3"></mat-divider>
+            </ng-container>
+          </div>
+          <div class="col-md-5 col-lg-5 mt-3">
+            <div class="print-box">
+              <h4>GDN No:
+                <span class="float-right">{{dispatchNoteMaster?.docNo}}</span>
+              </h4>
+            </div>
+            <div class="print-box">
+              <h4>Customer Name:
+                <span class="float-right" style="font-weight: 400;">{{dispatchNoteMaster?.customerName}}</span>
+              </h4>
+            </div>
+            <div class="print-box">
+              <h4>GDN Date:
+                <span class="float-right" style="font-weight: 400;">{{dispatchNoteMaster?.docDate | date: 'MMM d, y'}}</span>
+              </h4>
+            </div>
+          </div>
+
+          <kt-ra-grid-offline [raGridProperties]="raGridProperties"></kt-ra-grid-offline>
+        </div>
+      </div>
+    </kt-portlet-body>
+
+    <mat-divider class="mt-10"></mat-divider>
+
+    <div class="kt-portlet__foot">
+      <div class="kt-form__actions kt-form__actions">
+        <div class="row ">
+          <div *ngIf="dispatchNoteMaster?.isAllowedRole" class="col-lg-12 text-right">
+            <button (click)="workflow(action.Reject)" class="mr-5 danger__btn" mat-raised-button>Reject</button>
+            <button (click)="workflow(action.Approve)" class="success__btn" mat-raised-button>Approve</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </kt-portlet>
+</div>

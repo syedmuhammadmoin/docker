@@ -1,0 +1,141 @@
+<div [ktBusy]="isLoading">
+  <kt-portlet>
+    <kt-portlet-header [class]="'card-head-lg ribbon ribbon-clip ribbon-right'"
+                       [title]="'Debit Note Detail'">
+      <ng-container  ktPortletTools>
+        <div class="ribbon-target "><span
+          class="ribbon-inner {{debitNoteMaster?.status}}"></span> {{debitNoteMaster?.status}}</div>
+      </ng-container>
+    </kt-portlet-header>
+    <kt-portlet-body>
+      <div class="col-md-12 col-lg-12 mb-5">
+        <div class="row">
+          <div class="col-md-12 col-12 pb-3 text-right">
+            <ng-container ktPortletTools>
+              <button [routerLink]="'/' + DEBIT_NOTE.ID_BASED_ROUTE ('print',debitNoteMaster?.id) "
+                      class="btn-detail-print mr-3"
+                      type="button">
+                <i class="fa fa-print"></i> Print Debit Note
+              </button>
+              <button *ngIf="debitNoteMaster?.state === docStatus.Draft"
+                      [disabled]="!(permission.isGranted(permissions.DEBITNOTE_EDIT))"
+                      [ngClass]="!(permission.isGranted(permissions.DEBITNOTE_EDIT)) ? 'disable' : '' "
+                      [queryParams]="{q: debitNoteMaster?.id, 'isDebitNote': true}"
+                      [routerLink]="'/' + DEBIT_NOTE.ID_BASED_ROUTE ('edit',debitNoteMaster?.id)"
+                      class="app-edit-btn" type="button"><i class="fa fa-edit"></i> Edit
+              </button>
+              <button (click)="resetToDraft()"
+                      *ngIf="debitNoteMaster?.ledgerId"
+                      class="mr-3 app-edit-btn" type="button"><i class="fa fa-undo-alt"></i> Reset to Draft
+              </button>
+              <mat-divider class="mt-3"></mat-divider>
+            </ng-container>
+          </div>
+          <div class="col-md-4 col-lg-4 mt-3">
+            <div class="print-box">
+              <h4>Debit Note No:
+                <span class="float-right">{{debitNoteMaster?.docNo}}</span></h4>
+            </div>
+            <div class="print-box">
+              <h4>Vendor Name:
+                <span class="float-right" style="font-weight: 400;">{{debitNoteMaster?.vendorName}}</span></h4>
+            </div>
+            <div class="print-box">
+              <h4>Debit Note Date:
+                <span class="float-right"
+                      style="font-weight: 400;">{{debitNoteMaster?.noteDate | date: 'MMM d, y'}}</span></h4>
+            </div>
+          </div>
+          <kt-ra-grid-offline [raGridProperties]="raGridProperties"></kt-ra-grid-offline>
+          <div class="col-md-4 col-lg-4  ml-auto mt-3 totalBox">
+            <div class="bottom-print-box">
+              <h4 >Total Before Tax :
+                <span class="float-right" style="font-weight: 400;"> {{valueFormatter(totalBeforeTax || 0)}}</span>
+              </h4>
+            </div>
+            <div class="bottom-print-box">
+              <h4 >Total Tax :
+                <span class="float-right" style="font-weight: 400;">{{valueFormatter(totalTax || 0)}}</span>
+              </h4>
+            </div>
+            <div class="bottom-print-box">
+              <h4 >Grand Total :
+                <span class="float-right" style="font-weight: 400;">  {{valueFormatter(totalAmount || 0)}}</span>
+              </h4>
+            </div>
+
+            <div *ngIf="reconciledDocumentList.length > 0" class="bottom-print-box">
+              <mat-accordion>
+                <mat-expansion-panel>
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      Reconciled Amount :
+                    </mat-panel-title>
+                    <mat-panel-description>
+                      {{valueFormatter(debitNoteMaster?.reconciledAmount || 0)}}
+                    </mat-panel-description>
+                  </mat-expansion-panel-header>
+                  <table class="table paid-amount-table">
+                    <tr>
+                      <th>Doc #</th>
+                      <th class="text-right">Amount</th>
+                    </tr>
+                    <tr *ngFor="let pay of reconciledDocumentList">
+                      <td><a
+                        [routerLink]="'/' + BILL.ID_BASED_ROUTE ('details',pay?.id)"
+                        class="links">{{pay?.docNo}}</a></td>
+                      <td class="text-right">
+                        <a [routerLink]="'/' + BILL.ID_BASED_ROUTE ('details',pay?.id)"
+                           class="links">{{valueFormatter(pay.amount || 0)}}</a>
+                      </td>
+                    </tr>
+                  </table>
+                </mat-expansion-panel>
+              </mat-accordion>
+            </div>
+
+            <div *ngIf="debitNoteMaster?.documentReconcile" class="bottom-print-box">
+              <mat-accordion>
+                <mat-expansion-panel>
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      References :
+                    </mat-panel-title>
+
+                  </mat-expansion-panel-header>
+                  <table class="table  paid-amount-table">
+                    <tr>
+                      <th>Doc #</th>
+                    </tr>
+                    <tr>
+                      <td><a
+                        [routerLink]="'/' + BILL.ID_BASED_ROUTE ('details', debitNoteMaster?.documentReconcile?.id)"
+                        class="links">{{debitNoteMaster?.documentReconcile?.docNo}}</a></td>
+
+                    </tr>
+                  </table>
+                </mat-expansion-panel>
+              </mat-accordion>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </kt-portlet-body>
+
+    <mat-divider></mat-divider>
+
+    <div class="kt-portlet__foot">
+      <div class="kt-form__actions kt-form__actions">
+        <div class="row ">
+          <div *ngIf="debitNoteMaster?.isAllowedRole" class="col-lg-12 text-right">
+            <button (click)="workflow(action.Reject)" class="mr-5 danger__btn" mat-raised-button>Reject</button>
+            <button (click)="workflow(action.Approve)" class="success__btn" mat-raised-button>Approve</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </kt-portlet>
+</div>
+
+

@@ -1,0 +1,137 @@
+<div [ktBusy]="isLoading">
+  <kt-portlet>
+    <kt-portlet-header [class]="'card-head-lg ribbon ribbon-clip ribbon-right'"
+                       [title]="'Bank Statement Detail'">
+      <ng-container  ktPortletTools>
+        <!-- <h4 class="overall_statuses  {{paymentMaster?.status}}">Status:  {{paymentMaster?.status}}</h4> -->
+        <!-- <div class="ribbon-target " ><span class="ribbon-inner "></span> </div> -->
+      </ng-container>
+    </kt-portlet-header>
+    <kt-portlet-body>
+      <div class="col-md-12 col-lg-12 mb-5">
+        <div class="row">
+          <div class="col-md-12 col-12 pb-3 text-right">
+            <ng-container ktPortletTools>
+              <button
+                (click)="editBankStatement(bankStatement?.id)"
+                *ngIf="permission.isGranted(permissions.BANKSTATEMENT_EDIT)" class="mr-3 app-edit-btn" type="button"><i
+                class="fa fa-edit"></i>
+                Edit
+              </button>
+              <mat-divider class="mt-3"></mat-divider>
+            </ng-container>
+
+          </div>
+
+          <div class="col-md-6 col-lg-4  mt-3">
+            <div class="print-box">
+              <h4 >Bank Account:
+                <span class="float-right" style="font-weight: 400;">{{this.bankStatement?.bankAccountName}}</span>
+              </h4>
+            </div>
+
+            <div class="print-box">
+              <h4 >Description
+                <span class="float-right" style="font-weight: 400;">{{this.bankStatement?.description || 'N/A'}}</span>
+              </h4>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4 mt-3 ml-auto">
+            <div class="print-box">
+              <h4 >Opening Balance:
+                <span class="float-right"
+                      style="font-weight: 400;">{{valueFormatter(this.bankStatement?.openingBalance || 0)}}</span>
+              </h4>
+            </div>
+          </div>
+
+          <mat-divider></mat-divider>
+
+          <div class="col-md-12 col-lg-12 mt-5">
+            <div class="row table-header-row" >
+              <div class="col app-primary-text">
+
+              </div>
+              <div class="col app-primary-text">
+                Ref #
+              </div>
+              <div class="col app-primary-text">
+                Date
+              </div>
+              <div class="col app-primary-text">
+                Label
+              </div>
+              <div class="col app-primary-text">
+                Debit
+              </div>
+              <div class="col app-primary-text">
+                Credit
+              </div>
+
+            </div>
+            <ng-container *ngFor="let line of bankStatement?.bankStmtLines">
+              <div (click)="line.isOpen = !line.isOpen" class="row align-items-center table-content-row"
+                    >
+                <div [ngClass]="!line?.isOpen ? 'success' : 'active_btn'" class="col text-left">
+                  <ng-container *ngIf="line.reconPaymentList; else emptySpan">
+                    <i [ngClass]="!line?.isOpen ? 'fa-angle-right' : 'fa-angle-down'"
+                       class="fa " style="padding:20px ;"></i>
+                  </ng-container>
+                  <ng-template #emptySpan>
+                    <span style="padding: 27px; display: block;"></span>
+                  </ng-template>
+                </div>
+                <div class="col">
+                  {{line?.reference}}
+                </div>
+                <div class="col">
+                  {{transformDate(line?.stmtDate, 'MMM d, y')}}
+                </div>
+                <div class="col">
+                  {{line?.label}}
+                </div>
+                <div class="col">
+                  {{valueFormatter(line.debit || 0)}}
+                </div>
+                <div class="col">
+                  {{valueFormatter(line.credit || 0)}}
+                </div>
+              </div>
+              <div *ngIf="line.reconPaymentList" class="row"  @ngIfAnimation>
+                <ng-container *ngIf="line.isOpen" >
+                  <ng-container *ngFor="let payment of line.reconPaymentList">
+                    <div class="col-12 mx-auto table-accordion-content" @easeInOut>
+                      <table class="table table-striped text-center mb-0" >
+                        <tr>
+                          <td>{{docType[payment.docType] || 'N/A'}}</td>
+                          <td>{{payment.docNo || 'N/A'}}</td>
+                          <td>{{valueFormatter(payment.amount || 0)}}</td>
+                          <td>
+                            <a (click)="unreconcile(line, payment)" class="btn btn-icon btn-xs btn-light-danger"
+                               href="javascript:void(0);" matTooltip="UNRECONCILE">
+                              <i class="fas fa-undo-alt"></i>
+                            </a>
+                          </td>
+                        </tr>
+                      </table>
+                    </div>
+                  </ng-container>
+                </ng-container>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </kt-portlet-body>
+
+    <mat-divider></mat-divider>
+
+    <div class="kt-portlet__foot">
+      <div class="kt-form__actions kt-form__actions">
+
+      </div>
+    </div>
+  </kt-portlet>
+</div>
+
+

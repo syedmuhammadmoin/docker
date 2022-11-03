@@ -1,0 +1,66 @@
+<div class="kt-portlet" style="overflow :hidden;">
+  <div class="kt-portlet__head">
+    <div class="kt-portlet__head-caption">
+      <div class="kt-portlet__head-title">
+        <h3 class="kt-portlet__head-text modal-header">
+          Create Head Account
+        </h3>
+      </div>
+    </div>
+  </div>
+  <!-- form start -->
+  <form autocomplete="off" [formGroup]="level3Form" #formDirective="ngForm" (ngSubmit)="onSubmit()" class="kt-form kt-form--label-align-right">
+    <div class="kt-portlet__body" >
+      <div class="kt-form__section kt-form__section--first">
+        <!-- first row start -->
+        <div class="col-md-12 col-lg-12 col-sm-12">
+          <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6">
+              <label class="col-form-label">Head Name:</label>
+              <div class="form-group kt-form__group">
+                <kt-input-field
+                 formControlName="name"
+                 placeholder="Enter Head Name"
+                 [errorMessage]="vs.errTEXT(level3Form, 'name', 'Head Name')"
+                ></kt-input-field>
+              </div>
+            </div>
+
+            <div class="col-lg-6 col-md-6 col-sm-6">
+              <label class="col-form-label">Head Summary:</label>
+              <div class="form-group kt-form__group">
+                <kt-simple-dropdown
+                  formControlName="level2"
+                  (blurEvent)="logValidationErrors(this.level3Form, this.formErrors, this.validationMessages)"
+                  [errorMessage]="formErrors.level2"
+                  searchPlaceholder="Search Summary Head..."
+                  placeholder="Select Summary Head"
+                  matFormFieldClass="full-width"
+                  [optionList]="chartOfAccountService.getLevel2Account()"
+                  propertyName="name"
+                  propertyValue="id">
+                </kt-simple-dropdown>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <mat-divider></mat-divider>
+    <div class="kt-portlet__foot" >
+      <div class="kt-form__actions row">
+        <div class="col-lg-12">
+          <div class="float-right">
+            <button class="btn_white mr-3" mat-raised-button type="button" (click)="onCloseLevel3Dialog()">Cancel</button>
+            <button mat-raised-button class="sub___btn" type="submit"
+                    (click)="logValidationErrors(this.level3Form, this.formErrors, this.validationMessages)">Submit
+            </button>&nbsp;
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+  <!-- form ends -->
+</div>
+
+

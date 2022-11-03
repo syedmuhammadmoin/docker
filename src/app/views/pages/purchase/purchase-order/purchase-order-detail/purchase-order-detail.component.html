@@ -1,0 +1,111 @@
+<div [ktBusy]="isLoading">
+  <kt-portlet>
+    <kt-portlet-header [class]="'card-head-lg ribbon ribbon-clip ribbon-right'"
+                       [title]="'Purchase Order Detail'">
+      <ng-container ktPortletTools>
+        <div class="ribbon-target"><span
+          class="ribbon-inner {{purchaseOrderMaster?.status}}"></span> {{purchaseOrderMaster?.status}}</div>
+      </ng-container>
+    </kt-portlet-header>
+    <kt-portlet-body>
+      <div class="col-md-12 col-lg-12 mb-5">
+        <div class="row">
+          <div class="col-md-12 col-12 pb-3 text-right">
+            <ng-container ktPortletTools>
+              <button [routerLink]="'/'+ PURCHASE_ORDER.ID_BASED_ROUTE ('print',purchaseOrderMaster?.id) "
+                      class="btn-detail-print mr-3"
+                      type="button">
+                <i class="fa fa-print"></i> Print Purchase Order
+              </button>
+
+              <button
+                *ngIf="purchaseOrderMaster?.state != docStatus.Draft"
+                [disabled]="!(permission.isGranted(permissions.BILL_CREATE))"
+                [ngClass]="!(permission.isGranted(permissions.BILL_CREATE)) ? 'disable' : '' "
+                [queryParams]="{q: purchaseOrderMaster?.id, 'isPurchaseOrder': true}"
+                [routerLink]="'/'+BILL.CREATE" class=" btn app-default-btn btn-gradient mr-3"
+                type="button">
+                Create Bill
+              </button>
+              <!--[disabled]="!(permission.isGranted(permissions.GRN_CREATE))"
+                [ngClass]="!(permission.isGranted(permissions.GRN_CREATE)) ? 'disable' : '' "-->
+              <button
+                *ngIf="purchaseOrderMaster?.state != docStatus.Draft"
+                [queryParams]="{q: purchaseOrderMaster?.id, 'isPurchaseOrder': true}"
+                [routerLink]="'/'+GOODS_RECEIVED_NOTE.CREATE" class="btn app-default-btn btn-gradient mr-3"
+                type="button">
+                Create GRN
+              </button>
+              <button *ngIf="purchaseOrderMaster?.state === docStatus.Draft"
+                      [disabled]="!(permission.isGranted(permissions.PURCHASEORDER_EDIT))"
+                      [ngClass]="!(permission.isGranted(permissions.PURCHASEORDER_EDIT)) ? 'disable' : '' "
+                      [queryParams]="{q: purchaseOrderMaster?.id, 'isPurchaseOrder': true}"
+                      [routerLink]="'/'+ PURCHASE_ORDER.ID_BASED_ROUTE ('edit',purchaseOrderMaster?.id) "
+                      class="mr-3 app-edit-btn"
+                      type="button">
+                <i class="fa fa-edit"></i> Edit
+              </button>
+            </ng-container>
+          </div>
+
+          <div class="col-md-4 col-lg-4 mt-3">
+            <div class="print-box">
+              <h4>PO No:
+                <span class="float-right">{{purchaseOrderMaster?.docNo}}</span></h4>
+            </div>
+            <div class="print-box">
+              <h4>Vendor Name:
+                <span class="float-right">{{purchaseOrderMaster?.vendorName}}</span></h4>
+            </div>
+            <div class="print-box">
+              <h4>P.O Date:
+                <span class="float-right">{{purchaseOrderMaster?.poDate | date: 'MMM d, y'}}</span></h4>
+            </div>
+            <div class="print-box">
+              <h4>Due Date:
+                <span class="float-right">{{purchaseOrderMaster?.dueDate | date: 'MMM d, y'}}</span></h4>
+            </div>
+            <div class="print-box">
+              <h4>Contact:
+                <span class="float-right">{{purchaseOrderMaster?.contact}}</span></h4>
+            </div>
+          </div>
+
+          <div class="col-md-12 mt-10 mb-10">
+            <kt-ra-grid-offline [raGridProperties]="this.raGridProperties"></kt-ra-grid-offline>
+          </div>
+
+          <div class="col-md-4 col-lg-4 ml-auto mt-3">
+            <div class="bottom-print-box">
+              <h4 >Total Before Tax :
+                <span class="float-right" style="font-weight: 400;">{{valueFormatter(totalBeforeTax || 0)}}</span>
+              </h4>
+            </div>
+            <div class="bottom-print-box">
+              <h4 >Total Tax :
+                <span class="float-right" style="font-weight: 400;">{{valueFormatter(totalTax || 0)}}</span>
+              </h4>
+            </div>
+            <div class="bottom-print-box">
+              <h4 >Total Amount:
+                <span class="float-right" style="font-weight: 400;">{{valueFormatter(total || 0)}}</span>
+              </h4>
+            </div>
+          </div>
+        </div>
+      </div>
+    </kt-portlet-body>
+
+    <mat-divider class="mt-10"></mat-divider>
+    <div class="kt-portlet__foot">
+      <div class="kt-form__actions kt-form__actions">
+        <div class="row ">
+          <div *ngIf="purchaseOrderMaster?.isAllowedRole" class="col-lg-12 text-right">
+            <button (click)="workflow(action.Reject)" class="mr-5 danger__btn" mat-raised-button>Reject</button>
+            <button (click)="workflow(action.Approve)" class="success__btn" mat-raised-button>Approve</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </kt-portlet>
+</div>

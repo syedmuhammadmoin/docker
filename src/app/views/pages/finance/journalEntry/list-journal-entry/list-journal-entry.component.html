@@ -1,0 +1,24 @@
+<kt-portlet>
+  <kt-portlet-header [title]="'Journal Entries'">
+    <!-- <ng-container ktPortletTools>
+      <button (click)="addJournalEntry()"
+              [disabled]="!(permission.isGranted(permissions.JOURNALENTRY_CREATE))"
+              [ngClass]="!(permission.isGranted(permissions.JOURNALENTRY_CREATE)) ? 'disable' : '' "
+              class="btn_white" mat-raised-button matTooltip="Add Journal Entry">Add Journal
+        Entry
+      </button>
+    </ng-container> -->
+  </kt-portlet-header>
+  <kt-portlet-body>
+    <div class="col-lg-12 col-md-12 mb-4 text-right">
+        <button (click)="addJournalEntry()"
+                [disabled]="!(permission.isGranted(permissions.JOURNALENTRY_CREATE))"
+                [ngClass]="!(permission.isGranted(permissions.JOURNALENTRY_CREATE)) ? 'disable' : '' "
+                class="app-default-btn" matTooltip="Add Journal Entry">Add Journal
+          Entry
+        </button>
+    </div>
+    <mat-divider></mat-divider>
+    <kt-ra-grid [raGridProperties]="raGridProperties"></kt-ra-grid>
+  </kt-portlet-body>
+</kt-portlet>

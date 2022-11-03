@@ -1,0 +1,239 @@
+<div [ktBusy]="isLoading">
+  <kt-portlet>
+    <kt-portlet-header [class]="'card-head-lg ribbon ribbon-clip ribbon-right'" [title]="formName + ' Detail'">
+      <ng-container ktPortletTools>
+        <!-- <h4 class="overall_statuses  {{paymentMaster?.status}}">Status:  {{paymentMaster?.status}}</h4> -->
+        <div class="ribbon-target "><span class="ribbon-inner {{paymentMaster?.status}}"></span>
+          {{paymentMaster?.status}}</div>
+      </ng-container>
+    </kt-portlet-header>
+    <kt-portlet-body>
+      <div class="col-md-12 col-lg-12 mb-5">
+        <div class="row">
+          <div class="col-md-12 col-12 pb-3 text-right">
+            <ng-container ktPortletTools>
+              <button
+                [routerLink]="paymentRoute.CONDITIONAL_ROUTE(formRoute) + paymentRoute.ID_BASED_ROUTE('print' , paymentMaster?.id)"
+                class="btn-detail-print mr-3" type="button">
+                <i class="fa fa-print"></i> Print {{formName}}
+              </button>
+              <ng-container *ngIf="selectedDocument == docType.Payment; else receipt">
+                <button (click)="addPaymentDialog(paymentId)"
+                  *ngIf="paymentMaster?.state === docStatus.Draf"
+                  [disabled]="!permission.isGranted(permissions.PAYMENT_EDIT)"
+                  [ngClass]="!(permission.isGranted(permissions.PAYMENT_EDIT)) ? 'disable' : '' "
+                  class="mr-3 app-edit-btn" type="button"><i class="fa fa-edit"></i>
+                  Edit
+                </button>
+              </ng-container>
+              <ng-template #receipt>
+                <button (click)="addPaymentDialog(paymentId)"
+                  *ngIf="paymentMaster?.state === docStatus?.Draft"
+                  [disabled]="!(permission.isGranted(permissions.RECEIPT_EDIT))"
+                  [ngClass]="!(permission.isGranted(permissions.RECEIPT_EDIT)) ? 'disable' : '' "
+                  class="mr-3 app-edit-btn" type="button"><i class="fa fa-edit"></i>
+                  Edit
+                </button>
+              </ng-template>
+              <button (click)="resetToDraft()" *ngIf="paymentMaster?.state !== docStatus?.Draft"
+                class="mr-3 app-edit-btn" type="button"><i class="fa fa-undo-alt"></i> Reset to Draft
+              </button>
+              <mat-divider class="mt-3"></mat-divider>
+            </ng-container>
+
+          </div>
+
+          <div class="col-md-4 col-lg-4  mt-3">
+            <div class="print-box">
+              <h4>Payment ID:
+                <span class="float-right">{{paymentMaster?.docNo}}</span>
+              </h4>
+            </div>
+            <div class="print-box">
+              <h4>Payment Date:
+                <span class="float-right" style="font-weight: 400;">{{paymentMaster?.paymentDate | date: 'MMM d, y'}}</span>
+              </h4>
+            </div>
+            <div class="print-box partner__box">
+              <h4>{{paymentMaster?.businessPartnerName}}</h4>
+              <p class="mb-0">{{paymentMaster?.businessPartnerAddress}}</p>
+            </div>
+          </div>
+
+          <div class="col-md-12 mt-10">
+            <table class="table table-bordered default-table-color">
+              <tr style="background-color: #f6f8f9;">
+                <th>Account</th>
+                <th class="text-left">Description</th>
+                <th>Payment type</th>
+                <th class="text-right" style="width: 15%;">Gross Payment</th>
+
+              </tr>
+              <tr>
+                <td>{{paymentMaster?.accountName}}</td>
+                <td class="text-left">{{paymentMaster?.description}}</td>
+                <td>{{appConst.paymentType[paymentMaster?.paymentType]}}</td>
+                <td class="text-right">{{valueFormatter(paymentMaster?.grossPayment || 0)}}</td>
+              </tr>
+            </table>
+          </div>
+
+          <div class="col-lg-4 col-md-6 mr-auto mt-3">
+            <div *ngIf="paymentMaster?.paidAmountList?.length > 0" class="bottom-print-box">
+              <mat-accordion>
+                <mat-expansion-panel>
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      References
+                    </mat-panel-title>
+                    <!--<mat-panel-description >
+                      {{valueFormatter(paymentMaster?.reconciledAmount || 0)}}
+                    </mat-panel-description>-->
+                  </mat-expansion-panel-header>
+                  <table class="table paid-amount-table">
+                    <tr>
+                      <th>Doc #</th>
+                      <th class="text-right">Amount</th>
+                    </tr>
+                    <tr *ngFor="let ref of paymentMaster?.paidAmountList">
+                      <td>
+                        <a [routerLink]="(ref?.docType === docType.Bill) ? ('/' + BILL.ID_BASED_ROUTE('details', ref?.id)) : ('/' + INVOICE.ID_BASED_ROUTE('details' , ref?.id))"
+                          class="links">{{ref.docNo}}
+                        </a>
+                      </td>
+                      <td class="text-right">
+                        <a [routerLink]="(ref?.docType === docType.Bill) ? ('/' + BILL.ID_BASED_ROUTE('details', ref?.id)) : ('/' + INVOICE.ID_BASED_ROUTE('details' , ref?.id))"
+                          class="links">{{valueFormatter(ref.amount || 0)}}
+                        </a>
+                      </td>
+                    </tr>
+                  </table>
+                </mat-expansion-panel>
+              </mat-accordion>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 mr-auto mt-3">
+            <div *ngIf="paymentMaster?.reconStmtList?.length > 0" class="bottom-print-box">
+              <mat-accordion>
+                <mat-expansion-panel>
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      Bank Reconciliation
+                    </mat-panel-title>
+                    <!--<mat-panel-description >
+                      {{valueFormatter(paymentMaster?.reconciledAmount || 0)}}
+                    </mat-panel-description>-->
+                  </mat-expansion-panel-header>
+                  <table class="table paid-amount-table">
+                    <tr>
+                      <th>Reference #</th>
+                      <th class="text-right">Amount</th>
+                    </tr>
+                    <tr *ngFor="let ref of paymentMaster?.reconStmtList">
+                      <td>
+                        <a [routerLink]="('/' + BANKSTATEMENT.ID_BASED_ROUTE('details', ref?.id))"
+                          class="links">{{ref.docNo}}
+                        </a>
+                      </td>
+                      <td class="text-right">
+                        <a [routerLink]="('/' + BANKSTATEMENT.ID_BASED_ROUTE('details', ref?.id))"
+                          class="links">{{valueFormatter(ref.amount || 0)}}
+                        </a>
+                      </td>
+                    </tr>
+                  </table>
+                </mat-expansion-panel>
+              </mat-accordion>
+            </div>
+          </div>
+
+          <div class="col-md-4 col-lg-4  ml-auto mt-3">
+
+            <div class="bottom-print-box">
+              <h4>Discount:
+                <span class="float-right" style="font-weight: 400;">{{valueFormatter(paymentMaster?.discount ||
+                  0)}}</span>
+              </h4>
+            </div>
+            <div class="bottom-print-box">
+              <h4>Sales Tax:
+                <span class="float-right" style="font-weight: 400;">{{valueFormatter(paymentMaster?.salesTax ||
+                  0)}}</span>
+              </h4>
+            </div>
+            <div class="bottom-print-box">
+              <h4>Income Tax:
+                <span class="float-right" style="font-weight: 400;">{{valueFormatter(paymentMaster?.incomeTax ||
+                  0)}}</span>
+              </h4>
+            </div>
+            <!-- <div class="bottom-print-box">
+              <h4 >SRB Tax:
+                <span class="float-right" style="font-weight: 400;">{{valueFormatter(paymentMaster?.srbTax || 0)}}</span>
+              </h4>
+            </div> -->
+            <!-- <div class="bottom-print-box" *ngIf="paymentMaster?.paidAmountList?.length > 0">
+               <mat-accordion>
+                 <mat-expansion-panel>
+                   <mat-expansion-panel-header>
+                     <mat-panel-title >
+                       Paid Amount :
+                     </mat-panel-title>
+                     <mat-panel-description >
+                       {{valueFormatter(paymentMaster?.reconciledAmount || 0)}}
+                     </mat-panel-description>
+                   </mat-expansion-panel-header>
+                   <table class="table paid-amount-table">
+                     <tr >
+                       <th>Doc #</th>
+                       <th class="text-right">Amount</th>
+                     </tr>
+                     <tr *ngFor="let ref of paymentMaster?.paidAmountList" >
+                       <td>
+                         <a
+                           [routerLink]="(ref?.docType === docType.Bill) ? (BILL.ID_BASED_ROUTE('details', ref?.id)) : ('/' + INVOICE.ID_BASED_ROUTE('details' , pay?.id))"
+                           class="links">{{ref.docNo}}
+                         </a>
+                       </td>
+                       <td class="text-right">
+                         <a
+                           [routerLink]="(ref?.docType === docType.Bill) ? ('/' + BILL.ID_BASED_ROUTE('details', ref?.id)) : ('/' + INVOICE.ID_BASED_ROUTE('details' , pay?.id))"
+                           class="links">{{valueFormatter(ref.amount || 0)}}
+                         </a>
+                       </td>
+                     </tr>
+                   </table>
+                 </mat-expansion-panel>
+               </mat-accordion>
+             </div>-->
+            <div class="bottom-print-box">
+              <h4 style="border-top: 2px solid #2988BC;
+                    padding-top: 10px;">Net Payment:
+                <span class="float-right" style="font-weight: 600;">{{valueFormatter(paymentMaster?.netPayment ||
+                  0)}}</span>
+              </h4>
+            </div>
+          </div>
+        </div>
+      </div>
+    </kt-portlet-body>
+
+    <mat-divider></mat-divider>
+
+    <div class="kt-portlet__foot">
+      <div class="kt-form__actions kt-form__actions">
+        <div class="row ">
+          <div *ngIf="paymentMaster?.isAllowedRole" class="col-lg-12 text-right">
+            <button (click)="workflow(action.Reject)" class="mr-5 danger__btn" id="payment_reject" mat-raised-button>
+              Reject
+            </button>
+            <button (click)="workflow(action.Approve)" class="success__btn" id="payment_approve" mat-raised-button>
+              Approve
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </kt-portlet>
+</div>

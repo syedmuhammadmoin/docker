@@ -1,0 +1,18 @@
+<mat-form-field [ngClass]="matFormFieldClass" appearance="outline">
+  <mat-label class="mat-date-placeholder">{{placeholder}}</mat-label>
+  <input (blur)="blur()"
+         [matDatepicker]="updateFromPicker"
+         [formControl]="control"
+         matInput
+         [readonly]="'true'"
+         [max]="maxDate"
+         [min]="minDate">
+  <mat-datepicker-toggle matSuffix [for]="updateFromPicker"></mat-datepicker-toggle>
+  <mat-datepicker #updateFromPicker></mat-datepicker>
+  <mat-error *ngIf="errorMessage && !dateCondition">
+    <strong>{{errorMessage}}</strong>
+  </mat-error>
+    <mat-error *ngIf="dateCondition">
+      <strong>End Date must be after {{dateMessage}} Date!</strong>
+    </mat-error>
+</mat-form-field>

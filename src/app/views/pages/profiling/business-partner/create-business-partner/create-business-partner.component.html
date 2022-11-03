@@ -1,0 +1,248 @@
+<div [ktBusy]="isLoading" class="kt-portlet" style="overflow :hidden;">
+  <div class="kt-portlet__head">
+    <div class="kt-portlet__head-caption">
+      <div class="kt-portlet__head-title">
+        <h3 class="kt-portlet__head-text modal-header"> {{formName}}
+          <span (click)="onCloseDialog()" class="dialog-cross"><i class="fa fa-times float-right"></i></span>
+        </h3>
+      </div>
+    </div>
+  </div>
+  <!-- form start -->
+  <form autocomplete="off" #formDirective="ngForm" (ngSubmit)="onSubmit()" [formGroup]="businessPartnerForm"
+        class="kt-form kt-form--label-align-right">
+    <!-- portlet body starts -->
+    <div class="kt-portlet__body">
+      <!-- form first section starts -->
+      <div class="kt-form__section kt-form__section--first">
+        <div class="col-md-12 col-lg-12 col-sm-12">
+          <!-- first row starts -->
+          <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-4">
+              <div class="form-group kt-form__group mb-0">
+                <label class="col-form-label pt-0">Business Partner: <i class="fa fa-asterisk" aria-hidden="true" style="color: #eb4c5d;font-size: 8px;position: relative;top: -5px;"></i></label>
+                <kt-input-field
+                [errorMessage]="vs.errTEXT(businessPartnerForm, 'name', 'Business Partner')"
+                formControlName="name"
+                  placeholder="Enter Business Partner Name">
+                </kt-input-field>
+              </div>
+            </div>
+
+            <div class="col-md-4 col-lg-4 col-sm-4">
+              <div class="form-group mb-0">
+                <label class="col-form-label pt-0">Type: <i class="fa fa-asterisk" aria-hidden="true" style="color: #eb4c5d;font-size: 8px;position: relative;top: -5px;"></i></label>
+                <kt-simple-dropdown
+                  (blurEvent)="logValidationErrors(businessPartnerForm, formErrors, validationMessages)"
+                  [errorMessage]="formErrors.businessPartnerType"
+                  [isDisabled]="disableDropdown" [optionList]="typeList"
+                  formControlName="businessPartnerType" matFormFieldClass="full-width"
+                  placeholder="Business Partner Type" propertyName="viewValue" propertyValue="id"
+                  searchPlaceholder="Search Business Partner Type">
+                </kt-simple-dropdown>
+              </div>
+            </div>
+
+            <div class="col-lg-4 col-md-4 col-sm-4">
+              <div class="form-group kt-form__group mb-0">
+                <label class="col-form-label pt-0">Entity: <i class="fa fa-asterisk" aria-hidden="true" style="color: #eb4c5d;font-size: 8px;position: relative;top: -5px;"></i></label>
+                <kt-simple-dropdown
+                  (blurEvent)="logValidationErrors(this.businessPartnerForm, formErrors, validationMessages)"
+
+                  [errorMessage]="formErrors.entity"
+                  [isDisabled]="disableDropdown" [optionList]="entityList" formControlName="entity"
+                  matFormFieldClass="full-width" placeholder="Entity" propertyName="viewValue" propertyValue="id"
+                  searchPlaceholder="Search Entity">
+                </kt-simple-dropdown>
+              </div>
+            </div>
+          </div>
+          <!-- first row ends -->
+          <div class="row" style="justify-content: space-between;">
+            <div class="col-lg-4 col-md-4">
+              <div class="form-group kt-form__group pt-2 pb-0 mb-0">
+                <label class="col-form-label pt-0">Country:</label>
+                <kt-simple-dropdown
+                  (selectionChange)="onChangeCountry($event.value)"
+                  [isDisabled]="disableDropdown" [optionList]="countryList"
+                  formControlName="country" hintText="Optional" isRequired="false" matFormFieldClass="full-width"
+                  placeholder="Select Country" propertyName="name" propertyValue="id"
+                  searchPlaceholder="Search Country">
+                </kt-simple-dropdown>
+              </div>
+            </div>
+
+            <div class="col-lg-4 col-md-4">
+              <div class="form-group kt-form__group pt-2 pb-0 mb-0">
+                <label class="col-form-label pt-0">State:</label>
+                <kt-simple-dropdown
+                  (selectionChange)="onChangeState($event.value)"
+                  [isDisabled]="disableDropdown" [optionList]="stateList2"
+                  formControlName="state" hintText="Optional" isRequired="false" matFormFieldClass="full-width"
+                  placeholder="Select State" propertyName="name" propertyValue="id" searchPlaceholder="Search State">
+                </kt-simple-dropdown>
+              </div>
+            </div>
+
+            <div class="col-lg-4 col-md-4">
+              <div class="form-group kt-form__group pt-2 pb-0 mb-0">
+                <label class="col-form-label pt-0">City:</label>
+                <kt-simple-dropdown
+                  [isDisabled]="disableDropdown"
+                  [optionList]="cityList2" formControlName="city" hintText="Optional"
+                  isRequired="false" matFormFieldClass="full-width" placeholder="Select City" propertyName="name"
+                  propertyValue="id" searchPlaceholder="Search City">
+                </kt-simple-dropdown>
+              </div>
+            </div>
+          </div>
+          <!-- seventh row starts -->
+          <div class="row">
+            <div class="col-md-6 col-lg-6 col-sm-6">
+              <div class="form-group mb-0">
+                <label class="col-form-label pt-0">Acc: Payable: <i class="fa fa-asterisk" aria-hidden="true" style="color: #eb4c5d;font-size: 8px;position: relative;top: -5px;"></i></label>
+                <kt-simple-dropdown
+                  (blurEvent)="logValidationErrors(this.businessPartnerForm, formErrors, validationMessages)"
+                  [errorMessage]="formErrors.accountPayable"
+                  [isDisabled]="disableDropdown" [optionList]="ngxsService.payableAccountsLevel4$"
+                  formControlName="accountPayable" matFormFieldClass="full-width" placeholder="Account Payable"
+                  propertyName="name" propertyValue="id" searchPlaceholder="Search Account Payable">
+                </kt-simple-dropdown>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-lg-6 col-sm-6">
+              <div class="form-group mb-0">
+                <label class="col-form-label pt-0">Acc: Receivable <i class="fa fa-asterisk" aria-hidden="true" style="color: #eb4c5d;font-size: 8px;position: relative;top: -5px;"></i></label>
+                <kt-simple-dropdown
+                  (blurEvent)="logValidationErrors(this.businessPartnerForm, formErrors, validationMessages)"
+                  [errorMessage]="formErrors.accountReceivable"
+                  [isDisabled]="disableDropdown" [optionList]="ngxsService.receivablesAccountsLevel4$"
+                  formClassName="full-width" formControlName="accountReceivable" matFormFieldClass="full-width"
+                  placeholder="Account Receivable" propertyName="name" propertyValue="id"
+                  searchPlaceholder="Search Account Receivable">
+                </kt-simple-dropdown>
+              </div>
+            </div>
+
+          </div>
+          <!-- seventh row ends -->
+          <!-- second row starts -->
+          <div class="row">
+            <div class="col-md-12 col-lg-12 col-sm-12">
+              <div class="form-group mb-0">
+                <label class="col-form-label pt-0">Address:</label>
+                <kt-input-field
+                [errorMessage]="vs.errTEXT(businessPartnerForm, 'address', 'Address')" formControlName="address" hintText="Optional" isRequired="false"
+                placeholder="Enter Address">
+                </kt-input-field>
+              </div>
+            </div>
+          </div>
+          <!-- second row ends -->
+          <!-- third row starts -->
+          <div class="row">
+            <div class="col-md-4 col-lg-4 col-sm-4">
+              <div class="form-group mb-0">
+                <label class="col-form-label pt-0">Phone:</label>
+                <kt-input-field
+                  [errorMessage]="vs.errNUM(businessPartnerForm, 'phone', 'Phone Number')"
+                  hintText="Optional"
+                  formControlName="phone"
+                  placeholder="Enter Phone Number"
+                  type="tel">
+                </kt-input-field>
+              </div>
+            </div>
+
+            <div class="col-md-4 col-lg-4 col-sm-4">
+              <div class="form-group mb-0">
+                <label class="col-form-label pt-0">Mobile:</label>
+                <kt-input-field
+                  [errorMessage]="vs.errNUM(businessPartnerForm, 'mobile', 'Mobile Number')"
+                  hintText="Optional"
+                  formControlName="mobile"
+                  placeholder="Enter Mobile Number"
+                  type="tel">
+                </kt-input-field>
+              </div>
+            </div>
+
+            <div class="col-md-4 col-lg-4 col-sm-4">
+              <div class="form-group mb-0" >
+                <label class="col-form-label pt-0">CNIC:</label>
+                <kt-input-field
+                [errorMessage]="vs.errNUM(businessPartnerForm, 'cnic', {min: 13, max: 13})"
+                  formControlName="cnic"
+                  hintText="Optional"
+                  placeholder="Enter CNIC Number"
+                  type="tel">
+                </kt-input-field>
+              </div>
+            </div>
+          </div>
+          <!-- third row ends -->
+          <!-- fifth  row starts -->
+          <div class="row">
+            <div class="col-md-6 col-lg-6 col-sm-6">
+              <div class="form-group mb-0">
+                <label class="col-form-label pt-0">Sales Tax Id:</label>
+                <kt-input-field hintText="Optional" formControlName="salesTaxId"
+                [errorMessage]="vs.errNUM(businessPartnerForm, 'salesTaxId',  {min: 6, max: 20})"
+                placeholder="Enter Sales Tax">
+                </kt-input-field>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-lg-6 col-sm-6">
+              <div class="form-group mb-0">
+                <label class="col-form-label pt-0">Income Tax Id:</label>
+                <kt-input-field hintText="Optional" formControlName="incomeTaxId"
+                [errorMessage]="vs.errNUM(businessPartnerForm, 'incomeTaxId', {min: 6, max: 20})"
+                placeholder="Enter Income Tax">
+                </kt-input-field>
+              </div>
+            </div>
+
+          </div>
+          <!-- fifth row ends -->
+          <!-- six row starts -->
+          <div class="row">
+            <div class="col-md-6 col-lg-6 col-sm-6">
+              <div class="form-group mb-0">
+                <label class="col-form-label pt-0">Account Title:</label>
+                <kt-input-field hintText="Optional"
+                [errorMessage]="vs.errTEXT(businessPartnerForm, 'bankAccountTitle')"
+                  formControlName="bankAccountTitle"
+                  placeholder="Enter Account Title">
+                </kt-input-field>
+              </div>
+            </div>
+            <div class="col-md-6 col-lg-6 col-sm-6">
+              <div class="form-group mb-0">
+                <label class="col-form-label pt-0">Account / IBAN No:</label>
+                <kt-input-field
+                  hintText="Optional"
+                  [errorMessage]="vs.errNUM(businessPartnerForm, 'bankAccountNumber', {min: 16, max: 24})"
+                  formControlName="bankAccountNumber"
+                  placeholder="Enter Account / IBAN No"
+                  type="text">
+                </kt-input-field>
+              </div>
+            </div>
+          </div>
+          <!-- six row ends -->
+        </div>
+      </div>
+      <!-- form first section ends -->
+    </div>
+    <kt-btn-form-actions
+      [editDisplay]="isEditButtonShow"
+      [permissionz]="permissions.BUSINESSPARTNER_EDIT"
+      [validate]="{form:businessPartnerForm, errors: formErrors, messages: validationMessages}"
+      (resetAction)="reset()"
+      (toggleEdit)="toggleEdit()"
+    ></kt-btn-form-actions>
+  </form>
+  <!-- form ends -->
+</div>

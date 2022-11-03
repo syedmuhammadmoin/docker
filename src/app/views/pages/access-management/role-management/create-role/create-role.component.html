@@ -1,0 +1,88 @@
+<div [ktBusy]="isLoading" class="kt-portlet" style="overflow :hidden;">
+  <div class="kt-portlet__head">
+    <div class="kt-portlet__head-caption">
+      <div class="kt-portlet__head-title">
+
+        <h3 class="kt-portlet__head-text modal-header">
+          {{titleName}} <span (click)="onRoleDialogClose()" class="dialog-cross"><i
+          class="fa fa-times float-right"></i></span>
+        </h3>
+      </div>
+    </div>
+  </div>
+
+  <!-- form start -->
+  <form autocomplete="off" #formDirective='ngForm' (ngSubmit)="onSubmit()" [formGroup]="roleForm"
+        class="kt-form kt-form--label-align-right">
+    <mat-tab-group [(selectedIndex)]="currentIndex">
+      <mat-tab label="Details">
+        <!-- portlet body starts -->
+        <div class="kt-portlet__body">
+          <!-- form first section starts -->
+          <div class="kt-form__section kt-form__section--first">
+
+            <!-- first row starts -->
+            <div class="col-md-12 col-lg-12 col-sm-12">
+              <div class="row">
+                <div class="col-lg-7 col-md-7 col-sm-7 mx-auto">
+                  <label class="col-form-label">Name:</label>
+                  <div class="form-group kt-form__group">
+                    <kt-input-field
+                      [errorMessage]="vs.errTEXT(roleForm, 'roleName', 'Role name')"
+                      formControlName="roleName"
+                      matFormFieldClass="full-width"
+                      placeholder="Enter Role name">
+                    </kt-input-field>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- first row ends -->
+
+          </div>
+          <!-- form first section ends -->
+        </div>
+      </mat-tab>
+      <mat-tab class="role__list" label="Permissions">
+        <div class="row mx-auto">
+          <ng-container>
+            <div class="col-md-12 search_sticky">
+              <div class="p-1 input_style  shadow-sm mb-4">
+                <div class="input-group">
+                  <input [(ngModel)]="searchText" [ngModelOptions]="{standalone: true}" aria-describedby="button-addon1"
+                         class="form-control border-0 input-field-sty" placeholder="Search Permissions..."
+                         type="text">
+                  <div class="input-group-append">
+                    <button class="btn btn-link text-primary" id="button-addon1" type="button"><i
+                      class="fa fa-search"></i></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+          <div class="col-6">
+            <mat-checkbox (change)="selectAllClaims($event)" [checked]="selectAll"
+                          [disabled]="isEditButtonShow">{{selectAllPropertyName}}
+            </mat-checkbox>
+          </div>
+          <ng-container *ngFor="let claims of roleClaims | filter:searchText">
+            <div class="col-md-6">
+              <mat-checkbox (change)="onPermissionChange(claims, $event)" [checked]="claims.selected"
+                            [disabled]="isEditButtonShow">
+                {{claims.viewValue}}
+              </mat-checkbox>
+            </div>
+          </ng-container>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+    <kt-btn-form-actions
+      [editDisplay]="isEditButtonShow"
+      [permissionz]="permissions.ROLE_EDIT"
+      [validate]="{form:roleForm, errors: formErrors, messages: validationMessages}"
+      (resetAction)="reset()"
+      (toggleEdit)="toggleEdit()"
+    ></kt-btn-form-actions>
+  </form>
+  <!-- form ends -->
+</div>

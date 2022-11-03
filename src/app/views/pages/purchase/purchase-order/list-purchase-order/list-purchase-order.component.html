@@ -1,0 +1,12 @@
+<kt-portlet>
+  <kt-portlet-header [title]="'Purchase Order'">
+    <ng-container ktPortletTools></ng-container>
+  </kt-portlet-header>
+  <kt-portlet-body>
+    <kt-btn-action (clickEvent)="addPurchaseOrder()"
+      [permissionz]="permissions.PURCHASEORDER_CREATE" btnText="Add Purchase Order">
+    </kt-btn-action>
+    <kt-ra-grid [raGridProperties]="raGridProperties"></kt-ra-grid>
+  </kt-portlet-body>
+</kt-portlet>
+

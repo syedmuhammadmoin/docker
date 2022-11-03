@@ -1,0 +1,34 @@
+.ag-theme-alpine .ag-header-group-cell-label {
+  flex-direction: row-reverse;
+}
+
+.align-center {
+  margin: 0 auto;
+}
+
+::ng-deep .ag-header-group-text {
+  margin: 0 auto;
+  color: #2988BC;
+  font-weight: 500;
+  font-family: "DM sans", sans-serif;
+  letter-spacing: 1px;
+}
+
+
+::ng-deep .custom-grid .ag-header
+{
+  height: 80px !important;
+  min-height: 80px !important;
+}
+::ng-deep .custom-grid .ag-header-row
+{
+  height: 30px !important;
+}
+// ::ng-deep .custom-grid .ag-theme-alpine .ag-row
+// {
+//   height: 50px ;
+// }
+// ::ng-deep .custom-grid .ag-theme-alpine .ag-cell
+// {
+//   line-height: 0;
+// }

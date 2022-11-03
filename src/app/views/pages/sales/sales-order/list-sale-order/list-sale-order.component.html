@@ -1,0 +1,20 @@
+<kt-portlet>
+  <kt-portlet-header [title]="'Sales Order'">
+    <ng-container ktPortletTools>
+      <!--<button (click)="addSalesOrder()" class="btn_white" mat-raised-button matTooltip="Add Sales Order ">Add Sales
+        Order
+      </button>-->
+    </ng-container>
+  </kt-portlet-header>
+  <kt-portlet-body>
+    <div class="col-lg-12 col-md-12 mb-4 text-right">
+      <button (click)='addSalesOrder()'
+              [disabled]="!(permission.isGranted(permissions.SALESORDER_CREATE))"
+              [ngClass]="!(permission.isGranted(permissions.SALESORDER_CREATE)) ? 'disable' : '' "
+              class="app-default-btn" matTooltip="Add Debit Note">Add Sales Order
+      </button>
+    </div>
+    <mat-divider></mat-divider>
+    <kt-ra-grid [raGridProperties]="raGridProperties"></kt-ra-grid>
+  </kt-portlet-body>
+</kt-portlet>

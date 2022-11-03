@@ -1,0 +1,11 @@
+<kt-portlet>
+  <kt-portlet-header [title]="'Purchase Requisition'"></kt-portlet-header>
+  <kt-portlet-body>
+    <!-- [permissionz]="permissions.PURCHASEORDER_CREATE" -->
+    <kt-btn-action (clickEvent)="addPurchaseOrder()"
+      btnText="Add Purchase Requisition">
+    </kt-btn-action>
+    <kt-ra-grid #raGrid [raGridProperties]="raGridProperties"></kt-ra-grid>
+  </kt-portlet-body>
+</kt-portlet>
+

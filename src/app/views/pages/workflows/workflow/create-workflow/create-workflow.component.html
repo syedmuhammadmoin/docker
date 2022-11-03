@@ -1,0 +1,177 @@
+<div [ktBusy]="isLoading">
+  <kt-portlet >
+    <kt-portlet-header [title]="'Create Workflow'"></kt-portlet-header>
+    <!--begin::Form-->
+
+      <form autocomplete="off" [formGroup]="workflowForm" (ngSubmit)="onSubmit()" class="kt-form kt-form--label-align-right">
+        <div class="kt-portlet__body">
+          <div class="kt-form__section kt-form__section--first">
+            <div class="col-md-12 col-lg-12 col-sm-12">
+              <div class="row " >
+                <div class="col-lg-3 col-md-3 col-sm-3">
+                  <label class="col-form-label">Workflow Name:</label>
+                  <div class="form-group kt-form__group">
+                  <kt-input-field
+                    formControlName="name"
+                    placeholder="Enter Name"
+                    [errorMessage]="vs.errTEXT(workflowForm, 'name', 'Name')"
+                    matFormFieldClass="full-width "
+                  ></kt-input-field>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-3">
+                  <label class="col-form-label">Document Type:</label>
+                  <div class="form-group kt-form__group">
+                    <kt-simple-dropdown
+                      formControlName="docType"
+                      (blurEvent)="logValidationErrors(this.workflowForm, this.formErrors, this.validationMessages)"
+                      propertyName="value"
+                      propertyValue="id"
+                      matFormFieldClass="full-width "
+                      [errorMessage]="formErrors.docType"
+                      [optionList]="documents"
+                      searchPlaceholder="Search Document Type..."
+                      placeholder="Select Document Type">
+                    </kt-simple-dropdown>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-3">
+                  <label class="col-form-label">Active:</label>
+                  <div class="form-group kt-form__group">
+                    <kt-simple-dropdown
+                      formControlName="isActive"
+                      propertyName="value"
+                      propertyValue="id"
+                      matFormFieldClass="full-width "
+                      [optionList]="[{value: 'Yes', id: true}, {value: 'No', id: false}]"
+                      searchPlaceholder="Search..."
+                      placeholder="Active">
+                    </kt-simple-dropdown>
+                  </div>
+                </div>
+              </div>
+
+              <!--WORKFLOW LINES-->
+              <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                  <div class="example-container mat-elevation-z8">
+                    <ng-container formArrayName="workflowLines">
+                      <mat-table #table [dataSource]="workflowForm.get('workflowLines')['controls']">
+                        <!-- Description Column -->
+                        <ng-container matColumnDef="currentStatusId">
+                          <mat-header-cell *matHeaderCellDef class="flex-2"> Current State</mat-header-cell>
+                          <mat-cell *matCellDef="let element;  let i = index" [formGroup]="element" class="flex-2">
+                            <div class="col-lg-12 col-sm-12 mt-2">
+                              <kt-simple-dropdown
+                                [id]="'currentStatusId'+i"
+                                placeholder="Select Current State"
+                                propertyValue="id"
+                                propertyName="status"
+                                formControlName="currentStatusId"
+                                matFormFieldClass="full-width input_d_1"
+                                errorMessage="Current State is Required"
+                                [optionList]="statusService.getStatuses()">
+                              </kt-simple-dropdown>
+                            </div>
+                          </mat-cell>
+                        </ng-container>
+                        <!-- Account Column -->
+                        <ng-container matColumnDef="action">
+                          <mat-header-cell *matHeaderCellDef class="flex-2"> Action</mat-header-cell>
+                          <mat-cell *matCellDef="let element;  let i = index" [formGroup]="element" class="flex-2">
+                            <div class="col-lg-12 col-sm-12 mt-2">
+                              <kt-simple-dropdown [id]="'action'+i" placeholder="Select Action" propertyValue="id"
+                                propertyName="value" formControlName="action" matFormFieldClass="full-width input_d_1"
+                                errorMessage="Action is Required"
+                                [optionList]="[{value: 'Approve', id: actionButton.Approve}, {value: 'Reject', id: actionButton.Reject}]">
+                              </kt-simple-dropdown>
+                            </div>
+                          </mat-cell>
+                        </ng-container>
+                        <!-- Amount Column -->
+                        <ng-container matColumnDef="nextStatusId">
+                          <mat-header-cell *matHeaderCellDef class="flex-2"> Next State</mat-header-cell>
+                          <mat-cell *matCellDef="let element;  let i = index" [formGroup]="element" class="flex-2">
+                            <div class="col-lg-12 col-sm-12 mt-2">
+                              <kt-simple-dropdown
+                                [id]="'nextStatusId'+i"
+                                placeholder="Select Next State"
+                                propertyValue="id"
+                                propertyName="status"
+                                formControlName="nextStatusId"
+                                matFormFieldClass="full-width input_d_1"
+                                errorMessage="Next State is Required"
+                                [optionList]="statusService.getStatuses()">
+                              </kt-simple-dropdown>
+                            </div>
+                          </mat-cell>
+                        </ng-container>
+                        <!-- Action Column -->
+                        <ng-container matColumnDef="allowedRoleId">
+                          <mat-header-cell *matHeaderCellDef class="flex-2">Allowed Role</mat-header-cell>
+                          <mat-cell *matCellDef="let element;  let i = index" [formGroup]="element" class="flex-2">
+                            <div class="col-lg-12 col-sm-12 mt-2">
+                              <kt-simple-dropdown
+                                [id]="'allowedRoleId'+i"
+                                placeholder="Select Role"
+                                propertyValue="id"
+                                propertyName="name"
+                                formControlName="allowedRoleId"
+                                matFormFieldClass="full-width input_d_1"
+                                errorMessage="Role is Required"
+                                [optionList]="accessManagementService.getRoles()">
+                              </kt-simple-dropdown>
+                            </div>
+                          </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="delete">
+                          <mat-header-cell *matHeaderCellDef class="flex-1">Action</mat-header-cell>
+                          <mat-cell *matCellDef="let element;  let i = index" [formGroup]="element" class="flex-1">
+                            <!-- <mat-icon class="delete-button" (click)="removeInvoiceLineClick(i)">delete_forever</mat-icon> -->
+                            <button class=" remove-icon" type="button" (click)="removeInvoiceLineClick(i)"
+                            [disabled]="">
+                              <i  class="fas fa-trash" aria-hidden="true"></i>
+                            </button>
+                          </mat-cell>
+                        </ng-container>
+                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                      </mat-table>
+                    </ng-container>
+                    <ng-container>
+                      <div class="row" style="align-items: center;">
+                        <div class="col-lg-5 col-sm-5">
+                          <button class=" btn_create" type="button" (click)="addWorkflowLineClick()">
+                            <i class="fas fa-plus" aria-hidden="true"> </i> Add New Line
+                          </button>
+                        </div>
+                      </div>
+                    </ng-container>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <mat-divider class="mt-10"></mat-divider>
+        <div class="kt-portlet__foot mt-lg-n5">
+          <div class="kt-form__actions kt-form__actions">
+            <div class="row text-right">
+              <div class="col-lg-12">
+                <button class="mr-3 btn_white" mat-raised-button (click)="reset()" type="reset">Reset
+                </button>
+                <button mat-raised-button class="sub___btn" type="submit"
+                  (click)="logValidationErrors(this.workflowForm, this.formErrors, this.validationMessages)">
+                  Submit
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+
+    <!--end::Form-->
+  </kt-portlet>
+</div>

@@ -1,0 +1,208 @@
+
+<div [ktBusy]="isLoading">
+  <kt-portlet>
+
+    <kt-portlet-header [title]="'Inventory Adjustment'"></kt-portlet-header>
+    <!--begin::Form-->
+
+    <form autocomplete="off" [formGroup]="inventoryAdjustmentForm" (ngSubmit)="onSubmit()" class="kt-form kt-form--label-align-right">
+      <div class="kt-portlet__body">
+        <div class="kt-form__section kt-form__section--first">
+
+          <div class="col-md-12 col-sm-12 col-lg-12">
+            <div class="row">
+              <div class="col-lg-3 col-sm-3 col-md-3">
+                <div class="form-group kt-form__group">
+                  <label class="col-form-label pt-0">User:</label>
+                  <kt-simple-dropdown
+                    formControlName="user"
+                    (blurEvent)="logValidationErrors(this.inventoryAdjustmentForm, this.formErrors, this.validationMessages)"
+                    propertyName="name"
+                    propertyValue="id"
+                    [errorMessage]="formErrors.user"
+                    [optionList]="ngxsService.businessPartners$"
+                    clickEventButtonName="Add New User"
+                    (clickEvent)="openBusinessPartnerDialog()"
+                    searchPlaceholder="Search User..."
+                    matFormFieldClass="full-width"
+                    placeholder="Select User">
+                  </kt-simple-dropdown>
+                </div>
+              </div>
+
+              <div class="col-lg-3 col-sm-3 col-md-3">
+                <div class="form-group kt-form__group">
+                  <label class="col-form-label pt-0">Date:</label>
+                  <kt-date-input
+                     formControlName="date"
+                     placeholder="Date"
+                     matFormFieldClass="full-width"
+                     (blurEvent)="logValidationErrors(this.inventoryAdjustmentForm, formErrors, validationMessages)"
+                      [errorMessage]="formErrors.date">
+                  </kt-date-input>
+                </div>
+              </div>
+
+              <div class="col-lg-3 col-sm-3 col-md-3">
+                <div class="form-group kt-form__group">
+                  <label class="col-form-label pt-0">Nature Adjustment:</label>
+                  <kt-simple-dropdown
+                  propertyName="nature"
+                  propertyValue="id"
+                  [optionList]="natures"
+                  matFormFieldClass="full-width"
+                  formControlName="natureAdjustment"
+                  placeholder="Select Nature"
+                  [errorMessage]="formErrors.natureAdjustment">
+                </kt-simple-dropdown>
+                </div>
+              </div>
+
+              <div class="col-lg-3 col-sm-3 col-md-3">
+                <div class="form-group kt-form__group">
+                  <label class="col-form-label pt-0">Contact:</label>
+                  <kt-input-field
+                    formControlName="contact"
+                    placeholder="Enter Contact"
+                    matFormFieldClass="full-width"
+                    [errorMessage]="vs.errNUM(inventoryAdjustmentForm, 'contact', 'Contact')"
+                    hintText="(Optional)"
+                    >
+                        </kt-input-field>
+                </div>
+              </div>
+            </div>
+            <div class="row mt-5">
+              <div class="col-lg-12 col-md-12 col-sm-12">
+                <div class="example-container  mat-elevation-z8 ">
+                  <ng-container formArrayName="inventoryAdjustmentLines">
+                    <div class="table-responsive">
+                      <mat-table #table [dataSource]="inventoryAdjustmentForm.get('inventoryAdjustmentLines')['controls']">
+
+                        <!-- Item Column -->
+                        <ng-container matColumnDef="itemId">
+                          <mat-header-cell *matHeaderCellDef class="flex-1"> Item</mat-header-cell>
+                          <mat-cell *matCellDef="let element;  let i = index" [formGroup]="element" class="flex-1">
+                            <div class="col-lg-12 col-sm-12 mt-2">
+                              <kt-simple-dropdown propertyName="productName" propertyValue="id"
+                                [optionList]="ngxsService.products$"
+                                clickEventButtonName="Add New Item"
+                                (clickEvent)="openProductDialog()"
+                                formControlName="itemId"
+                                placeholder="Select Item" matFormFieldClass="mobile-label full-width input_d_1"
+                                [errorMessage]="'Item is Required'"
+                                (selectionChange)="onItemSelected($event.value, i)">
+                              </kt-simple-dropdown>
+                            </div>
+                          </mat-cell>
+                        </ng-container>
+
+                        <!--Description Column-->
+                        <ng-container matColumnDef="description">
+                          <mat-header-cell *matHeaderCellDef class="flex-1"> Description</mat-header-cell>
+                          <mat-cell *matCellDef="let element;  let i = index" [formGroup]="element" class="flex-1">
+                            <div class="col-lg-12 col-sm-12 mt-2">
+                            <kt-input-field
+                               formControlName="description"
+                               matFormFieldClass="mobile-label full-width input_d_1"
+                               placeholder="Enter Description"
+                               [errorMessage]="vs.errTEXT(element, 'description', 'Description')"
+                            ></kt-input-field>
+                            </div>
+                        </mat-cell>
+                        </ng-container>
+
+                        <!-- Quantity Column -->
+                        <ng-container matColumnDef="quantity">
+                          <mat-header-cell *matHeaderCellDef class="flex-1"> Quantity</mat-header-cell>
+                          <mat-cell *matCellDef="let element;  let i = index" [formGroup]="element" class="flex-1">
+                            <div class="col-lg-12 col-sm-12 mt-2">
+                            <kt-input-field
+                              formControlName="quantity"
+                              matFormFieldClass="mobile-label full-width input_d_1"
+                              placeholder="Enter Quantity"
+                              #itemName
+                              [errorMessage]="vs.errNum(element, 'quantity', 'Quantity',{min: 1})"
+                            ></kt-input-field>
+                            </div>
+                        </mat-cell>
+                        </ng-container>
+
+                        // price column
+                        <ng-container matColumnDef="price">
+                          <mat-header-cell *matHeaderCellDef class="flex-1"> Price </mat-header-cell>
+                             <mat-cell *matCellDef="let element;  let i = index" [formGroup]="element" class="flex-1">
+                              <div class="col-lg-12 col-sm-12 mt-2">
+                              <kt-input-field
+                               formControlName="price"
+                               matFormFieldClass="mobile-label full-width input_d_1"
+                               placeholder="Enter Price"
+                               readonly="true"
+                               #itemName
+                               [errorMessage]="vs.errNum(element, 'price', 'Price',{min: 1})"
+                              ></kt-input-field>
+                             </div>
+                              </mat-cell>
+                       </ng-container>
+                        <!-- Location Column -->
+                        <ng-container matColumnDef="locationId">
+                          <mat-header-cell *matHeaderCellDef class="flex-1"> Location</mat-header-cell>
+                          <mat-cell *matCellDef="let element;  let i = index" [formGroup]="element" class="flex-1">
+                            <div class="col-lg-12 col-sm-12 mt-2">
+                            <kt-group-dropdown
+                              formControlName="locationId"
+                              placeholder="Location"
+                              [optionList]="ngxsService.warehouses$"
+                              clickEventButtonName="Add New Location"
+                              (clickEvent)="openLocationDialog()"
+                              [errorMessage]="'Location is Required'"
+                              matFormFieldClass="mobile-label full-width input_d_1"
+                              groupPropertyName="name"
+                              groupChildrenName="locations">
+                            </kt-group-dropdown>
+                            </div>
+                          </mat-cell>
+                        </ng-container>
+
+                        <!-- Action Column -->
+                        <ng-container matColumnDef="action">
+                          <mat-header-cell *matHeaderCellDef class="flex-1">Action</mat-header-cell>
+                          <mat-cell *matCellDef="let element;  let i = index" [formGroup]="element" class="flex-1">
+
+                            <button class=" remove-icon" type="button"
+                            (click)="removeInventoryAdjustmentLineClick(i); ">
+                              <i class="fas fa-trash" aria-hidden="true"></i>
+                            </button>
+                         </mat-cell>
+                        </ng-container>
+                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                      </mat-table>
+                    </div>
+                  </ng-container>
+
+                  <ng-container>
+                    <div class="row">
+                      <div class="col-md-12 col-sm-12">
+
+                        <button class=" btn_create" type="button"(click)="addInventoryLineClick()">
+                          <i class="fas fa-plus" aria-hidden="true"> </i> Add New Line
+                        </button>
+                      </div>
+                    </div>
+                  </ng-container>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <kt-btn-form-draft
+        [validate]="{form:inventoryAdjustmentForm, errors: formErrors, messages: validationMessages}"
+        (resetAction)="reset()"
+        (submitAction)="isSubmit($event)"
+      ></kt-btn-form-draft>
+    </form>
+  </kt-portlet>
+</div>

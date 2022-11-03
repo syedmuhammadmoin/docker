@@ -1,0 +1,55 @@
+.tool  {
+  
+    width: 100%;
+    background-color: #283655;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+  
+  }
+
+//   .links
+// {
+//   color: #ffffff !important;
+// }
+.list {
+  padding: 0px;
+  list-style-type: none;
+}
+
+.links-header {
+  color : white;
+}
+
+hr {
+    width: 100%;
+    border: 1px solid lightblue;
+    margin: 5px 0px;
+    border-radius: 5px;
+    padding: 0;
+    box-shadow: 0 0 8px lightsteelblue;
+  }
+
+  //reconcile table
+.styled-table {
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  
+  }
+  
+  .styled-table thead tr {
+    background: linear-gradient(to right, #1e1f26, #9ac0f5);
+    color: #ffffff;
+  
+  }
+  
+  .styled-table td {
+      padding: 9px 15px;
+  }
+  
+  .styled-table th {
+      padding: 12px 15px;
+  }
+  
+  .styled-table tbody tr {
+    border-bottom: 1px solid #dddddd;
+  }

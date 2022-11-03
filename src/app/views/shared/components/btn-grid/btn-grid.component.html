@@ -1,0 +1,8 @@
+<button
+  (click)="onClick($event)"
+  class="btn btn-sm app-default-btn"
+  [disabled]="(params?.data?.status != 'Pending')"
+  [ngClass]="(params?.data?.status != 'Pending') ? 'disable' : ''"
+  >
+  {{label}}
+</button>

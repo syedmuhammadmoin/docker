@@ -1,0 +1,33 @@
+
+:host {
+  position: absolute;
+  height: 70px;
+  pointer-events: none;
+  transition: opacity .2s;
+  display: inline-block;
+  margin-top: -2.5%;
+  margin-left: 30px;
+}
+
+:host.ag-tooltip-hiding {
+  opacity: 0;
+}
+
+.appearance {
+  background-color: #2988BC;
+  border-radius: 5px;
+  padding: 10px;
+  color: white;
+  font-weight: 400;
+}
+
+.appearance::after {
+  content: "";
+  position: absolute;
+  top: 27%;
+  right: 100%;
+  margin-top: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent #2988BC transparent transparent;
+}

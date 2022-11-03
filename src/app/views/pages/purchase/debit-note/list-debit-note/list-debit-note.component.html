@@ -1,0 +1,13 @@
+<kt-portlet>
+  <kt-portlet-header [title]="'Debit Note'">
+    <ng-container ktPortletTools></ng-container>
+  </kt-portlet-header>
+  <kt-portlet-body>
+    <kt-btn-action (clickEvent)="addDebitNote()"
+      [permissionz]="permissions.DEBITNOTE_CREATE" btnText="Add Debit Note">
+    </kt-btn-action>
+    <kt-ra-grid #raGrid [raGridProperties]="raGridProperties"></kt-ra-grid>
+  </kt-portlet-body>
+</kt-portlet>
+
+

@@ -1,0 +1,32 @@
+// ag-grid start
+.ag-header
+{
+  background-color: #e4edf3;
+  height: 36px !important;
+  min-height: 36px !important;
+}
+.ag-header-row
+{
+  height: 100% !important;
+}
+.ag-theme-alpine .ag-row
+{
+  height: 35px;
+}
+.ag-theme-alpine .ag-cell
+{
+  line-height: 35px;
+}
+.ag-header-cell-text
+{
+  color: #2988BC;
+  font-weight: 500;
+  font-family: 'DM sans', sans-serif;
+  letter-spacing: 1px;
+}
+
+.ag-theme-alpine .ag-root-wrapper
+{
+  border-color: #e4edf3;
+}
+// ag-grid end

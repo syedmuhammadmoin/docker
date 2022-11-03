@@ -1,0 +1,5 @@
+{
+  "remoteServiceBaseUrl": "http://testapi.vizalys.com/api/",
+  "appBaseUrl": "http://testapp.vizalys.com",
+  "websiteBaseUrl": "http://testsaas.vizalys.com"
+}

@@ -1,0 +1,127 @@
+<!-- BEGIN: Left Aside -->
+<div #asideMenuOffcanvas [ngClass]="asideClasses" class="aside aside-left d-flex flex-column flex-row-auto"
+     id="kt_aside">
+  <!-- begin:: Brand -->
+  <kt-brand></kt-brand>
+  <!-- end:: Brand -->
+
+  <!-- BEGIN: Aside Menu -->
+  <div class="aside-menu-wrapper flex-column-fluid" id="kt_aside_menu_wrapper">
+    <!-- [perfectScrollbar]="{wheelPropagation: false, suppressScrollX: false}" -->
+    <div #asideMenu (mouseenter)="mouseEnter($event)" (mouseleave)="mouseLeave($event)"
+         [ngClass]="htmlClassService.getClasses('aside_menu', true)"
+         [ngStyle]="{'max-height': '100vh', 'position': 'relative'}" [options]="menuOptions"
+
+         class="aside-menu scroll-side" id="kt_aside_menu"
+         ktMenu>
+      <ul [ngClass]="htmlClassService.getClasses('aside_menu_nav', true)" class="menu-nav">
+        <ng-container [ngTemplateOutlet]="menuListTemplate"></ng-container>
+      </ul>
+    </div>
+  </div>
+  <kt-organization-switch></kt-organization-switch>
+  <!-- END: Aside Menu -->
+</div>
+<!-- END: Left Aside -->
+
+<ng-template #menuListTemplate>
+  <ng-container *ngFor="let child of menuAsideService.menuList$ | async">
+    <ng-container *ngIf="child.section" [ngTemplateOutletContext]="{ item: child }"
+                  [ngTemplateOutlet]="menuItemSectionTemplate"></ng-container>
+    <ng-container *ngIf="child.separator" [ngTemplateOutletContext]="{ item: child }"
+                  [ngTemplateOutlet]="menuItemSeparatorTemplate"></ng-container>
+    <ng-container *ngIf="child.title" [ngTemplateOutletContext]="{ item: child }"
+                  [ngTemplateOutlet]="menuItemTemplate"></ng-container>
+  </ng-container>
+</ng-template>
+<ng-template #menuItemTemplate let-item="item" let-parentItem="parentItem">
+  <ng-container *ngIf="!item.permission" [ngTemplateOutletContext]="{ item: item, parentItem: parentItem  }"
+                [ngTemplateOutlet]="menuItemInnerTemplate"></ng-container>
+  <ng-template *ngIf="item.permission" [ngxPermissionsOnly]="item.permission">
+    <!-- ngxPermissionsOnly="{{ item.permission }}" &&  showMenuItem(item.permission) -->
+    <ng-container [ngTemplateOutletContext]="{ item: item, parentItem: parentItem  }"
+                  [ngTemplateOutlet]="menuItemInnerTemplate"></ng-container>
+  </ng-template>
+</ng-template>
+
+<ng-template #menuItemInnerTemplate let-item="item" let-parentItem="parentItem">
+  <li [attr.aria-haspopup]="true"
+      [attr.data-ktmenu-dropdown-toggle-class]="item['dropdown-toggle-class']"
+      [attr.data-ktmenu-submenu-mode]="item.mode"
+      [attr.data-menu-toggle]="getItemAttrSubmenuToggle(item)" [ngClass]="getItemCssClasses(item)">
+
+    <!-- if menu item hasn't submenu -->
+    <a *ngIf="!item.submenu" [routerLink]="item.page" class="menu-link menu-toggle">
+      <ng-container [ngTemplateOutletContext]="{ item: item, parentItem: parentItem }"
+                    [ngTemplateOutlet]="menuItemTextTemplate"></ng-container>
+    </a>
+    <!-- if menu item has sumnenu child  -->
+    <a *ngIf="item.submenu" class="menu-link menu-toggle">
+      <ng-container [ngTemplateOutletContext]="{ item: item, parentItem: parentItem }"
+                    [ngTemplateOutlet]="menuItemTextTemplate"></ng-container>
+    </a>
+
+    <!-- if menu item has submenu child then recursively call new menu item component -->
+    <div *ngIf="item.submenu" class="menu-submenu">
+      <span class="menu-arrow"></span>
+      <div *ngIf="item['custom-class'] === 'menu-item--submenu-fullheight'" class="menu-wrapper">
+        <!-- wrap submenu to full height -->
+        <ng-container [ngTemplateOutletContext]="{ item: item, parentItem: parentItem }"
+                      [ngTemplateOutlet]="menuSubmenuTemplate"></ng-container>
+      </div>
+      <!-- normal submenu -->
+      <ng-container *ngIf="item['custom-class'] !== 'menu-item--submenu-fullheight'"
+                    [ngTemplateOutletContext]="{ item: item, parentItem: parentItem }"
+                    [ngTemplateOutlet]="menuSubmenuTemplate">
+      </ng-container>
+    </div>
+  </li>
+
+</ng-template>
+
+<ng-template #menuSubmenuTemplate let-item="item" let-parentItem="parentItem">
+  <ul class="menu-subnav">
+    <ng-container *ngFor="let child of item.submenu">
+      <ng-container *ngIf="child.section" [ngTemplateOutletContext]="{ item: child, parentItem: item }"
+                    [ngTemplateOutlet]="menuItemSectionTemplate"></ng-container>
+      <ng-container *ngIf="child.separator" [ngTemplateOutletContext]="{ item: child, parentItem: item }"
+                    [ngTemplateOutlet]="menuItemSeparatorTemplate"></ng-container>
+      <ng-container *ngIf="child.title" [ngTemplateOutletContext]="{ item: child, parentItem: item }"
+                    [ngTemplateOutlet]="menuItemTemplate"></ng-container>
+    </ng-container>
+  </ul>
+</ng-template>
+
+<ng-template #menuItemTextTemplate let-item="item" let-parentItem="parentItem">
+  <!-- if menu item has icon -->
+  <i *ngIf="item.icon" [ngClass]="item.icon" class="menu-icon"></i>
+
+  <!-- if menu item using bullet -->
+  <i *ngIf="parentItem && parentItem.bullet === 'dot'" class="menu-bullet menu-bullet-dot">
+    <span></span>
+  </i>
+  <i *ngIf="parentItem && parentItem.bullet === 'line'" class="menu-bullet menu-bullet-line">
+    <span></span>
+  </i>
+
+  <!-- menu item title text -->
+  <span [translate]="item.translate" class="menu-text">{{item.title}}</span>
+  <!-- menu item with badge -->
+  <span *ngIf="item.badge" class="menu-badge">
+		<span [ngClass]="item.badge.type" class="badge">{{item.badge.value}}</span>
+	</span>
+
+  <!-- if menu item has submenu child then put arrow icon -->
+  <i *ngIf="item.submenu" class="menu-arrow"></i>
+</ng-template>
+
+<ng-template #menuItemSeparatorTemplate let-item="item" let-parentItem="parentItem">
+  <li class="menu-separator"><span></span></li>
+</ng-template>
+
+<ng-template #menuItemSectionTemplate let-item="item" let-parentItem="parentItem">
+  <li class="menu-section">
+    <h4 class="menu-text">{{item.section}}</h4>
+    <i class="menu-icon flaticon-more-v2"></i>
+  </li>
+</ng-template>

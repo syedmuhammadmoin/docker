@@ -1,0 +1,68 @@
+<ng-container *ngIf="user as _user">
+  <!-- begin::Offcanvas Toolbar Quick Actions -->
+  <div [ngStyle]="{ overflow: 'hidden' }" [options]="offcanvasOptions" class="offcanvas offcanvas-right p-10"
+       id="kt_quick_user"
+       ktOffcanvas>
+    <div class="offcanvas-header d-flex align-items-center justify-content-between pb-5">
+      <h3 class="font-weight-bold m-0 app-text-primary">
+        User Profile
+        <!-- <small class="text-muted font-size-sm ml-2">12 messages</small> -->
+      </h3>
+      <a class="btn btn-xs btn-icon btn-light bg-gradient" href="#" id="kt_quick_user_close">
+        <i class="ki ki-close icon-xs app-text-primary"></i>
+      </a>
+    </div>
+
+    <div [ngStyle]="{ 'height': '100vh', 'overflow': 'hidden' }" class="offcanvas-content">
+      <div [ngStyle]="{ 'height': '600px', 'position': 'relative' }" [perfectScrollbar]="{ wheelPropagation: false }"
+           class="scroll">
+        <!--begin::User-->
+        <div class="text-center mb-10">
+          <!-- <div class="symbol symbol-60 symbol-circle symbol-xl-90">
+            <div class="symbol-label" style="background-image:url('/metronic/theme/html/demo1/dist/assets/media/users/300_21.jpg')"></div>
+            <i class="symbol-badge symbol-badge-bottom bg-success"></i>
+          </div> -->
+          <div class="symbol symbol-60 symbol-circle">
+            <span class="font-size-h3 symbol-label font-weight-boldest bg-gradient">{{_user.fullname.toString().replace('.', ' ') |
+              firstLetter | uppercase}}</span>
+          </div>
+          <h4 class="font-weight-bold my-2 app-text-primary">{{_user.fullname.toString().replace('.', ' ') | uppercase}}</h4>
+          <div class="text-muted mb-2">{{_user.roles.toString()}}</div>
+          <span class="label label-light-primary label-inline font-weight-bold label-lg bg-dark-mode">{{_user.email}}</span>
+        </div>
+        <!--end::User-->
+        <!--begin::Nav-->
+        <a (click)="logout()"
+           class="btn btn-hover-light-primary bg-gradient font-weight-bold py-3 px-6 mb-2 text-center btn-block active"
+           href="Javascript:void(0)">Sign Out</a>
+        <a (click)="changePassword()"
+           class="btn btn-hover-light-warning bg-gradient font-weight-bold py-3 px-6 mb-2 text-center btn-block active"
+           href="Javascript:void(0)">Change Password</a>
+        <!--end::Nav-->
+        <div class="separator separator-dashed mt-8 mb-5"></div>
+        <div >
+            <form #formDirective="ngForm" (ngSubmit)="onSubmit()" [formGroup]="form" class="kt-form kt-form--label-align-right">
+                <div class="form-group kt-form__group mb-0">
+                  <label class="col-form-label pt-0 ">Date Format:</label>
+                  <div class="kt-radio-list mt-5">
+                    <mat-radio-group
+                      formControlName="dateFormat">
+                      <mat-radio-button value="dd-MM-yyyy">dd-MM-yyyy</mat-radio-button>
+                      <mat-radio-button value="MM/dd/yy">MM/dd/yy</mat-radio-button>
+                      <mat-radio-button value="MMM dd, yyyy">MMM dd, yyyy</mat-radio-button>
+                      <mat-radio-button value="MMMM dd, yyyy">MMMM dd, yyyy</mat-radio-button>
+                      <mat-radio-button value="EEEE, MMMM dd, yyyy">EEEE, MMMM dd, yyyy</mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                </div>
+              <button [disabled]="isLoading" [ngClass]="{'spinner spinner-right spinner-md spinner-light': isLoading}"
+                      class="btn app-default-btn w-30 mt-5"
+                      type="submit">Submit
+              </button>
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- end::Offcanvas Toolbar Quick User Actions -->
+</ng-container>
