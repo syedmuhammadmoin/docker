@@ -1,7 +1,10 @@
-FROM node:alpine
+#Stage 1: 
+FROM node:latest as node 
 WORKDIR /app
-COPY . /app
+COPY . . 
+CMD ["npm", "start"]
 
-RUN npm install  
 
-CMD /app/node_modules/.bin/ng serve --host 0.0.0.0 --disableHostCheck
+#Stage: 2 
+FROM nginx:alpine
+COPY --from=node /app/dist /usr/share/nginx/html
